@@ -3,5 +3,7 @@
     "data_file": "sample_data.csv",
     "top_n": 1,
     "locked": ["VER"],
-    "banned": []
+    "banned": [],
+    "gameday": 1,
+    "user_uuid": "b60abc1c-11f3-11f1-b13d-dbdbcc859276"
 }

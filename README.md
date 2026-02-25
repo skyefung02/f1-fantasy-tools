@@ -107,11 +107,69 @@ CONSTRUCTORS
 ──────────────────────────────────────────────────────
 ```
 
+## Fetching your teams from the website
+
+`fetch_teams.py` pulls your current team selections directly from the F1 Fantasy website so you don't have to enter them manually.
+
+### One-time setup
+
+**Step 1 — Extract your session cookie**
+
+The script authenticates using your browser's session cookie. You need to copy it once (and re-copy it when it expires, usually after a few days).
+
+1. Log into [fantasy.formula1.com](https://fantasy.formula1.com) in Chrome
+2. Open DevTools: `Cmd+Option+I`
+3. Go to the **Network** tab and select the **Fetch/XHR** filter
+4. Hard-refresh the My Team page: `Cmd+Shift+R`
+5. Click any request to `fantasy.formula1.com` in the list
+6. In the **Headers** panel on the right, find the **Request Headers** section
+7. Copy the full value of the `Cookie:` header (it's a long string)
+8. Create a file called `.env` in this project folder and paste it in like this — no quotes:
+
+```
+F1_FANTASY_COOKIE=<paste the full cookie string here>
+```
+
+**Step 2 — Find your user UUID**
+
+Your UUID identifies your account in the API. It only needs to be set once.
+
+1. After the hard-refresh in Step 1, look for a request in the Network tab whose URL contains `getteam` or `getusergamedaysv1`
+2. The URL looks like:
+   ```
+   https://fantasy.formula1.com/services/user/gameplay/{uuid}/getteam/...
+   ```
+3. Copy the UUID (the part between `gameplay/` and `/getteam`)
+4. Add it to `settings.json`:
+   ```json
+   "user_uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+   ```
+
+### Usage
+
+```bash
+python fetch_teams.py
+```
+
+This prints all 3 of your team slots with drivers, constructors, turbo pick, prices, and remaining budget.
+
+### Settings for fetch_teams.py
+
+| Key | Description |
+|---|---|
+| `user_uuid` | Your account UUID (see setup above) |
+| `gameday` | Game day number to fetch (default `1`) |
+
+### Cookie expiry
+
+If you get an authentication error, your cookie has expired. Repeat Step 1 above to get a fresh one and update `.env`.
+
 ## Files
 
 | File | Description |
 |---|---|
 | `solver.py` | ILP solver, top-N logic, CLI |
+| `fetch_teams.py` | Fetches your picked teams from the F1 Fantasy website |
 | `settings.json` | Runtime configuration |
 | `sample_data.csv` | Example driver/constructor data |
 | `requirements.txt` | Python dependencies |
