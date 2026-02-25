@@ -1,0 +1,7 @@
+{
+    "budget": 100.0,
+    "data_file": "sample_data.csv",
+    "top_n": 1,
+    "locked": ["VER"],
+    "banned": []
+}
