@@ -1,0 +1,11 @@
+name: f1-fantasy
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas
+  - requests
+  - pip
+  - pip:
+    - pulp
