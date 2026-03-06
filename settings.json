@@ -5,5 +5,9 @@
     "locked": [],
     "banned": [],
     "gameday": 1,
-    "user_uuid": "b60abc1c-11f3-11f1-b13d-dbdbcc859276"
+    "user_uuid": "b60abc1c-11f3-11f1-b13d-dbdbcc859276",
+    "pts_per_1m_per_race": 1.3,
+    "remaining_races": 23,
+    "portfolio_n": 3,
+    "portfolio_max_overlap": 4
 }

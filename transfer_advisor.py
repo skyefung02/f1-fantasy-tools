@@ -32,7 +32,13 @@ def team_budget(team: dict) -> float:
 
 # ── Display ───────────────────────────────────────────────────────────────────
 
-def print_transfer_plan(result: dict, current_team: dict, budget: float, team_idx: int) -> None:
+def print_transfer_plan(
+    result: dict,
+    current_team: dict,
+    budget: float,
+    team_idx: int,
+    budget_pts_weight: float = 0.0,
+) -> None:
     sep = "─" * 60
     wide = "=" * 60
 
@@ -68,21 +74,35 @@ def print_transfer_plan(result: dict, current_team: dict, budget: float, team_id
         | set(result["constructor_transfers_in"])
     )
 
+    show_delta = budget_pts_weight != 0.0
+
     print(f"\n  NEW TEAM")
-    print(f"  {'TLA':<8} {'Price':>6}  {'xPts':>6}  {'Note'}")
-    print(f"  {'─'*8} {'─'*6}  {'─'*6}  {'─'*20}")
+    if show_delta:
+        print(f"  {'TLA':<8} {'Price':>6}  {'xPts':>6}  {'ΔPrice':>7}  {'Note'}")
+        print(f"  {'─'*8} {'─'*6}  {'─'*6}  {'─'*7}  {'─'*20}")
+    else:
+        print(f"  {'TLA':<8} {'Price':>6}  {'xPts':>6}  {'Note'}")
+        print(f"  {'─'*8} {'─'*6}  {'─'*6}  {'─'*20}")
 
     for d in result["drivers"]:
         tla = d["name"].upper()
         tag = " ★ TURBO (2x)" if d["is_turbo"] else ""
         new_tag = "  ← NEW" if tla in new_picks else ""
         pts_disp = f"{d['expected_points'] * 2:.1f}" if d["is_turbo"] else f"{d['expected_points']:.1f}"
-        print(f"  {tla:<8} {d['price']:>6.1f}  {pts_disp:>6}  {tag}{new_tag}")
+        if show_delta:
+            delta_str = f"{d.get('xDeltaPrice', 0.0):+.2f}"
+            print(f"  {tla:<8} {d['price']:>6.1f}  {pts_disp:>6}  {delta_str:>7}  {tag}{new_tag}")
+        else:
+            print(f"  {tla:<8} {d['price']:>6.1f}  {pts_disp:>6}  {tag}{new_tag}")
 
     for c in result["constructors"]:
         tla = c["name"].upper()
         new_tag = "  ← NEW" if tla in new_picks else ""
-        print(f"  {tla:<8} {c['price']:>6.1f}  {c['expected_points']:>6.1f}  {new_tag}")
+        if show_delta:
+            delta_str = f"{c.get('xDeltaPrice', 0.0):+.2f}"
+            print(f"  {tla:<8} {c['price']:>6.1f}  {c['expected_points']:>6.1f}  {delta_str:>7}  {new_tag}")
+        else:
+            print(f"  {tla:<8} {c['price']:>6.1f}  {c['expected_points']:>6.1f}  {new_tag}")
 
     # ── Points breakdown ─────────────────────────────────────────────────────
     print(f"\n{sep}")
@@ -90,6 +110,10 @@ def print_transfer_plan(result: dict, current_team: dict, budget: float, team_id
     if result["penalty_pts"]:
         print(f"  Penalty      : -{result['penalty_pts']:.0f}  ({extra} extra transfer(s) × 10 pts)")
     print(f"  Net xPts     : {result['total_points']:.2f}")
+    if show_delta:
+        bv = result.get("budget_value", 0.0)
+        print(f"  Budget value : {bv:+.2f}  (xDeltaPrice × {budget_pts_weight:.1f} pts/M)")
+        print(f"  Combined     : {result['total_points'] + bv:.2f}")
     print(f"  Spent        : {result['total_price']:.1f}m  (remaining: {result['remaining_budget']:.1f}m)")
     print(sep)
 
@@ -180,6 +204,23 @@ def main():
             "Overlap counts: 5 driver picks + 2 constructor picks + 1 turbo = 8 max."
         ),
     )
+    parser.add_argument(
+        "--pts-per-1m",
+        type=float,
+        default=settings.get("pts_per_1m_per_race", 0.0),
+        metavar="PTS",
+        help=(
+            "Points earned per 1M budget increase per future race "
+            "(default from settings.json). Set to 0 to disable budget optimisation."
+        ),
+    )
+    parser.add_argument(
+        "--remaining-races",
+        type=int,
+        default=settings.get("remaining_races", 23),
+        metavar="N",
+        help="Number of remaining races to value budget gains over (default from settings.json).",
+    )
     args = parser.parse_args()
 
     # ── Load xPts data ────────────────────────────────────────────────────────
@@ -201,6 +242,10 @@ def main():
     df["type"] = df["type"].str.lower().str.strip()
     df["price"] = pd.to_numeric(df["price"], errors="coerce")
     df["expected_points"] = pd.to_numeric(df["expected_points"], errors="coerce")
+    if "xDeltaPrice" in df.columns:
+        df["xDeltaPrice"] = pd.to_numeric(df["xDeltaPrice"], errors="coerce").fillna(0.0)
+
+    budget_pts_weight = args.pts_per_1m * args.remaining_races
 
     # ── Fetch current teams ───────────────────────────────────────────────────
     cookie = load_cookie()
@@ -241,6 +286,8 @@ def main():
     locked = [c.upper() for c in settings.get("locked", [])]
     banned = [c.upper() for c in settings.get("banned", [])]
 
+    if budget_pts_weight != 0.0:
+        print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
     print(f"\nSolving transfers (max overlap {args.overlap}/8)...\n")
     try:
         results = solve_portfolio_transfers(
@@ -250,6 +297,7 @@ def main():
             max_pairwise_overlap=args.overlap,
             locked=locked,
             banned=banned,
+            budget_pts_weight=budget_pts_weight,
         )
     except (ValueError, RuntimeError) as e:
         print(f"Solver error: {e}")
@@ -258,7 +306,7 @@ def main():
     for i, (result, current_team, budget) in enumerate(
         zip(results, current_teams, budgets), start=1
     ):
-        print_transfer_plan(result, current_team, budget, team_idx=i)
+        print_transfer_plan(result, current_team, budget, team_idx=i, budget_pts_weight=budget_pts_weight)
 
     print_portfolio_summary(results, current_teams, max_pairwise_overlap=args.overlap)
 

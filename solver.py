@@ -25,8 +25,10 @@ DEFAULT_SETTINGS = {
     "locked": [],
     "banned": [],
     "top_n": 5,
-    "portfolio_n": 3,
+    "portfolio_n": None,
     "portfolio_max_overlap": 5,
+    "pts_per_1m_per_race": 0.0,
+    "remaining_races": 23,
 }
 
 
@@ -46,6 +48,7 @@ def solve(
     banned: list[str] | None = None,
     exclusions: list[dict] | None = None,
     overlap_constraints: list[tuple[dict, int]] | None = None,
+    budget_pts_weight: float = 0.0,
 ) -> dict:
     """
     Run the F1 Fantasy ILP optimiser.
@@ -53,6 +56,7 @@ def solve(
     Parameters
     ----------
     df                  : DataFrame with columns [name, type, price, expected_points]
+                          and optionally [xDeltaPrice]
     budget              : Total spend cap (default 100)
     locked              : List of codes that MUST be in the team
     banned              : List of codes that MUST NOT be in the team
@@ -60,6 +64,8 @@ def solve(
     overlap_constraints : List of (prev_result, max_overlap) pairs. Overlap is counted over
                           8 decisions (5 driver selections + 2 constructor selections +
                           1 turbo designation); max_overlap caps how many can match.
+    budget_pts_weight   : Points value of a 1M price increase over all remaining races
+                          (= pts_per_1m_per_race × remaining_races). 0 disables budget optimisation.
     """
     locked = {c.upper() for c in (locked or [])}
     banned = {c.upper() for c in (banned or [])}
@@ -103,14 +109,23 @@ def solve(
     t_d = [pulp.LpVariable(f"turbo_{i}", cat="Binary") for i in range(n_d)]
 
     # ── Objective ─────────────────────────────────────────────────────────────
-    # Turbo driver earns 2x points → regular pts + bonus pts
-    # Total = Σ (x_d[i] + t_d[i]) * pts_i  +  Σ x_c[j] * pts_j
+    # Turbo driver earns 2x xPts → regular pts + bonus pts (turbo does NOT double price value)
+    # Combined score = xPts + xDeltaPrice * budget_pts_weight (if enabled)
+    has_delta = "xDeltaPrice" in df.columns and budget_pts_weight != 0.0
+
     driver_pts = pulp.lpSum(
         (x_d[i] + t_d[i]) * drivers.loc[i, "expected_points"] for i in range(n_d)
     )
     constructor_pts = pulp.lpSum(
         x_c[j] * constructors.loc[j, "expected_points"] for j in range(n_c)
     )
+    if has_delta:
+        driver_pts += pulp.lpSum(
+            x_d[i] * drivers.loc[i, "xDeltaPrice"] * budget_pts_weight for i in range(n_d)
+        )
+        constructor_pts += pulp.lpSum(
+            x_c[j] * constructors.loc[j, "xDeltaPrice"] * budget_pts_weight for j in range(n_c)
+        )
     prob += driver_pts + constructor_pts
 
     # ── Constraints ───────────────────────────────────────────────────────────
@@ -199,6 +214,8 @@ def solve(
     selected_drivers = []
     turbo_driver = None
 
+    has_delta_col = "xDeltaPrice" in drivers.columns
+
     for i in range(n_d):
         if pulp.value(x_d[i]) > 0.5:
             row = drivers.loc[i]
@@ -207,12 +224,15 @@ def solve(
                 "name": row["name"],
                 "price": row["price"],
                 "expected_points": row["expected_points"],
+                "xDeltaPrice": float(row["xDeltaPrice"]) if has_delta_col else 0.0,
                 "is_turbo": is_turbo,
             })
             if is_turbo:
                 turbo_driver = row["name"]
 
     selected_constructors = []
+    has_delta_col_c = "xDeltaPrice" in constructors.columns
+
     for j in range(n_c):
         if pulp.value(x_c[j]) > 0.5:
             row = constructors.loc[j]
@@ -220,6 +240,7 @@ def solve(
                 "name": row["name"],
                 "price": row["price"],
                 "expected_points": row["expected_points"],
+                "xDeltaPrice": float(row["xDeltaPrice"]) if has_delta_col_c else 0.0,
             })
 
     # Reorder: non-turbo first, turbo highlighted at end
@@ -233,6 +254,11 @@ def solve(
         for d in selected_drivers
     ) + sum(c["expected_points"] for c in selected_constructors)
 
+    budget_value = (
+        sum(d["xDeltaPrice"] for d in selected_drivers)
+        + sum(c["xDeltaPrice"] for c in selected_constructors)
+    ) * budget_pts_weight
+
     return {
         "drivers": selected_drivers,
         "turbo_driver": turbo_driver,
@@ -240,6 +266,7 @@ def solve(
         "total_price": round(spent, 1),
         "remaining_budget": round(budget - spent, 1),
         "total_points": round(pts, 2),
+        "budget_value": round(budget_value, 2),
     }
 
 
@@ -251,12 +278,16 @@ def solve_top_n(
     locked: list[str] | None = None,
     banned: list[str] | None = None,
     n: int = 5,
+    budget_pts_weight: float = 0.0,
 ) -> list[dict]:
     """Return the top-n distinct optimal teams, ranked by total points."""
     results = []
     for _ in range(n):
         try:
-            result = solve(df, budget=budget, locked=locked, banned=banned, exclusions=results)
+            result = solve(
+                df, budget=budget, locked=locked, banned=banned,
+                exclusions=results, budget_pts_weight=budget_pts_weight,
+            )
         except RuntimeError:
             break
         results.append(result)
@@ -288,6 +319,7 @@ def solve_portfolio(
     banned: list[str] | None = None,
     n_teams: int = 3,
     max_pairwise_overlap: int = 5,
+    budget_pts_weight: float = 0.0,
 ) -> list[dict]:
     """
     Solve for n_teams distinct teams that together form a diversified portfolio.
@@ -314,6 +346,7 @@ def solve_portfolio(
                 locked=locked,
                 banned=banned,
                 overlap_constraints=constraints,
+                budget_pts_weight=budget_pts_weight,
             )
         except RuntimeError:
             break
@@ -333,6 +366,7 @@ def solve_with_transfers(
     overlap_constraints: list[tuple[dict, int]] | None = None,
     max_free_transfers: int = 2,
     penalty_per_transfer: int = 10,
+    budget_pts_weight: float = 0.0,
 ) -> dict:
     """
     Solve for optimal transfers from a current team.
@@ -381,13 +415,22 @@ def solve_with_transfers(
     # e = excess transfers beyond the free allowance (what gets penalised)
     e = pulp.LpVariable("excess_transfers", lowBound=0, cat="Integer")
 
-    # ── Objective: gross points − penalty ────────────────────────────────────
+    # ── Objective: gross points + budget value − penalty ──────────────────────
+    has_delta = "xDeltaPrice" in df.columns and budget_pts_weight != 0.0
+
     driver_pts = pulp.lpSum(
         (x_d[i] + t_d[i]) * drivers.loc[i, "expected_points"] for i in range(n_d)
     )
     constructor_pts = pulp.lpSum(
         x_c[j] * constructors.loc[j, "expected_points"] for j in range(n_c)
     )
+    if has_delta:
+        driver_pts += pulp.lpSum(
+            x_d[i] * drivers.loc[i, "xDeltaPrice"] * budget_pts_weight for i in range(n_d)
+        )
+        constructor_pts += pulp.lpSum(
+            x_c[j] * constructors.loc[j, "xDeltaPrice"] * budget_pts_weight for j in range(n_c)
+        )
     prob += driver_pts + constructor_pts - penalty_per_transfer * e
 
     # ── Standard constraints ──────────────────────────────────────────────────
@@ -461,6 +504,7 @@ def solve_with_transfers(
     selected_drivers = []
     turbo_driver = None
     new_driver_tlas = set()
+    has_delta_col = "xDeltaPrice" in drivers.columns
 
     for i in range(n_d):
         if pulp.value(x_d[i]) > 0.5:
@@ -471,6 +515,7 @@ def solve_with_transfers(
                 "name": row["name"],
                 "price": row["price"],
                 "expected_points": row["expected_points"],
+                "xDeltaPrice": float(row["xDeltaPrice"]) if has_delta_col else 0.0,
                 "is_turbo": is_turbo,
             })
             new_driver_tlas.add(tla)
@@ -479,6 +524,7 @@ def solve_with_transfers(
 
     selected_constructors = []
     new_constructor_tlas = set()
+    has_delta_col_c = "xDeltaPrice" in constructors.columns
 
     for j in range(n_c):
         if pulp.value(x_c[j]) > 0.5:
@@ -487,6 +533,7 @@ def solve_with_transfers(
                 "name": row["name"],
                 "price": row["price"],
                 "expected_points": row["expected_points"],
+                "xDeltaPrice": float(row["xDeltaPrice"]) if has_delta_col_c else 0.0,
             })
             new_constructor_tlas.add(row["name"].upper())
 
@@ -499,6 +546,11 @@ def solve_with_transfers(
         (d["expected_points"] * 2 if d["is_turbo"] else d["expected_points"])
         for d in selected_drivers
     ) + sum(c["expected_points"] for c in selected_constructors)
+
+    budget_value = (
+        sum(d["xDeltaPrice"] for d in selected_drivers)
+        + sum(c["xDeltaPrice"] for c in selected_constructors)
+    ) * budget_pts_weight
 
     n_transfers = max(0, round(pulp.value(e))) + max_free_transfers
     # Recompute n_transfers accurately from set differences (more reliable than ILP var)
@@ -516,6 +568,7 @@ def solve_with_transfers(
         "total_price": round(spent, 1),
         "remaining_budget": round(budget - spent, 1),
         "gross_points": round(gross_pts, 2),
+        "budget_value": round(budget_value, 2),
         "penalty_pts": penalty_pts,
         "total_points": round(gross_pts - penalty_pts, 2),
         "n_transfers": n_transfers,
@@ -535,6 +588,7 @@ def solve_portfolio_transfers(
     banned: list[str] | None = None,
     max_free_transfers: int = 2,
     penalty_per_transfer: int = 10,
+    budget_pts_weight: float = 0.0,
 ) -> list[dict]:
     """
     Solve optimal transfers for all teams in the portfolio, maintaining diversity.
@@ -562,6 +616,7 @@ def solve_portfolio_transfers(
             overlap_constraints=constraints,
             max_free_transfers=max_free_transfers,
             penalty_per_transfer=penalty_per_transfer,
+            budget_pts_weight=budget_pts_weight,
         )
         results.append(result)
     return results
@@ -569,63 +624,111 @@ def solve_portfolio_transfers(
 
 # ── Pretty printer ────────────────────────────────────────────────────────────
 
-def print_result(result: dict, budget: float, rank: int = 1, total: int = 1) -> None:
-    sep = "─" * 54
+def print_result(
+    result: dict,
+    budget: float,
+    rank: int = 1,
+    total: int = 1,
+    budget_pts_weight: float = 0.0,
+) -> None:
+    sep = "─" * 62
+    show_delta = budget_pts_weight != 0.0 and result.get("budget_value", 0.0) != 0.0
 
     if total > 1:
         title = f"RANK #{rank}  —  {result['total_points']:.2f} pts"
     else:
         title = "F1 FANTASY OPTIMAL TEAM"
-    print(f"\n{title:^54}")
+    print(f"\n{title:^62}")
     print(sep)
 
     print(f"\n{'DRIVERS':}")
-    print(f"  {'Name':<25} {'Price':>6}  {'Pts':>6}  {'Note'}")
-    print(f"  {'─'*25} {'─'*6}  {'─'*6}  {'─'*10}")
+    if show_delta:
+        print(f"  {'Name':<25} {'Price':>6}  {'xPts':>6}  {'ΔPrice':>7}  {'Note'}")
+        print(f"  {'─'*25} {'─'*6}  {'─'*6}  {'─'*7}  {'─'*13}")
+    else:
+        print(f"  {'Name':<25} {'Price':>6}  {'Pts':>6}  {'Note'}")
+        print(f"  {'─'*25} {'─'*6}  {'─'*6}  {'─'*13}")
     for d in result["drivers"]:
         tag = " ★ TURBO (2x)" if d["is_turbo"] else ""
         pts_disp = f"{d['expected_points']*2:.1f}" if d["is_turbo"] else f"{d['expected_points']:.1f}"
         raw = f"({d['expected_points']:.1f})" if d["is_turbo"] else ""
-        print(f"  {d['name']:<25} {d['price']:>6.1f}  {pts_disp:>6}{raw:>8}{tag}")
+        if show_delta:
+            delta = d.get("xDeltaPrice", 0.0)
+            delta_str = f"{delta:+.2f}"
+            print(f"  {d['name']:<25} {d['price']:>6.1f}  {pts_disp:>6}{raw:>4}  {delta_str:>7}  {tag}")
+        else:
+            print(f"  {d['name']:<25} {d['price']:>6.1f}  {pts_disp:>6}{raw:>8}{tag}")
 
     print(f"\n{'CONSTRUCTORS':}")
-    print(f"  {'Name':<25} {'Price':>6}  {'Pts':>6}")
-    print(f"  {'─'*25} {'─'*6}  {'─'*6}")
+    if show_delta:
+        print(f"  {'Name':<25} {'Price':>6}  {'xPts':>6}  {'ΔPrice':>7}")
+        print(f"  {'─'*25} {'─'*6}  {'─'*6}  {'─'*7}")
+    else:
+        print(f"  {'Name':<25} {'Price':>6}  {'Pts':>6}")
+        print(f"  {'─'*25} {'─'*6}  {'─'*6}")
     for c in result["constructors"]:
-        print(f"  {c['name']:<25} {c['price']:>6.1f}  {c['expected_points']:>6.1f}")
+        if show_delta:
+            delta = c.get("xDeltaPrice", 0.0)
+            delta_str = f"{delta:+.2f}"
+            print(f"  {c['name']:<25} {c['price']:>6.1f}  {c['expected_points']:>6.1f}  {delta_str:>7}")
+        else:
+            print(f"  {c['name']:<25} {c['price']:>6.1f}  {c['expected_points']:>6.1f}")
 
     print(f"\n{sep}")
     print(f"  Budget:           {budget:.1f}")
     print(f"  Total spent:      {result['total_price']:.1f}")
     print(f"  Remaining:        {result['remaining_budget']:.1f}")
-    print(f"  Total points:     {result['total_points']:.2f}  (incl. turbo bonus)")
+    print(f"  Race xPts:        {result['total_points']:.2f}  (incl. turbo bonus)")
+    if show_delta:
+        bv = result.get("budget_value", 0.0)
+        print(f"  Budget value:     {bv:+.2f}  (xDeltaPrice × {budget_pts_weight:.1f} pts/M)")
+        print(f"  Combined score:   {result['total_points'] + bv:.2f}")
     print(sep)
 
 
-def print_portfolio(teams: list[dict], budget: float, max_pairwise_overlap: int) -> None:
+def print_portfolio(
+    teams: list[dict],
+    budget: float,
+    max_pairwise_overlap: int,
+    budget_pts_weight: float = 0.0,
+) -> None:
     """Print all portfolio teams, then a pairwise overlap + xPts-cost summary."""
     optimal_pts = teams[0]["total_points"] if teams else 0.0
 
     for rank, team in enumerate(teams, start=1):
-        print_result(team, budget=budget, rank=rank, total=len(teams))
+        print_result(team, budget=budget, rank=rank, total=len(teams), budget_pts_weight=budget_pts_weight)
 
     if len(teams) < 2:
         return
+
+    show_combined = budget_pts_weight != 0.0
+    optimal_combined = optimal_pts + (teams[0].get("budget_value", 0.0) if teams else 0.0)
 
     sep = "─" * 54
     print(f"\n{'PORTFOLIO SUMMARY':^54}")
     print(sep)
     print(f"  Max pairwise overlap allowed : {max_pairwise_overlap} / 8")
     print(f"  Optimal (Team 1) xPts       : {optimal_pts:.2f}")
+    if show_combined:
+        print(f"  Optimal (Team 1) Combined   : {optimal_combined:.2f}")
     print()
 
     # xPts cost per team
-    print(f"  {'Team':<8} {'xPts':>8}  {'vs Optimal':>12}")
-    print(f"  {'─'*8} {'─'*8}  {'─'*12}")
-    for i, team in enumerate(teams, start=1):
-        cost = team["total_points"] - optimal_pts
-        cost_str = f"{cost:+.2f}"
-        print(f"  Team {i:<3}  {team['total_points']:>8.2f}  {cost_str:>12}")
+    if show_combined:
+        print(f"  {'Team':<8} {'xPts':>8}  {'Combined':>10}  {'vs Optimal':>12}")
+        print(f"  {'─'*8} {'─'*8}  {'─'*10}  {'─'*12}")
+        for i, team in enumerate(teams, start=1):
+            combined = team["total_points"] + team.get("budget_value", 0.0)
+            cost = combined - optimal_combined
+            cost_str = f"{cost:+.2f}"
+            print(f"  Team {i:<3}  {team['total_points']:>8.2f}  {combined:>10.2f}  {cost_str:>12}")
+    else:
+        print(f"  {'Team':<8} {'xPts':>8}  {'vs Optimal':>12}")
+        print(f"  {'─'*8} {'─'*8}  {'─'*12}")
+        for i, team in enumerate(teams, start=1):
+            cost = team["total_points"] - optimal_pts
+            cost_str = f"{cost:+.2f}"
+            print(f"  Team {i:<3}  {team['total_points']:>8.2f}  {cost_str:>12}")
 
     # Pairwise overlap matrix
     print()
@@ -691,7 +794,7 @@ def main():
         "--portfolio",
         type=int,
         nargs="?",
-        const=settings["portfolio_n"],
+        const=settings["portfolio_n"] or 3,
         default=None,
         metavar="N",
         help=(
@@ -710,13 +813,38 @@ def main():
             "Overlap counts: 5 driver picks + 2 constructor picks + 1 turbo = 8 max."
         ),
     )
+    parser.add_argument(
+        "--pts-per-1m",
+        type=float,
+        default=None,
+        metavar="PTS",
+        help=(
+            f"Points earned per 1M budget increase per future race "
+            f"(default from settings.json: {settings['pts_per_1m_per_race']}). "
+            "Set to 0 to disable budget optimisation."
+        ),
+    )
+    parser.add_argument(
+        "--remaining-races",
+        type=int,
+        default=None,
+        metavar="N",
+        help=(
+            f"Number of remaining races to value budget gains over "
+            f"(default from settings.json: {settings['remaining_races']})."
+        ),
+    )
     args = parser.parse_args()
 
     # CLI args override settings; settings override hard-coded defaults
     budget = args.budget if args.budget is not None else settings["budget"]
     top_n = args.top if args.top is not None else settings["top_n"]
-    portfolio_n = args.portfolio  # None means not in portfolio mode
+    # portfolio mode: CLI flag > settings.json portfolio_n > None (top-N mode)
+    portfolio_n = args.portfolio if args.portfolio is not None else settings["portfolio_n"]
     max_overlap = args.overlap if args.overlap is not None else settings["portfolio_max_overlap"]
+    pts_per_1m = args.pts_per_1m if args.pts_per_1m is not None else settings["pts_per_1m_per_race"]
+    remaining_races = args.remaining_races if args.remaining_races is not None else settings["remaining_races"]
+    budget_pts_weight = pts_per_1m * remaining_races
 
     locked = [c.upper() for c in settings.get("locked", [])]
     banned = [c.upper() for c in settings.get("banned", [])]
@@ -728,6 +856,8 @@ def main():
         print(f"  mode      : portfolio ({portfolio_n} teams, max overlap {max_overlap}/8)")
     else:
         print(f"  top_n     : {top_n}")
+    if budget_pts_weight != 0.0:
+        print(f"  pts/1M/race : {pts_per_1m}  ×  {remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
     if locked:
         print(f"  locked    : {', '.join(locked)}")
     if banned:
@@ -752,6 +882,8 @@ def main():
     df["type"] = df["type"].str.lower().str.strip()
     df["price"] = pd.to_numeric(df["price"], errors="coerce")
     df["expected_points"] = pd.to_numeric(df["expected_points"], errors="coerce")
+    if "xDeltaPrice" in df.columns:
+        df["xDeltaPrice"] = pd.to_numeric(df["xDeltaPrice"], errors="coerce").fillna(0.0)
 
     try:
         if portfolio_n is not None:
@@ -762,9 +894,13 @@ def main():
                 banned=banned,
                 n_teams=portfolio_n,
                 max_pairwise_overlap=max_overlap,
+                budget_pts_weight=budget_pts_weight,
             )
         else:
-            results = solve_top_n(df, budget=budget, locked=locked, banned=banned, n=top_n)
+            results = solve_top_n(
+                df, budget=budget, locked=locked, banned=banned, n=top_n,
+                budget_pts_weight=budget_pts_weight,
+            )
     except ValueError as e:
         print(f"Solver error: {e}")
         sys.exit(1)
@@ -774,10 +910,10 @@ def main():
         sys.exit(1)
 
     if portfolio_n is not None:
-        print_portfolio(results, budget=budget, max_pairwise_overlap=max_overlap)
+        print_portfolio(results, budget=budget, max_pairwise_overlap=max_overlap, budget_pts_weight=budget_pts_weight)
     else:
         for rank, result in enumerate(results, start=1):
-            print_result(result, budget=budget, rank=rank, total=len(results))
+            print_result(result, budget=budget, rank=rank, total=len(results), budget_pts_weight=budget_pts_weight)
 
 
 if __name__ == "__main__":
