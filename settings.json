@@ -9,5 +9,6 @@
     "pts_per_1m_per_race": 1.2,
     "remaining_races": 22,
     "portfolio_n": 3,
-    "portfolio_max_overlap": 4
+    "portfolio_max_overlap": 4,
+    "xdelta_confidence": 0.85
 }

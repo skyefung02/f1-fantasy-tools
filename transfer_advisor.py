@@ -38,6 +38,7 @@ def print_transfer_plan(
     budget: float,
     team_idx: int,
     budget_pts_weight: float = 0.0,
+    xdelta_confidence: float = 1.0,
 ) -> None:
     sep = "─" * 60
     wide = "=" * 60
@@ -111,8 +112,9 @@ def print_transfer_plan(
         print(f"  Penalty      : -{result['penalty_pts']:.0f}  ({extra} extra transfer(s) × 10 pts)")
     print(f"  Net xPts     : {result['total_points']:.2f}")
     if show_delta:
-        bv = result.get("budget_value", 0.0)
-        print(f"  Budget value : {bv:+.2f}  (xDeltaPrice × {budget_pts_weight:.1f} pts/M)")
+        bv = result.get("budget_value", 0.0) * xdelta_confidence
+        conf_note = f" × {xdelta_confidence:.0%} confidence" if xdelta_confidence != 1.0 else ""
+        print(f"  Budget value : {bv:+.2f}  (xDeltaPrice × {budget_pts_weight:.1f} pts/M{conf_note})")
         print(f"  Combined     : {result['total_points'] + bv:.2f}")
     print(f"  Spent        : {result['total_price']:.1f}m  (remaining: {result['remaining_budget']:.1f}m)")
     print(sep)
@@ -123,6 +125,7 @@ def print_portfolio_summary(
     current_teams: list[dict],
     max_pairwise_overlap: int,
     budget_pts_weight: float = 0.0,
+    xdelta_confidence: float = 1.0,
 ) -> None:
     if len(results) < 2:
         return
@@ -140,7 +143,7 @@ def print_portfolio_summary(
         print(f"  {'Team':<10} {'Net xPts':>10}  {'Combined':>10}  {'Transfers':>10}  {'Penalty':>8}")
         print(f"  {'─'*10} {'─'*10}  {'─'*10}  {'─'*10}  {'─'*8}")
         for i, (r, t) in enumerate(zip(results, current_teams), 1):
-            combined = r['total_points'] + r.get('budget_value', 0.0)
+            combined = r['total_points'] + r.get('budget_value', 0.0) * xdelta_confidence
             print(
                 f"  Team {i:<5}  {r['total_points']:>10.2f}"
                 f"  {combined:>10.2f}"
@@ -313,10 +316,13 @@ def main():
     locked = [c.upper() for c in settings.get("locked", [])]
     banned = [c.upper() for c in settings.get("banned", [])]
 
-    team_weights = args.weights
+    team_weights      = args.weights
+    xdelta_confidence = float(settings.get("xdelta_confidence", 1.0))
 
     if budget_pts_weight != 0.0:
         print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
+        if xdelta_confidence != 1.0:
+            print(f"  xdelta conf : {xdelta_confidence:.0%}  (budget value discounted in reported Combined)")
     if team_weights:
         print(f"  team weights: {team_weights}")
     print(f"\nSolving transfers (max overlap {args.overlap}/8)...\n")
@@ -338,9 +344,9 @@ def main():
     for i, (result, current_team, budget) in enumerate(
         zip(results, current_teams, budgets), start=1
     ):
-        print_transfer_plan(result, current_team, budget, team_idx=i, budget_pts_weight=budget_pts_weight)
+        print_transfer_plan(result, current_team, budget, team_idx=i, budget_pts_weight=budget_pts_weight, xdelta_confidence=xdelta_confidence)
 
-    print_portfolio_summary(results, current_teams, max_pairwise_overlap=args.overlap, budget_pts_weight=budget_pts_weight)
+    print_portfolio_summary(results, current_teams, max_pairwise_overlap=args.overlap, budget_pts_weight=budget_pts_weight, xdelta_confidence=xdelta_confidence)
 
 
 if __name__ == "__main__":
