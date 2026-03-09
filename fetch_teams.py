@@ -44,6 +44,11 @@ DEFAULT_SETTINGS = {
 SLOT_LABELS = {1: "CURRENT RACE", 2: "NEXT RACE", 3: "SLOT 3"}
 CONSTRUCTOR_POSITIONS = {6, 7}
 
+# Map API TLAs that differ from the codes used in the CSV data file.
+TLA_ALIASES: dict[str, str] = {
+    "RBS": "VRB",  # Racing Bulls (API) → VRB (CSV)
+}
+
 
 # ── Settings / env ────────────────────────────────────────────────────────────
 
@@ -114,9 +119,10 @@ def enrich_team(raw_team: dict, players: dict[str, dict]) -> dict:
         is_turbo = bool(pick.get("iscaptain"))
 
         name = player.get("FUllName") or f"Player #{pid}"
+        tla  = TLA_ALIASES.get(player.get("DriverTLA", ""), player.get("DriverTLA", ""))
         entry = {
             "name": name,
-            "tla": player.get("DriverTLA", ""),
+            "tla": tla,
             "price": float(player.get("Value", 0)),
             "season_score": round(float(player.get("OverallPpints") or 0)),
             "is_turbo": is_turbo,

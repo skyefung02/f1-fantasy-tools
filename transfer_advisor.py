@@ -43,9 +43,12 @@ def print_transfer_plan(
     sep = "─" * 60
     wide = "=" * 60
 
+    is_limitless = result.get("is_limitless", False)
+
     print(f"\n{wide}")
-    print(f"  TEAM {team_idx}  —  {current_team['name']}")
-    print(f"  Budget available: {budget:.1f}m")
+    limitless_tag = "  ★ LIMITLESS" if is_limitless else ""
+    print(f"  TEAM {team_idx}  —  {current_team['name']}{limitless_tag}")
+    print(f"  Budget available: {budget:.1f}m" + ("  (unlimited this week)" if is_limitless else ""))
     print(wide)
 
     # ── Transfers summary ────────────────────────────────────────────────────
@@ -55,7 +58,9 @@ def print_transfer_plan(
     if n == 0:
         print("\n  No changes — current team is already optimal.")
     else:
-        penalty_note = f"  (-{result['penalty_pts']:.0f} pts penalty)" if extra else "  (all free)"
+        penalty_note = "  (Limitless — no penalty)" if is_limitless else (
+            f"  (-{result['penalty_pts']:.0f} pts penalty)" if extra else "  (all free)"
+        )
         print(f"\n  TRANSFERS: {n}{penalty_note}")
         print(f"  {'─'*56}")
 
@@ -111,12 +116,15 @@ def print_transfer_plan(
     if result["penalty_pts"]:
         print(f"  Penalty      : -{result['penalty_pts']:.0f}  ({extra} extra transfer(s) × 10 pts)")
     print(f"  Net xPts     : {result['total_points']:.2f}")
-    if show_delta:
+    if show_delta and not is_limitless:
         bv = result.get("budget_value", 0.0) * xdelta_confidence
         conf_note = f" × {xdelta_confidence:.0%} confidence" if xdelta_confidence != 1.0 else ""
         print(f"  Budget value : {bv:+.2f}  (xDeltaPrice × {budget_pts_weight:.1f} pts/M{conf_note})")
         print(f"  Combined     : {result['total_points'] + bv:.2f}")
-    print(f"  Spent        : {result['total_price']:.1f}m  (remaining: {result['remaining_budget']:.1f}m)")
+    if is_limitless:
+        print(f"  Spent        : {result['total_price']:.1f}m  (over normal budget by {-result['remaining_budget']:.1f}m)" if result['remaining_budget'] < 0 else f"  Spent        : {result['total_price']:.1f}m  (within normal budget)")
+    else:
+        print(f"  Spent        : {result['total_price']:.1f}m  (remaining: {result['remaining_budget']:.1f}m)")
     print(sep)
 
 
@@ -318,6 +326,8 @@ def main():
 
     team_weights      = args.weights
     xdelta_confidence = float(settings.get("xdelta_confidence", 1.0))
+    # limitless is 1-indexed in settings (team numbers); convert to 0-indexed
+    limitless_teams   = [t - 1 for t in settings.get("limitless", [])]
 
     if budget_pts_weight != 0.0:
         print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
@@ -336,6 +346,7 @@ def main():
             banned=banned,
             budget_pts_weight=budget_pts_weight,
             team_weights=team_weights,
+            limitless_teams=limitless_teams,
         )
     except (ValueError, RuntimeError) as e:
         print(f"Solver error: {e}")
