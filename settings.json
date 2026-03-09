@@ -4,10 +4,10 @@
     "top_n": 1,
     "locked": [],
     "banned": [],
-    "gameday": 1,
+    "gameday": 2,
     "user_uuid": "b60abc1c-11f3-11f1-b13d-dbdbcc859276",
     "pts_per_1m_per_race": 1.2,
-    "remaining_races": 23,
+    "remaining_races": 22,
     "portfolio_n": 3,
     "portfolio_max_overlap": 4
 }

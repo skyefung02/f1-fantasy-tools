@@ -118,7 +118,7 @@ def enrich_team(raw_team: dict, players: dict[str, dict]) -> dict:
             "name": name,
             "tla": player.get("DriverTLA", ""),
             "price": float(player.get("Value", 0)),
-            "season_score": int(player.get("OverallPpints") or 0),
+            "season_score": round(float(player.get("OverallPpints") or 0)),
             "is_turbo": is_turbo,
         }
 

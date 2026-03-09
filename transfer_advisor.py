@@ -122,9 +122,12 @@ def print_portfolio_summary(
     results: list[dict],
     current_teams: list[dict],
     max_pairwise_overlap: int,
+    budget_pts_weight: float = 0.0,
 ) -> None:
     if len(results) < 2:
         return
+
+    show_combined = budget_pts_weight != 0.0
 
     sep = "─" * 60
     print(f"\n{'PORTFOLIO SUMMARY':^60}")
@@ -133,14 +136,26 @@ def print_portfolio_summary(
     print()
 
     # Per-team stats
-    print(f"  {'Team':<10} {'Net xPts':>10}  {'Transfers':>10}  {'Penalty':>8}")
-    print(f"  {'─'*10} {'─'*10}  {'─'*10}  {'─'*8}")
-    for i, (r, t) in enumerate(zip(results, current_teams), 1):
-        print(
-            f"  Team {i:<5}  {r['total_points']:>10.2f}"
-            f"  {r['n_transfers']:>10}"
-            f"  {r['penalty_pts']:>8.0f}"
-        )
+    if show_combined:
+        print(f"  {'Team':<10} {'Net xPts':>10}  {'Combined':>10}  {'Transfers':>10}  {'Penalty':>8}")
+        print(f"  {'─'*10} {'─'*10}  {'─'*10}  {'─'*10}  {'─'*8}")
+        for i, (r, t) in enumerate(zip(results, current_teams), 1):
+            combined = r['total_points'] + r.get('budget_value', 0.0)
+            print(
+                f"  Team {i:<5}  {r['total_points']:>10.2f}"
+                f"  {combined:>10.2f}"
+                f"  {r['n_transfers']:>10}"
+                f"  {r['penalty_pts']:>8.0f}"
+            )
+    else:
+        print(f"  {'Team':<10} {'Net xPts':>10}  {'Transfers':>10}  {'Penalty':>8}")
+        print(f"  {'─'*10} {'─'*10}  {'─'*10}  {'─'*8}")
+        for i, (r, t) in enumerate(zip(results, current_teams), 1):
+            print(
+                f"  Team {i:<5}  {r['total_points']:>10.2f}"
+                f"  {r['n_transfers']:>10}"
+                f"  {r['penalty_pts']:>8.0f}"
+            )
 
     # Pairwise overlap matrix
     print()
@@ -221,6 +236,18 @@ def main():
         metavar="N",
         help="Number of remaining races to value budget gains over (default from settings.json).",
     )
+    parser.add_argument(
+        "--weights",
+        type=float,
+        nargs="+",
+        default=settings.get("team_weights", None),
+        metavar="W",
+        help=(
+            "Per-team objective weights, one per team (e.g. --weights 0.2 0.4 0.4). "
+            "Higher weight = solver prioritises that team more. "
+            "Defaults to equal weighting. Also settable via 'team_weights' in settings.json."
+        ),
+    )
     args = parser.parse_args()
 
     # ── Load xPts data ────────────────────────────────────────────────────────
@@ -286,8 +313,12 @@ def main():
     locked = [c.upper() for c in settings.get("locked", [])]
     banned = [c.upper() for c in settings.get("banned", [])]
 
+    team_weights = args.weights
+
     if budget_pts_weight != 0.0:
         print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
+    if team_weights:
+        print(f"  team weights: {team_weights}")
     print(f"\nSolving transfers (max overlap {args.overlap}/8)...\n")
     try:
         results = solve_portfolio_transfers(
@@ -298,6 +329,7 @@ def main():
             locked=locked,
             banned=banned,
             budget_pts_weight=budget_pts_weight,
+            team_weights=team_weights,
         )
     except (ValueError, RuntimeError) as e:
         print(f"Solver error: {e}")
@@ -308,7 +340,7 @@ def main():
     ):
         print_transfer_plan(result, current_team, budget, team_idx=i, budget_pts_weight=budget_pts_weight)
 
-    print_portfolio_summary(results, current_teams, max_pairwise_overlap=args.overlap)
+    print_portfolio_summary(results, current_teams, max_pairwise_overlap=args.overlap, budget_pts_weight=budget_pts_weight)
 
 
 if __name__ == "__main__":

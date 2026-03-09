@@ -589,36 +589,223 @@ def solve_portfolio_transfers(
     max_free_transfers: int = 2,
     penalty_per_transfer: int = 10,
     budget_pts_weight: float = 0.0,
+    team_weights: list[float] | None = None,
 ) -> list[dict]:
     """
-    Solve optimal transfers for all teams in the portfolio, maintaining diversity.
+    Solve optimal transfers for all teams jointly in a single ILP.
 
-    Each team is solved sequentially; overlap constraints against all previously
-    solved teams ensure the resulting portfolio stays differentiated.
+    All teams are optimised simultaneously with pairwise overlap constraints
+    enforced across every team pair at once. Unlike a sequential approach, no
+    team is prioritised over others — the solver trades off freely between teams
+    to maximise the weighted total portfolio score.
 
     Parameters
     ----------
     current_teams : list of enrich_team() dicts from fetch_teams.py
     budgets       : available budget per team (total_price + budget_remaining)
+    team_weights  : per-team objective weights (e.g. [0.2, 0.4, 0.4]).
+                    Higher weight = solver prioritises that team more.
+                    Defaults to equal weights [1.0, 1.0, ...] if None.
     """
-    results = []
-    for team, budget in zip(current_teams, budgets):
-        driver_tlas = {d["tla"].upper() for d in team["drivers"]}
-        constructor_tlas = {c["tla"].upper() for c in team["constructors"]}
-        constraints = [(r, max_pairwise_overlap) for r in results]
-        result = solve_with_transfers(
-            df,
-            current_driver_tlas=driver_tlas,
-            current_constructor_tlas=constructor_tlas,
-            budget=budget,
-            locked=locked,
-            banned=banned,
-            overlap_constraints=constraints,
-            max_free_transfers=max_free_transfers,
-            penalty_per_transfer=penalty_per_transfer,
-            budget_pts_weight=budget_pts_weight,
+    n_teams = len(current_teams)
+    locked  = {c.upper() for c in (locked or [])}
+    banned  = {c.upper() for c in (banned or [])}
+
+    if team_weights is None:
+        team_weights = [1.0] * n_teams
+    if len(team_weights) != n_teams:
+        raise ValueError(f"team_weights must have {n_teams} entries, got {len(team_weights)}")
+
+    overlap = locked & banned
+    if overlap:
+        raise ValueError(f"Codes appear in both locked and banned: {overlap}")
+
+    drivers      = df[df["type"] == "driver"].reset_index(drop=True)
+    constructors = df[df["type"] == "constructor"].reset_index(drop=True)
+    n_d, n_c     = len(drivers), len(constructors)
+
+    all_codes = set(df["name"].str.upper())
+    unknown   = (locked | banned) - all_codes
+    if unknown:
+        raise ValueError(f"Codes not found in data: {unknown}")
+    if n_d < 5:
+        raise ValueError(f"Need at least 5 drivers, got {n_d}.")
+    if n_c < 2:
+        raise ValueError(f"Need at least 2 constructors, got {n_c}.")
+
+    prob      = pulp.LpProblem("F1_Fantasy_Joint_Portfolio", pulp.LpMaximize)
+    has_delta = "xDeltaPrice" in df.columns and budget_pts_weight != 0.0
+
+    # ── Decision variables (one set per team) ─────────────────────────────────
+    x_d = [[pulp.LpVariable(f"x_d_{k}_{i}", cat="Binary") for i in range(n_d)] for k in range(n_teams)]
+    x_c = [[pulp.LpVariable(f"x_c_{k}_{j}", cat="Binary") for j in range(n_c)] for k in range(n_teams)]
+    t_d = [[pulp.LpVariable(f"t_d_{k}_{i}", cat="Binary") for i in range(n_d)] for k in range(n_teams)]
+    e   =  [pulp.LpVariable(f"e_{k}", lowBound=0, cat="Integer")               for k in range(n_teams)]
+
+    # ── Objective: weighted sum of (score − penalty) across all teams ─────────
+    obj_terms = []
+    for k in range(n_teams):
+        w     = team_weights[k]
+        score = pulp.lpSum(
+            (x_d[k][i] + t_d[k][i]) * drivers.loc[i, "expected_points"] for i in range(n_d)
+        ) + pulp.lpSum(
+            x_c[k][j] * constructors.loc[j, "expected_points"] for j in range(n_c)
         )
-        results.append(result)
+        if has_delta:
+            score += pulp.lpSum(
+                x_d[k][i] * drivers.loc[i, "xDeltaPrice"] * budget_pts_weight for i in range(n_d)
+            ) + pulp.lpSum(
+                x_c[k][j] * constructors.loc[j, "xDeltaPrice"] * budget_pts_weight for j in range(n_c)
+            )
+        obj_terms.append(w * (score - penalty_per_transfer * e[k]))
+    prob += pulp.lpSum(obj_terms)
+
+    # ── Per-team standard + transfer constraints ───────────────────────────────
+    for k, (team, budget) in enumerate(zip(current_teams, budgets)):
+        prob += pulp.lpSum(x_d[k]) == 5, f"k{k}_5_drivers"
+        prob += pulp.lpSum(x_c[k]) == 2, f"k{k}_2_constructors"
+        prob += pulp.lpSum(t_d[k]) == 1, f"k{k}_1_turbo"
+
+        for i in range(n_d):
+            prob += t_d[k][i] <= x_d[k][i], f"k{k}_turbo_sel_{i}"
+
+        for i in range(n_d):
+            code = drivers.loc[i, "name"].upper()
+            if code in locked:
+                prob += x_d[k][i] == 1, f"k{k}_lock_d_{code}"
+            elif code in banned:
+                prob += x_d[k][i] == 0, f"k{k}_ban_d_{code}"
+
+        for j in range(n_c):
+            code = constructors.loc[j, "name"].upper()
+            if code in locked:
+                prob += x_c[k][j] == 1, f"k{k}_lock_c_{code}"
+            elif code in banned:
+                prob += x_c[k][j] == 0, f"k{k}_ban_c_{code}"
+
+        prob += (
+            pulp.lpSum(x_d[k][i] * drivers.loc[i, "price"] for i in range(n_d))
+            + pulp.lpSum(x_c[k][j] * constructors.loc[j, "price"] for j in range(n_c))
+            <= budget,
+            f"k{k}_budget",
+        )
+
+        current_d = {d["tla"].upper() for d in team["drivers"]}
+        current_c = {c["tla"].upper() for c in team["constructors"]}
+        kept = (
+            pulp.lpSum(x_d[k][i] for i in range(n_d) if drivers.loc[i, "name"].upper() in current_d)
+            + pulp.lpSum(x_c[k][j] for j in range(n_c) if constructors.loc[j, "name"].upper() in current_c)
+        )
+        prob += e[k] >= 7 - kept - max_free_transfers, f"k{k}_excess_lb"
+
+    # ── Pairwise overlap constraints (all pairs, jointly) ─────────────────────
+    # Overlap between teams a and b = shared driver picks + shared constructor
+    # picks + same turbo. Requires auxiliary binary vars to linearise AND of
+    # two binary variables: z = x_a AND x_b  ⟺  z≤x_a, z≤x_b, z≥x_a+x_b-1
+    for a, b in [(a, b) for a in range(n_teams) for b in range(a + 1, n_teams)]:
+        z_d = [pulp.LpVariable(f"z_d_{a}{b}_{i}", cat="Binary") for i in range(n_d)]
+        z_c = [pulp.LpVariable(f"z_c_{a}{b}_{j}", cat="Binary") for j in range(n_c)]
+        w_t = [pulp.LpVariable(f"w_t_{a}{b}_{i}", cat="Binary") for i in range(n_d)]
+
+        for i in range(n_d):
+            prob += z_d[i] <= x_d[a][i],                  f"zd_{a}{b}_{i}_ub_a"
+            prob += z_d[i] <= x_d[b][i],                  f"zd_{a}{b}_{i}_ub_b"
+            prob += z_d[i] >= x_d[a][i] + x_d[b][i] - 1, f"zd_{a}{b}_{i}_lb"
+            prob += w_t[i] <= t_d[a][i],                  f"wt_{a}{b}_{i}_ub_a"
+            prob += w_t[i] <= t_d[b][i],                  f"wt_{a}{b}_{i}_ub_b"
+            prob += w_t[i] >= t_d[a][i] + t_d[b][i] - 1, f"wt_{a}{b}_{i}_lb"
+
+        for j in range(n_c):
+            prob += z_c[j] <= x_c[a][j],                  f"zc_{a}{b}_{j}_ub_a"
+            prob += z_c[j] <= x_c[b][j],                  f"zc_{a}{b}_{j}_ub_b"
+            prob += z_c[j] >= x_c[a][j] + x_c[b][j] - 1, f"zc_{a}{b}_{j}_lb"
+
+        prob += (
+            pulp.lpSum(z_d) + pulp.lpSum(z_c) + pulp.lpSum(w_t) <= max_pairwise_overlap,
+            f"overlap_{a}{b}",
+        )
+
+    # ── Solve ─────────────────────────────────────────────────────────────────
+    prob.solve(pulp.PULP_CBC_CMD(msg=0))
+
+    if prob.status != 1:
+        raise RuntimeError(
+            f"Solver did not find an optimal solution. Status: {pulp.LpStatus[prob.status]}"
+        )
+
+    # ── Parse one result dict per team ────────────────────────────────────────
+    has_delta_d = "xDeltaPrice" in drivers.columns
+    has_delta_c = "xDeltaPrice" in constructors.columns
+    results     = []
+
+    for k, (team, budget) in enumerate(zip(current_teams, budgets)):
+        current_d = {d["tla"].upper() for d in team["drivers"]}
+        current_c = {c["tla"].upper() for c in team["constructors"]}
+
+        sel_drivers, new_d_tlas, turbo_driver = [], set(), None
+        for i in range(n_d):
+            if pulp.value(x_d[k][i]) > 0.5:
+                row      = drivers.loc[i]
+                is_turbo = pulp.value(t_d[k][i]) > 0.5
+                sel_drivers.append({
+                    "name":            row["name"],
+                    "price":           row["price"],
+                    "expected_points": row["expected_points"],
+                    "xDeltaPrice":     float(row["xDeltaPrice"]) if has_delta_d else 0.0,
+                    "is_turbo":        is_turbo,
+                })
+                new_d_tlas.add(row["name"].upper())
+                if is_turbo:
+                    turbo_driver = row["name"]
+
+        sel_constructors, new_c_tlas = [], set()
+        for j in range(n_c):
+            if pulp.value(x_c[k][j]) > 0.5:
+                row = constructors.loc[j]
+                sel_constructors.append({
+                    "name":            row["name"],
+                    "price":           row["price"],
+                    "expected_points": row["expected_points"],
+                    "xDeltaPrice":     float(row["xDeltaPrice"]) if has_delta_c else 0.0,
+                })
+                new_c_tlas.add(row["name"].upper())
+
+        sel_drivers.sort(key=lambda d: d["is_turbo"])
+
+        spent     = sum(d["price"] for d in sel_drivers) + sum(c["price"] for c in sel_constructors)
+        gross_pts = sum(
+            (d["expected_points"] * 2 if d["is_turbo"] else d["expected_points"])
+            for d in sel_drivers
+        ) + sum(c["expected_points"] for c in sel_constructors)
+        budget_value = (
+            sum(d["xDeltaPrice"] for d in sel_drivers)
+            + sum(c["xDeltaPrice"] for c in sel_constructors)
+        ) * budget_pts_weight
+
+        driver_out  = sorted(current_d - new_d_tlas)
+        driver_in   = sorted(new_d_tlas - current_d)
+        constr_out  = sorted(current_c - new_c_tlas)
+        constr_in   = sorted(new_c_tlas - current_c)
+        n_transfers = len(driver_out) + len(constr_out)
+        penalty_pts = max(0, n_transfers - max_free_transfers) * penalty_per_transfer
+
+        results.append({
+            "drivers":                   sel_drivers,
+            "turbo_driver":              turbo_driver,
+            "constructors":              sel_constructors,
+            "total_price":               round(spent, 1),
+            "remaining_budget":          round(budget - spent, 1),
+            "gross_points":              round(gross_pts, 2),
+            "budget_value":              round(budget_value, 2),
+            "penalty_pts":               penalty_pts,
+            "total_points":              round(gross_pts - penalty_pts, 2),
+            "n_transfers":               n_transfers,
+            "driver_transfers_out":      driver_out,
+            "driver_transfers_in":       driver_in,
+            "constructor_transfers_out": constr_out,
+            "constructor_transfers_in":  constr_in,
+        })
+
     return results
 
 
