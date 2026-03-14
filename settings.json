@@ -12,9 +12,5 @@
     "portfolio_max_overlap": 8,
     "xdelta_confidence": 1,
     "limitless": [2],
-    "reference_team": 3,
-    "reference_team_picks": {
-        "drivers": ["ANT", "BEA", "LEC", "BOR", "OCO"],
-        "constructors": ["FER", "HAA"]
-    }
+    "reference_team": 1
 }
