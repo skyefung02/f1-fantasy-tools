@@ -296,6 +296,30 @@ def solve_top_n(
 
 # ── Portfolio solver ──────────────────────────────────────────────────────────
 
+def compute_differential_ev(team: dict, reference_tlas: set[str]) -> float:
+    """
+    Sum of base expected_points for assets in team that are NOT in reference_tlas.
+
+    Uses base EV (turbo not doubled) since turbo is a team-specific choice
+    independent of which assets are shared with the reference.
+
+    Parameters
+    ----------
+    team           : result dict from solve() / solve_with_transfers() etc.
+    reference_tlas : set of uppercase asset codes (drivers + constructors)
+                     that define the reference team
+    """
+    ref = {t.upper() for t in reference_tlas}
+    diff_ev = sum(
+        d["expected_points"] for d in team["drivers"]
+        if d["name"].upper() not in ref
+    ) + sum(
+        c["expected_points"] for c in team["constructors"]
+        if c["name"].upper() not in ref
+    )
+    return round(diff_ev, 2)
+
+
 def compute_overlap(team1: dict, team2: dict) -> int:
     """
     Count the number of matching decisions between two teams (out of 8 total):
@@ -592,6 +616,8 @@ def solve_portfolio_transfers(
     team_weights: list[float] | None = None,
     max_transfers: int | None = None,
     limitless_teams: list[int] | None = None,
+    diff_ev_weight: float = 0.0,
+    diff_ev_reference_tlas: set[str] | None = None,
 ) -> list[dict]:
     """
     Solve optimal transfers for all teams jointly in a single ILP.
@@ -603,19 +629,27 @@ def solve_portfolio_transfers(
 
     Parameters
     ----------
-    current_teams   : list of enrich_team() dicts from fetch_teams.py
-    budgets         : available budget per team (total_price + budget_remaining)
-    team_weights    : per-team objective weights (e.g. [0.2, 0.4, 0.4]).
-                      Higher weight = solver prioritises that team more.
-                      Defaults to equal weights [1.0, 1.0, ...] if None.
-    max_transfers   : hard cap on total transfers per team (e.g. 1 to model
-                      banking a free transfer). None = unconstrained.
-    limitless_teams : 0-indexed list of teams playing the Limitless chip.
-                      Limitless teams are solved with unlimited budget, no
-                      transfer penalty, and pure xPts (no xDeltaPrice).
-                      Overlap constraints against Limitless teams use their
-                      pre-Limitless (current) picks, since those picks revert
-                      next race week.
+    current_teams          : list of enrich_team() dicts from fetch_teams.py
+    budgets                : available budget per team (total_price + budget_remaining)
+    team_weights           : per-team objective weights (e.g. [0.2, 0.4, 0.4]).
+                             Higher weight = solver prioritises that team more.
+                             Defaults to equal weights [1.0, 1.0, ...] if None.
+    max_transfers          : hard cap on total transfers per team (e.g. 1 to model
+                             banking a free transfer). None = unconstrained.
+    limitless_teams        : 0-indexed list of teams playing the Limitless chip.
+                             Limitless teams are solved with unlimited budget, no
+                             transfer penalty, and pure xPts (no xDeltaPrice).
+                             Overlap constraints against Limitless teams use their
+                             pre-Limitless (current) picks, since those picks revert
+                             next race week.
+    diff_ev_weight         : λ in [0, 1]. Blends the per-asset EV coefficient between
+                             full weight (λ=0, pure total EV) and discounted for
+                             reference assets (λ=1, pure differential EV).
+                             Reference assets have their selection coefficient scaled
+                             by (1 − λ); non-reference assets keep full weight.
+                             Ignored when diff_ev_reference_tlas is None or empty.
+    diff_ev_reference_tlas : Set of uppercase asset codes defining the reference team.
+                             Typically loaded from settings.json reference_team_picks.
     """
     n_teams       = len(current_teams)
     limitless_set = set(limitless_teams or [])
@@ -653,14 +687,38 @@ def solve_portfolio_transfers(
     t_d = [[pulp.LpVariable(f"t_d_{k}_{i}", cat="Binary") for i in range(n_d)] for k in range(n_teams)]
     e   =  [pulp.LpVariable(f"e_{k}", lowBound=0, cat="Integer")               for k in range(n_teams)]
 
+    # ── Differential EV coefficients ─────────────────────────────────────────
+    # When diff_ev_weight (λ) > 0, reference assets have their selection
+    # coefficient scaled by (1 − λ) while non-reference assets keep weight 1.
+    # Effective objective per asset:
+    #   non-ref driver selection : 1.0 × ev    (unique to this team → full credit)
+    #   ref     driver selection : (1−λ) × ev  (shared with reference → discounted)
+    #   turbo bonus              : same scale as corresponding selection coefficient
+    #   xDeltaPrice              : always full weight (budget value is independent
+    #                              of weekly differential EV concept)
+    ref = {t.upper() for t in (diff_ev_reference_tlas or set())}
+    use_diff = bool(ref) and diff_ev_weight > 0.0
+
+    def _d_coeff(i: int) -> float:
+        if use_diff and drivers.loc[i, "name"].upper() in ref:
+            return 1.0 - diff_ev_weight
+        return 1.0
+
+    def _c_coeff(j: int) -> float:
+        if use_diff and constructors.loc[j, "name"].upper() in ref:
+            return 1.0 - diff_ev_weight
+        return 1.0
+
     # ── Objective: weighted sum of (score − penalty) across all teams ─────────
     obj_terms = []
     for k in range(n_teams):
         w     = team_weights[k]
         score = pulp.lpSum(
-            (x_d[k][i] + t_d[k][i]) * drivers.loc[i, "expected_points"] for i in range(n_d)
+            (x_d[k][i] + t_d[k][i]) * _d_coeff(i) * drivers.loc[i, "expected_points"]
+            for i in range(n_d)
         ) + pulp.lpSum(
-            x_c[k][j] * constructors.loc[j, "expected_points"] for j in range(n_c)
+            x_c[k][j] * _c_coeff(j) * constructors.loc[j, "expected_points"]
+            for j in range(n_c)
         )
         # Limitless teams optimise pure xPts only — their picks revert next week
         # so xDeltaPrice gains are irrelevant.
