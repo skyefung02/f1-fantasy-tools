@@ -1,0 +1,182 @@
+[
+  {
+    "slot": 1,
+    "name": "Two Drivers, One CSV",
+    "budget_remaining": 1.4,
+    "drivers": [
+      {
+        "name": "Franco Colapinto",
+        "tla": "COL",
+        "price": 7.6,
+        "season_score": 28,
+        "is_turbo": false
+      },
+      {
+        "name": "George Russell",
+        "tla": "RUS",
+        "price": 28.3,
+        "season_score": -3,
+        "is_turbo": true
+      },
+      {
+        "name": "Liam Lawson",
+        "tla": "LAW",
+        "price": 7.5,
+        "season_score": 50,
+        "is_turbo": false
+      },
+      {
+        "name": "Oliver Bearman",
+        "tla": "BEA",
+        "price": 9.2,
+        "season_score": 42,
+        "is_turbo": false
+      },
+      {
+        "name": "Charles Leclerc",
+        "tla": "LEC",
+        "price": 23.7,
+        "season_score": 111,
+        "is_turbo": false
+      }
+    ],
+    "turbo_driver": "Charles Leclerc",
+    "constructors": [
+      {
+        "name": "Ferrari",
+        "tla": "FER",
+        "price": 24.2,
+        "season_score": 263,
+        "is_turbo": false
+      },
+      {
+        "name": "Racing Bulls",
+        "tla": "VRB",
+        "price": 8.1,
+        "season_score": 303,
+        "is_turbo": false
+      }
+    ],
+    "total_price": 107.3
+  },
+  {
+    "slot": 2,
+    "name": "Melbourne Moneyball",
+    "budget_remaining": 1.4,
+    "drivers": [
+      {
+        "name": "Kimi Antonelli",
+        "tla": "ANT",
+        "price": 24.1,
+        "season_score": 40,
+        "is_turbo": false
+      },
+      {
+        "name": "Oliver Bearman",
+        "tla": "BEA",
+        "price": 9.2,
+        "season_score": -3,
+        "is_turbo": false
+      },
+      {
+        "name": "Liam Lawson",
+        "tla": "LAW",
+        "price": 7.5,
+        "season_score": 50,
+        "is_turbo": false
+      },
+      {
+        "name": "Esteban Ocon",
+        "tla": "OCO",
+        "price": 9.1,
+        "season_score": 42,
+        "is_turbo": false
+      },
+      {
+        "name": "Charles Leclerc",
+        "tla": "LEC",
+        "price": 23.7,
+        "season_score": 111,
+        "is_turbo": true
+      }
+    ],
+    "turbo_driver": "Charles Leclerc",
+    "constructors": [
+      {
+        "name": "Ferrari",
+        "tla": "FER",
+        "price": 24.2,
+        "season_score": 263,
+        "is_turbo": false
+      },
+      {
+        "name": "Haas",
+        "tla": "HAA",
+        "price": 9.2,
+        "season_score": 84,
+        "is_turbo": false
+      }
+    ],
+    "total_price": 107.3
+  },
+  {
+    "slot": 3,
+    "name": "Scarlet Regression",
+    "budget_remaining": 0.0,
+    "drivers": [
+      {
+        "name": "Oliver Bearman",
+        "tla": "BEA",
+        "price": 9.2,
+        "season_score": 40,
+        "is_turbo": false
+      },
+      {
+        "name": "Arvid Lindbland",
+        "tla": "LIN",
+        "price": 7.6,
+        "season_score": -3,
+        "is_turbo": false
+      },
+      {
+        "name": "Liam Lawson",
+        "tla": "LAW",
+        "price": 7.5,
+        "season_score": 50,
+        "is_turbo": false
+      },
+      {
+        "name": "Esteban Ocon",
+        "tla": "OCO",
+        "price": 9.1,
+        "season_score": 42,
+        "is_turbo": false
+      },
+      {
+        "name": "George Russell",
+        "tla": "RUS",
+        "price": 28.3,
+        "season_score": 92,
+        "is_turbo": true
+      }
+    ],
+    "turbo_driver": "Lewis Hamilton",
+    "constructors": [
+      {
+        "name": "Ferrari",
+        "tla": "FER",
+        "price": 24.2,
+        "season_score": 263,
+        "is_turbo": false
+      },
+      {
+        "name": "Haas",
+        "tla": "HAA",
+        "price": 9.2,
+        "season_score": 84,
+        "is_turbo": false
+      }
+    ],
+    "total_price": 106.8
+  }
+]

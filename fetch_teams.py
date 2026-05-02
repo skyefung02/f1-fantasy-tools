@@ -27,9 +27,10 @@ from urllib.parse import unquote
 
 import requests
 
-SETTINGS_FILE = Path(__file__).parent / "settings.json"
-ENV_FILE      = Path(__file__).parent / ".env"
-BASE_URL      = "https://fantasy.formula1.com"
+SETTINGS_FILE  = Path(__file__).parent / "settings.json"
+ENV_FILE       = Path(__file__).parent / ".env"
+SNAPSHOT_FILE  = Path(__file__).parent / "teams_snapshot.json"
+BASE_URL       = "https://fantasy.formula1.com"
 
 DEFAULT_SETTINGS = {
     "budget": 100.0,
@@ -152,6 +153,63 @@ def enrich_team(raw_team: dict, players: dict[str, dict]) -> dict:
     }
 
 
+# ── Snapshot ─────────────────────────────────────────────────────────────────
+
+def save_snapshot(teams: list[dict]) -> None:
+    with open(SNAPSHOT_FILE, "w") as f:
+        json.dump(teams, f, indent=2)
+    print(f"Snapshot saved → {SNAPSHOT_FILE}")
+
+
+def load_snapshot() -> list[dict] | None:
+    if SNAPSHOT_FILE.exists():
+        with open(SNAPSHOT_FILE) as f:
+            return json.load(f)
+    return None
+
+
+def get_current_teams(settings: dict) -> list[dict]:
+    """Return enriched teams. Uses snapshot if present, otherwise fetches live from the API."""
+    snapshot = load_snapshot()
+    if snapshot is not None:
+        print(f"Using snapshot: {SNAPSHOT_FILE}  (run 'python fetch_teams.py --save' to refresh)")
+        return snapshot
+
+    # ── Live fallback ─────────────────────────────────────────────────────────
+    cookie = load_cookie()
+    if not cookie:
+        print("Error: F1_FANTASY_COOKIE not set. See README for setup instructions.")
+        sys.exit(1)
+
+    user_uuid = settings.get("user_uuid")
+    if not user_uuid:
+        print("Error: 'user_uuid' not set in settings.json.")
+        sys.exit(1)
+
+    gameday = settings.get("gameday", 1)
+    client  = F1FantasyClient(cookie=cookie)
+
+    print(f"No snapshot found — fetching live from API (gameday {gameday})...")
+    try:
+        players = client.get_players(gameday=gameday)
+    except requests.HTTPError as e:
+        print(f"Error fetching players: {e}")
+        sys.exit(1)
+
+    try:
+        raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday)
+    except requests.HTTPError as e:
+        print(f"Error fetching teams: {e}")
+        print("Your cookie may be expired — re-extract it from the browser.")
+        sys.exit(1)
+
+    if not raw_teams:
+        print("No teams found. Check your cookie and user_uuid.")
+        sys.exit(0)
+
+    return [enrich_team(raw, players) for raw in raw_teams]
+
+
 # ── Display ───────────────────────────────────────────────────────────────────
 
 def print_team(team: dict) -> None:
@@ -183,6 +241,19 @@ def print_team(team: dict) -> None:
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Fetch and display your F1 Fantasy teams.")
+    parser.add_argument(
+        "--save",
+        action="store_true",
+        help=(
+            "Save fetched teams to teams_snapshot.json. "
+            "Run this BEFORE making any transfers on the website — "
+            "all other tools will use the snapshot automatically."
+        ),
+    )
+    args = parser.parse_args()
+
     settings = load_settings()
 
     cookie = load_cookie()
@@ -220,8 +291,12 @@ def main():
         print("No teams found. Check that your cookie is valid and user_uuid is correct.")
         sys.exit(0)
 
-    for raw in raw_teams:
-        team = enrich_team(raw, players)
+    teams = [enrich_team(raw, players) for raw in raw_teams]
+
+    if args.save:
+        save_snapshot(teams)
+
+    for team in teams:
         print_team(team)
 
 

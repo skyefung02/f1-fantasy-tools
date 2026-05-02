@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 
-from fetch_teams import F1FantasyClient, enrich_team, load_cookie, load_settings
+from fetch_teams import F1FantasyClient, enrich_team, load_cookie, load_settings, get_current_teams
 from solver import solve_portfolio_transfers, solve_with_transfers, compute_differential_ev
 
 TEAM_COLOURS = ["#E10600", "#00A0DC", "#00D2BE", "#FF8000", "#C0C0C0"]
@@ -143,7 +143,10 @@ def main():
     budget_pts_weight = args.pts_per_1m * args.remaining_races
     xdelta_confidence = float(settings.get("xdelta_confidence", 1.0))
     limitless_teams   = [t - 1 for t in settings.get("limitless", [])]
+    wildcard_teams    = [t - 1 for t in settings.get("wildcard",  [])]
     limitless_set     = set(limitless_teams)
+    wildcard_set      = set(wildcard_teams)
+    chip_set          = limitless_set | wildcard_set
     ref_k             = settings.get("reference_team", 1) - 1  # 0-indexed
 
     # ── Load CSV ──────────────────────────────────────────────────────────────
@@ -161,50 +164,23 @@ def main():
     if "xDeltaPrice" in df.columns:
         df["xDeltaPrice"] = pd.to_numeric(df["xDeltaPrice"], errors="coerce").fillna(0.0)
 
-    # ── Fetch current teams ───────────────────────────────────────────────────
-    cookie = load_cookie()
-    if not cookie:
-        print("Error: F1_FANTASY_COOKIE not set.")
-        sys.exit(1)
-
-    user_uuid = settings.get("user_uuid")
-    if not user_uuid:
-        print("Error: 'user_uuid' not set in settings.json.")
-        sys.exit(1)
-
-    gameday = settings.get("gameday", 1)
-    client  = F1FantasyClient(cookie=cookie)
-
-    print(f"Fetching player data (gameday {gameday})...")
-    try:
-        players = client.get_players(gameday=gameday)
-    except requests.HTTPError as e:
-        print(f"Error fetching players: {e}")
-        sys.exit(1)
-
-    print("Fetching your teams...")
-    try:
-        raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday)
-    except requests.HTTPError as e:
-        print(f"Error fetching teams: {e}")
-        sys.exit(1)
-
-    if not raw_teams:
-        print("No teams found.")
-        sys.exit(0)
-
-    current_teams = [enrich_team(raw, players) for raw in raw_teams]
+    # ── Load current teams (snapshot if available, else live API) ─────────────
+    current_teams = get_current_teams(settings)
     budgets       = [team_budget(t) for t in current_teams]
     n_teams       = len(current_teams)
     locked        = [c.upper() for c in settings.get("locked", [])]
     banned        = [c.upper() for c in settings.get("banned", [])]
 
-    plot_teams = [k for k in range(n_teams) if k != ref_k and k not in limitless_set]
+    plot_teams = [k for k in range(n_teams) if k != ref_k and k not in chip_set]
     if not plot_teams:
         print("No eligible teams to plot (all teams are either the reference or playing a chip).")
         sys.exit(0)
 
-    chip_labels  = [f"T{k+1}" for k in limitless_set]
+    chip_labels  = [
+        f"T{k+1} (Limitless)" for k in limitless_set
+    ] + [
+        f"T{k+1} (Wildcard)"  for k in wildcard_set
+    ]
     plot_labels  = [f"T{k+1}" for k in plot_teams]
     print(f"\nReference team : T{ref_k + 1}")
     if chip_labels:
@@ -214,7 +190,7 @@ def main():
     # ── Phase 1: resolve reference picks ─────────────────────────────────────
     ref_result = None
 
-    if ref_k in limitless_set:
+    if ref_k in chip_set:
         ref_tlas  = ref_tlas_from_settings(settings)
         if not ref_tlas:
             print(
@@ -235,6 +211,7 @@ def main():
             budget_pts_weight=budget_pts_weight,
             team_weights=args.weights,
             limitless_teams=limitless_teams,
+            wildcard_teams=wildcard_teams,
             diff_ev_weight=0.0,
         )
         ref_result = baseline[ref_k]

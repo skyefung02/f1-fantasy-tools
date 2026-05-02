@@ -107,6 +107,32 @@ CONSTRUCTORS
 ──────────────────────────────────────────────────────
 ```
 
+## Gameweek workflow
+
+**Step 1 — snapshot your teams (do this first, before touching the website)**
+
+```bash
+python fetch_teams.py --save
+```
+
+This saves your current pre-transfer teams to `teams_snapshot.json`. All other tools (`transfer_advisor.py`, `wildcard_eval.py`, `diff_ev_plot.py`) automatically load from this snapshot instead of calling the live API, so they always see your teams as they were at the start of the week — not after you've already made transfers.
+
+Run this once per gameweek, before making any changes on the F1 Fantasy website. The snapshot is just overwritten the next time you run `--save`, so there's nothing to clean up.
+
+**Step 2 — update your xPts data**
+
+Edit `sample_data.csv` (or your data file) with the latest expected points and price projections for the upcoming race.
+
+**Step 3 — run the tools**
+
+```bash
+python transfer_advisor.py   # optimal transfers across all 3 teams
+python wildcard_eval.py      # should you play the wildcard?
+python diff_ev_plot.py       # Pareto frontier: total EV vs differential EV
+```
+
+---
+
 ## Fetching your teams from the website
 
 `fetch_teams.py` pulls your current team selections directly from the F1 Fantasy website so you don't have to enter them manually.
@@ -119,12 +145,13 @@ The script authenticates using your browser's session cookie. You need to copy i
 
 1. Log into [fantasy.formula1.com](https://fantasy.formula1.com) in Chrome
 2. Open DevTools: `Cmd+Option+I`
-3. Go to the **Network** tab and select the **Fetch/XHR** filter
-4. Hard-refresh the My Team page: `Cmd+Shift+R`
-5. Click any request to `fantasy.formula1.com` in the list
+3. Go to the **Network** tab
+4. In the filter/search box, type `buster` — this filters to the right request quickly
+5. Click the `buster` request that appears
 6. In the **Headers** panel on the right, find the **Request Headers** section
-7. Copy the full value of the `Cookie:` header (it's a long string)
-8. Create a file called `.env` in this project folder and paste it in like this — no quotes:
+7. Find the `Cookie:` header — it starts with something like `consentUUID=...`
+8. Copy the full value of the `Cookie:` header (it's a long string)
+9. Create a file called `.env` in this project folder and paste it in like this — no quotes:
 
 ```
 F1_FANTASY_COOKIE=<paste the full cookie string here>

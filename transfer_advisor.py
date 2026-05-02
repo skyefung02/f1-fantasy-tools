@@ -19,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-from fetch_teams import F1FantasyClient, enrich_team, load_cookie, load_settings
+from fetch_teams import F1FantasyClient, enrich_team, load_cookie, load_settings, get_current_teams
 from solver import solve_portfolio_transfers, compute_overlap
 
 
@@ -44,10 +44,11 @@ def print_transfer_plan(
     wide = "=" * 60
 
     is_limitless = result.get("is_limitless", False)
+    is_wildcard  = result.get("is_wildcard",  False)
 
     print(f"\n{wide}")
-    limitless_tag = "  ★ LIMITLESS" if is_limitless else ""
-    print(f"  TEAM {team_idx}  —  {current_team['name']}{limitless_tag}")
+    chip_tag = "  ★ LIMITLESS" if is_limitless else ("  ★ WILDCARD" if is_wildcard else "")
+    print(f"  TEAM {team_idx}  —  {current_team['name']}{chip_tag}")
     print(f"  Budget available: {budget:.1f}m" + ("  (unlimited this week)" if is_limitless else ""))
     print(wide)
 
@@ -58,8 +59,10 @@ def print_transfer_plan(
     if n == 0:
         print("\n  No changes — current team is already optimal.")
     else:
-        penalty_note = "  (Limitless — no penalty)" if is_limitless else (
-            f"  (-{result['penalty_pts']:.0f} pts penalty)" if extra else "  (all free)"
+        penalty_note = (
+            "  (Limitless — no penalty)" if is_limitless else
+            "  (Wildcard — no penalty)"  if is_wildcard  else
+            (f"  (-{result['penalty_pts']:.0f} pts penalty)" if extra else "  (all free)")
         )
         print(f"\n  TRANSFERS: {n}{penalty_note}")
         print(f"  {'─'*56}")
@@ -285,40 +288,8 @@ def main():
 
     budget_pts_weight = args.pts_per_1m * args.remaining_races
 
-    # ── Fetch current teams ───────────────────────────────────────────────────
-    cookie = load_cookie()
-    if not cookie:
-        print("Error: F1_FANTASY_COOKIE not set. See README for setup instructions.")
-        sys.exit(1)
-
-    user_uuid = settings.get("user_uuid")
-    if not user_uuid:
-        print("Error: 'user_uuid' not set in settings.json.")
-        sys.exit(1)
-
-    gameday = settings.get("gameday", 1)
-    client = F1FantasyClient(cookie=cookie)
-
-    print(f"Fetching player data (gameday {gameday})...")
-    try:
-        players = client.get_players(gameday=gameday)
-    except requests.HTTPError as e:
-        print(f"Error fetching players: {e}")
-        sys.exit(1)
-
-    print("Fetching your teams...")
-    try:
-        raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday)
-    except requests.HTTPError as e:
-        print(f"Error fetching teams: {e}")
-        print("Your cookie may be expired — re-extract it from the browser.")
-        sys.exit(1)
-
-    if not raw_teams:
-        print("No teams found. Check your cookie and user_uuid.")
-        sys.exit(0)
-
-    current_teams = [enrich_team(raw, players) for raw in raw_teams]
+    # ── Load current teams (snapshot if available, else live API) ─────────────
+    current_teams = get_current_teams(settings)
     budgets = [team_budget(t) for t in current_teams]
 
     locked = [c.upper() for c in settings.get("locked", [])]
@@ -326,8 +297,9 @@ def main():
 
     team_weights      = args.weights
     xdelta_confidence = float(settings.get("xdelta_confidence", 1.0))
-    # limitless is 1-indexed in settings (team numbers); convert to 0-indexed
+    # limitless/wildcard are 1-indexed in settings (team numbers); convert to 0-indexed
     limitless_teams   = [t - 1 for t in settings.get("limitless", [])]
+    wildcard_teams    = [t - 1 for t in settings.get("wildcard",  [])]
 
     if budget_pts_weight != 0.0:
         print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
@@ -347,6 +319,7 @@ def main():
             budget_pts_weight=budget_pts_weight,
             team_weights=team_weights,
             limitless_teams=limitless_teams,
+            wildcard_teams=wildcard_teams,
         )
     except (ValueError, RuntimeError) as e:
         print(f"Solver error: {e}")

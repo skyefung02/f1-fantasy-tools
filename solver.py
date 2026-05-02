@@ -616,6 +616,7 @@ def solve_portfolio_transfers(
     team_weights: list[float] | None = None,
     max_transfers: int | None = None,
     limitless_teams: list[int] | None = None,
+    wildcard_teams: list[int] | None = None,
     diff_ev_weight: float = 0.0,
     diff_ev_reference_tlas: set[str] | None = None,
 ) -> list[dict]:
@@ -642,6 +643,10 @@ def solve_portfolio_transfers(
                              Overlap constraints against Limitless teams use their
                              pre-Limitless (current) picks, since those picks revert
                              next race week.
+    wildcard_teams         : 0-indexed list of teams playing the Wildcard chip.
+                             Wildcard teams keep their normal budget but pay no
+                             transfer penalty (all transfers are free). Budget value
+                             (xDeltaPrice) is still included in the objective.
     diff_ev_weight         : λ in [0, 1]. Blends the per-asset EV coefficient between
                              full weight (λ=0, pure total EV) and discounted for
                              reference assets (λ=1, pure differential EV).
@@ -653,6 +658,7 @@ def solve_portfolio_transfers(
     """
     n_teams       = len(current_teams)
     limitless_set = set(limitless_teams or [])
+    wildcard_set  = set(wildcard_teams  or [])
     locked  = {c.upper() for c in (locked or [])}
     banned  = {c.upper() for c in (banned or [])}
 
@@ -734,8 +740,9 @@ def solve_portfolio_transfers(
     # ── Per-team standard + transfer constraints ───────────────────────────────
     for k, (team, budget) in enumerate(zip(current_teams, budgets)):
         is_limitless    = k in limitless_set
+        is_wildcard     = k in wildcard_set
         eff_budget      = 999.0 if is_limitless else budget
-        eff_mft         = 7     if is_limitless else max_free_transfers
+        eff_mft         = 7     if (is_limitless or is_wildcard) else max_free_transfers
 
         prob += pulp.lpSum(x_d[k]) == 5, f"k{k}_5_drivers"
         prob += pulp.lpSum(x_c[k]) == 2, f"k{k}_2_constructors"
@@ -772,7 +779,7 @@ def solve_portfolio_transfers(
             + pulp.lpSum(x_c[k][j] for j in range(n_c) if constructors.loc[j, "name"].upper() in current_c)
         )
         prob += e[k] >= 7 - kept - eff_mft, f"k{k}_excess_lb"
-        if max_transfers is not None and not is_limitless:
+        if max_transfers is not None and not is_limitless and not is_wildcard:
             prob += kept >= 7 - max_transfers, f"k{k}_hard_max_xfers"
 
     # ── Pairwise overlap constraints (all pairs, jointly) ─────────────────────
@@ -899,8 +906,10 @@ def solve_portfolio_transfers(
             for d in sel_drivers
         ) + sum(c["expected_points"] for c in sel_constructors)
         is_limitless = k in limitless_set
+        is_wildcard  = k in wildcard_set
         # Limitless picks revert next week — price gains and transfer penalties
         # are both irrelevant for these teams.
+        # Wildcard keeps normal budget/picks but pays no transfer penalty.
         budget_value = 0.0 if is_limitless else (
             sum(d["xDeltaPrice"] for d in sel_drivers)
             + sum(c["xDeltaPrice"] for c in sel_constructors)
@@ -911,7 +920,7 @@ def solve_portfolio_transfers(
         constr_out  = sorted(current_c - new_c_tlas)
         constr_in   = sorted(new_c_tlas - current_c)
         n_transfers = len(driver_out) + len(constr_out)
-        penalty_pts = 0 if is_limitless else max(0, n_transfers - max_free_transfers) * penalty_per_transfer
+        penalty_pts = 0 if (is_limitless or is_wildcard) else max(0, n_transfers - max_free_transfers) * penalty_per_transfer
 
         results.append({
             "drivers":                   sel_drivers,
@@ -925,6 +934,7 @@ def solve_portfolio_transfers(
             "total_points":              round(gross_pts - penalty_pts, 2),
             "n_transfers":               n_transfers,
             "is_limitless":              is_limitless,
+            "is_wildcard":               is_wildcard,
             "driver_transfers_out":      driver_out,
             "driver_transfers_in":       driver_in,
             "constructor_transfers_out": constr_out,
