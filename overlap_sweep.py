@@ -17,9 +17,8 @@ import sys
 import argparse
 
 import pandas as pd
-import requests
 
-from fetch_teams import F1FantasyClient, enrich_team, load_cookie, load_settings
+from fetch_teams import load_settings, get_current_teams
 from solver import solve_portfolio_transfers, compute_overlap
 
 
@@ -42,6 +41,7 @@ def run_sweep(
     banned: list[str],
     budget_pts_weight: float,
     team_weights: list[float] | None,
+    free_transfers: list[int],
     max_transfers: int | None = None,
     limitless_teams: list[int] | None = None,
 ) -> list[dict]:
@@ -58,6 +58,7 @@ def run_sweep(
                 banned=banned,
                 budget_pts_weight=budget_pts_weight,
                 team_weights=team_weights,
+                max_free_transfers=free_transfers,
                 max_transfers=max_transfers,
                 limitless_teams=limitless_teams,
             )
@@ -291,41 +292,11 @@ def main():
         df["xDeltaPrice"] = pd.to_numeric(df["xDeltaPrice"], errors="coerce").fillna(0.0)
 
     # ── Fetch current teams ───────────────────────────────────────────────────
-    cookie = load_cookie()
-    if not cookie:
-        print("Error: F1_FANTASY_COOKIE not set.")
-        sys.exit(1)
-
-    user_uuid = settings.get("user_uuid")
-    if not user_uuid:
-        print("Error: 'user_uuid' not set in settings.json.")
-        sys.exit(1)
-
-    gameday = settings.get("gameday", 1)
-    client  = F1FantasyClient(cookie=cookie)
-
-    print(f"Fetching player data (gameday {gameday})...")
-    try:
-        players = client.get_players(gameday=gameday)
-    except requests.HTTPError as e:
-        print(f"Error fetching players: {e}")
-        sys.exit(1)
-
-    print("Fetching your teams...")
-    try:
-        raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday)
-    except requests.HTTPError as e:
-        print(f"Error fetching teams: {e}")
-        sys.exit(1)
-
-    if not raw_teams:
-        print("No teams found.")
-        sys.exit(0)
-
-    current_teams = [enrich_team(raw, players) for raw in raw_teams]
-    budgets       = [team_budget(t) for t in current_teams]
-    locked        = [c.upper() for c in settings.get("locked", [])]
-    banned        = [c.upper() for c in settings.get("banned", [])]
+    current_teams  = get_current_teams(settings)
+    budgets        = [team_budget(t) for t in current_teams]
+    free_transfers = [t.get("free_transfers", 2) for t in current_teams]
+    locked         = [c.upper() for c in settings.get("locked", [])]
+    banned         = [c.upper() for c in settings.get("banned", [])]
 
     xdelta_confidence = float(settings.get("xdelta_confidence", 1.0))
     # limitless is 1-indexed in settings; convert to 0-indexed
@@ -344,11 +315,11 @@ def main():
 
     rows_2ft = run_sweep(
         df, current_teams, budgets, locked, banned, budget_pts_weight, args.weights,
-        max_transfers=None, limitless_teams=limitless_teams,
+        free_transfers=free_transfers, max_transfers=None, limitless_teams=limitless_teams,
     )
     rows_1ft = run_sweep(
         df, current_teams, budgets, locked, banned, budget_pts_weight, args.weights,
-        max_transfers=1, limitless_teams=limitless_teams,
+        free_transfers=free_transfers, max_transfers=1, limitless_teams=limitless_teams,
     )
 
     best_overlap = print_sweep(rows_2ft, budget_pts_weight, xdelta_confidence=xdelta_confidence, limitless_teams=limitless_teams)

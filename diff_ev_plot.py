@@ -61,6 +61,7 @@ def enumerate_teams(
     banned: list[str],
     budget_pts_weight: float,
     n: int,
+    max_free_transfers: int = 2,
 ) -> list[dict]:
     """
     Enumerate up to n distinct teams via repeated solve_with_transfers calls.
@@ -85,6 +86,7 @@ def enumerate_teams(
                 banned=banned,
                 overlap_constraints=[(r, 7) for r in results],
                 budget_pts_weight=budget_pts_weight,
+                max_free_transfers=max_free_transfers,
             )
             results.append(result)
         except RuntimeError:
@@ -165,11 +167,12 @@ def main():
         df["xDeltaPrice"] = pd.to_numeric(df["xDeltaPrice"], errors="coerce").fillna(0.0)
 
     # ── Load current teams (snapshot if available, else live API) ─────────────
-    current_teams = get_current_teams(settings)
-    budgets       = [team_budget(t) for t in current_teams]
-    n_teams       = len(current_teams)
-    locked        = [c.upper() for c in settings.get("locked", [])]
-    banned        = [c.upper() for c in settings.get("banned", [])]
+    current_teams  = get_current_teams(settings)
+    budgets        = [team_budget(t) for t in current_teams]
+    n_teams        = len(current_teams)
+    locked         = [c.upper() for c in settings.get("locked", [])]
+    banned         = [c.upper() for c in settings.get("banned", [])]
+    free_transfers = [t.get("free_transfers", 2) for t in current_teams]
 
     plot_teams = [k for k in range(n_teams) if k != ref_k and k not in chip_set]
     if not plot_teams:
@@ -212,6 +215,7 @@ def main():
             team_weights=args.weights,
             limitless_teams=limitless_teams,
             wildcard_teams=wildcard_teams,
+            max_free_transfers=free_transfers,
             diff_ev_weight=0.0,
         )
         ref_result = baseline[ref_k]
@@ -239,6 +243,7 @@ def main():
             banned=banned,
             budget_pts_weight=budget_pts_weight,
             n=args.top_n,
+            max_free_transfers=free_transfers[k],
         )
         print(f"  Found {len(enumerated)} distinct teams.")
 

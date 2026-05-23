@@ -610,7 +610,7 @@ def solve_portfolio_transfers(
     max_pairwise_overlap: int = 5,
     locked: list[str] | None = None,
     banned: list[str] | None = None,
-    max_free_transfers: int = 2,
+    max_free_transfers: int | list[int] = 2,
     penalty_per_transfer: int = 10,
     budget_pts_weight: float = 0.0,
     team_weights: list[float] | None = None,
@@ -661,6 +661,11 @@ def solve_portfolio_transfers(
     wildcard_set  = set(wildcard_teams  or [])
     locked  = {c.upper() for c in (locked or [])}
     banned  = {c.upper() for c in (banned or [])}
+
+    mft_list = (
+        max_free_transfers if isinstance(max_free_transfers, list)
+        else [max_free_transfers] * n_teams
+    )
 
     if team_weights is None:
         team_weights = [1.0] * n_teams
@@ -742,7 +747,7 @@ def solve_portfolio_transfers(
         is_limitless    = k in limitless_set
         is_wildcard     = k in wildcard_set
         eff_budget      = 999.0 if is_limitless else budget
-        eff_mft         = 7     if (is_limitless or is_wildcard) else max_free_transfers
+        eff_mft         = 7     if (is_limitless or is_wildcard) else mft_list[k]
 
         prob += pulp.lpSum(x_d[k]) == 5, f"k{k}_5_drivers"
         prob += pulp.lpSum(x_c[k]) == 2, f"k{k}_2_constructors"
@@ -920,7 +925,7 @@ def solve_portfolio_transfers(
         constr_out  = sorted(current_c - new_c_tlas)
         constr_in   = sorted(new_c_tlas - current_c)
         n_transfers = len(driver_out) + len(constr_out)
-        penalty_pts = 0 if (is_limitless or is_wildcard) else max(0, n_transfers - max_free_transfers) * penalty_per_transfer
+        penalty_pts = 0 if (is_limitless or is_wildcard) else max(0, n_transfers - mft_list[k]) * penalty_per_transfer
 
         results.append({
             "drivers":                   sel_drivers,

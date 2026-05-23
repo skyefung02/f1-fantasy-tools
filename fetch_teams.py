@@ -107,7 +107,14 @@ class F1FantasyClient:
 
 # ── Data enrichment ───────────────────────────────────────────────────────────
 
-def enrich_team(raw_team: dict, players: dict[str, dict]) -> dict:
+def _calc_free_transfers(raw: dict) -> int:
+    """Derive next-race free transfers from a completed gameday's API data."""
+    subsallowed = int(raw.get("subsallowed", 2))
+    usersubs    = int(raw.get("usersubs",    0))
+    return min(2 + max(0, subsallowed - usersubs), 3)
+
+
+def enrich_team(raw_team: dict, players: dict[str, dict], prev_raw_team: dict | None = None) -> dict:
     """Cross-reference picked player IDs with full player data."""
     drivers = []
     constructors = []
@@ -146,6 +153,7 @@ def enrich_team(raw_team: dict, players: dict[str, dict]) -> dict:
         "slot": raw_team.get("teamno"),
         "name": unquote(raw_team.get("teamname", "")),
         "budget_remaining": float(raw_team.get("teambal", 0)),
+        "free_transfers": _calc_free_transfers(prev_raw_team or raw_team),
         "drivers": drivers,
         "turbo_driver": turbo_driver,
         "constructors": constructors,
@@ -207,7 +215,15 @@ def get_current_teams(settings: dict) -> list[dict]:
         print("No teams found. Check your cookie and user_uuid.")
         sys.exit(0)
 
-    return [enrich_team(raw, players) for raw in raw_teams]
+    prev_raw_teams = []
+    if gameday > 1:
+        try:
+            prev_raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday - 1)
+        except requests.HTTPError:
+            pass
+
+    prev_by_slot = {t.get("teamno"): t for t in prev_raw_teams}
+    return [enrich_team(raw, players, prev_by_slot.get(raw.get("teamno"))) for raw in raw_teams]
 
 
 # ── Display ───────────────────────────────────────────────────────────────────
@@ -233,8 +249,9 @@ def print_team(team: dict) -> None:
     for c in team["constructors"]:
         print(f"  {c['name']:<28} {'':6} {c['price']:>5.1f}  {c['season_score']:>10}")
 
-    print(f"\n  Total spent:     {team['total_price']:.1f}")
-    print(f"  Budget remaining:{team['budget_remaining']:.1f}")
+    print(f"\n  Total spent:      {team['total_price']:.1f}")
+    print(f"  Budget remaining: {team['budget_remaining']:.1f}")
+    print(f"  Free transfers:   {team.get('free_transfers', 2)}")
     print(sep)
 
 
@@ -291,7 +308,15 @@ def main():
         print("No teams found. Check that your cookie is valid and user_uuid is correct.")
         sys.exit(0)
 
-    teams = [enrich_team(raw, players) for raw in raw_teams]
+    prev_raw_teams = []
+    if gameday > 1:
+        try:
+            prev_raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday - 1)
+        except requests.HTTPError:
+            pass
+
+    prev_by_slot = {t.get("teamno"): t for t in prev_raw_teams}
+    teams = [enrich_team(raw, players, prev_by_slot.get(raw.get("teamno"))) for raw in raw_teams]
 
     if args.save:
         save_snapshot(teams)

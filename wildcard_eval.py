@@ -150,7 +150,8 @@ def main() -> None:
     xdelta_confidence = float(settings.get("xdelta_confidence", 1.0))
     locked = [c.upper() for c in settings.get("locked", [])]
     banned = [c.upper() for c in settings.get("banned", [])]
-    max_free_transfers = int(settings.get("max_free_transfers", 2))
+    # Prefer per-team values from the API; fall back to a single settings value for snapshots
+
 
     # ── Load CSV ──────────────────────────────────────────────────────────────
     try:
@@ -168,9 +169,10 @@ def main() -> None:
         df["xDeltaPrice"] = pd.to_numeric(df["xDeltaPrice"], errors="coerce").fillna(0.0)
 
     # ── Load current teams (snapshot if available, else live API) ─────────────
-    current_teams = get_current_teams(settings)
-    budgets       = [team_budget(t) for t in current_teams]
-    n_teams       = len(current_teams)
+    current_teams  = get_current_teams(settings)
+    budgets        = [team_budget(t) for t in current_teams]
+    n_teams        = len(current_teams)
+    free_transfers = [t.get("free_transfers", int(settings.get("max_free_transfers", 2))) for t in current_teams]
 
     # Determine which teams to evaluate
     if args.team is not None:
@@ -190,7 +192,7 @@ def main() -> None:
         locked=locked,
         banned=banned,
         budget_pts_weight=budget_pts_weight,
-        max_free_transfers=max_free_transfers,
+        max_free_transfers=free_transfers,
         # Solve each team independently — no cross-team overlap constraint.
         max_pairwise_overlap=8,
     )

@@ -300,6 +300,7 @@ def main():
     # limitless/wildcard are 1-indexed in settings (team numbers); convert to 0-indexed
     limitless_teams   = [t - 1 for t in settings.get("limitless", [])]
     wildcard_teams    = [t - 1 for t in settings.get("wildcard",  [])]
+    free_transfers    = [t.get("free_transfers", 2) for t in current_teams]
 
     if budget_pts_weight != 0.0:
         print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
@@ -320,6 +321,7 @@ def main():
             team_weights=team_weights,
             limitless_teams=limitless_teams,
             wildcard_teams=wildcard_teams,
+            max_free_transfers=free_transfers,
         )
     except (ValueError, RuntimeError) as e:
         print(f"Solver error: {e}")
