@@ -107,14 +107,7 @@ class F1FantasyClient:
 
 # ── Data enrichment ───────────────────────────────────────────────────────────
 
-def _calc_free_transfers(raw: dict) -> int:
-    """Derive next-race free transfers from a completed gameday's API data."""
-    subsallowed = int(raw.get("subsallowed", 2))
-    usersubs    = int(raw.get("usersubs",    0))
-    return min(2 + max(0, subsallowed - usersubs), 3)
-
-
-def enrich_team(raw_team: dict, players: dict[str, dict], prev_raw_team: dict | None = None) -> dict:
+def enrich_team(raw_team: dict, players: dict[str, dict], free_transfers: int = 2) -> dict:
     """Cross-reference picked player IDs with full player data."""
     drivers = []
     constructors = []
@@ -153,7 +146,7 @@ def enrich_team(raw_team: dict, players: dict[str, dict], prev_raw_team: dict | 
         "slot": raw_team.get("teamno"),
         "name": unquote(raw_team.get("teamname", "")),
         "budget_remaining": float(raw_team.get("teambal", 0)),
-        "free_transfers": _calc_free_transfers(prev_raw_team or raw_team),
+        "free_transfers": free_transfers,
         "drivers": drivers,
         "turbo_driver": turbo_driver,
         "constructors": constructors,
@@ -215,15 +208,11 @@ def get_current_teams(settings: dict) -> list[dict]:
         print("No teams found. Check your cookie and user_uuid.")
         sys.exit(0)
 
-    prev_raw_teams = []
-    if gameday > 1:
-        try:
-            prev_raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday - 1)
-        except requests.HTTPError:
-            pass
-
-    prev_by_slot = {t.get("teamno"): t for t in prev_raw_teams}
-    return [enrich_team(raw, players, prev_by_slot.get(raw.get("teamno"))) for raw in raw_teams]
+    ft_list = settings.get("free_transfers", [])
+    return [
+        enrich_team(raw, players, ft_list[raw.get("teamno", 1) - 1] if ft_list else 2)
+        for raw in raw_teams
+    ]
 
 
 # ── Display ───────────────────────────────────────────────────────────────────
@@ -308,15 +297,11 @@ def main():
         print("No teams found. Check that your cookie is valid and user_uuid is correct.")
         sys.exit(0)
 
-    prev_raw_teams = []
-    if gameday > 1:
-        try:
-            prev_raw_teams = client.get_my_teams(user_uuid=user_uuid, gameday=gameday - 1)
-        except requests.HTTPError:
-            pass
-
-    prev_by_slot = {t.get("teamno"): t for t in prev_raw_teams}
-    teams = [enrich_team(raw, players, prev_by_slot.get(raw.get("teamno"))) for raw in raw_teams]
+    ft_list = settings.get("free_transfers", [])
+    teams = [
+        enrich_team(raw, players, ft_list[raw.get("teamno", 1) - 1] if ft_list else 2)
+        for raw in raw_teams
+    ]
 
     if args.save:
         save_snapshot(teams)

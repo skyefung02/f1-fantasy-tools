@@ -3,15 +3,16 @@
     "data_file": "sample_data.csv",
     "top_n": 1,
     "locked": [],
-    "banned": [],
-    "gameday": 5,
+    "banned": ["HAD", "LAW"],
+    "free_transfers": [3,3,3],
+    "gameday":12,
     "user_uuid": "b60abc1c-11f3-11f1-b13d-dbdbcc859276",
-    "pts_per_1m_per_race": 1.7,
-    "remaining_races": 18,
+    "pts_per_1m_per_race": 1,
+    "remaining_races": 12,
     "portfolio_n": 3,
-    "portfolio_max_overlap": 8,
+    "portfolio_max_overlap": 4,
     "xdelta_confidence": 1,
     "limitless": [],
     "wildcard": [],
-    "reference_team": 1
+    "reference_team": 2
 }

@@ -172,7 +172,7 @@ def main() -> None:
     current_teams  = get_current_teams(settings)
     budgets        = [team_budget(t) for t in current_teams]
     n_teams        = len(current_teams)
-    free_transfers = [t.get("free_transfers", int(settings.get("max_free_transfers", 2))) for t in current_teams]
+    free_transfers = [t.get("free_transfers", 2) for t in current_teams]
 
     # Determine which teams to evaluate
     if args.team is not None:
