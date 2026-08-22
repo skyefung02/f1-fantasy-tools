@@ -244,6 +244,42 @@ def load_settings():
     return {}
 
 
+def update_settings(meta):
+    """Write the race-week numbers into settings.json.
+
+    Edited with a regex rather than json.dump so the file keeps its hand-written
+    formatting (and any comments a future format might allow) byte-for-byte -
+    only the two numbers move. Returns a list of (key, old, new) for reporting.
+    """
+    wanted = {}
+    round_number = (meta.get("next_race") or {}).get("roundNumber")
+    if isinstance(round_number, int):
+        wanted["gameday"] = round_number
+    future_races = meta.get("number_of_future_races")
+    if isinstance(future_races, int):
+        wanted["remaining_races"] = future_races
+    if not wanted or not SETTINGS_FILE.exists():
+        return []
+
+    text = SETTINGS_FILE.read_text()
+    changed = []
+    for key, value in wanted.items():
+        pattern = re.compile(rf'("{key}"\s*:\s*)(-?\d+(?:\.\d+)?)')
+        match = pattern.search(text)
+        if match is None:
+            print(f"  note: no {key!r} key in settings.json, skipped", file=sys.stderr)
+            continue
+        previous = match.group(2)
+        if previous == str(value):
+            continue
+        text = text[: match.start()] + f"{match.group(1)}{value}" + text[match.end() :]
+        changed.append((key, previous, value))
+
+    if changed:
+        SETTINGS_FILE.write_text(text)
+    return changed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     parser.add_argument("--sim", help="analyst sim id or name (default: newest active)")
@@ -251,6 +287,11 @@ def main():
     parser.add_argument("--out", help="output CSV (default: settings.json data_file)")
     parser.add_argument("--dry-run", action="store_true", help="print instead of writing")
     parser.add_argument("--no-backup", action="store_true", help="don't keep a .bak of the old CSV")
+    parser.add_argument(
+        "--no-settings",
+        action="store_true",
+        help="don't sync gameday/remaining_races into settings.json",
+    )
     parser.add_argument("--url", default=PAGE_URL, help=argparse.SUPPRESS)
     args = parser.parse_args()
 
@@ -316,6 +357,10 @@ def main():
             handle,
             indent=2,
         )
+
+    if not args.no_settings:
+        for key, previous, value in update_settings(meta):
+            print(f"settings.json: {key} {previous} -> {value}")
 
     drivers = sum(1 for r in rows if r["type"] == "driver")
     print(

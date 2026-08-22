@@ -116,7 +116,28 @@ CONSTRUCTORS
 
 ## Gameweek workflow
 
-**Step 1 — snapshot your teams (do this first, before touching the website)**
+**Step 1 — refresh projections and race-week numbers**
+
+```bash
+python fetch_projections.py
+```
+
+This pulls the latest analyst projections off `f1fantasytools.com/team-calculator` and rewrites your data file (`settings.json` → `data_file`) with fresh `price`, `xPts` and `xDeltaPrice` for every active driver and constructor. The previous file is kept as `.bak`, and the raw simulation is saved to `projections_snapshot.json`.
+
+It also syncs two numbers into `settings.json` so you never have to work them out by hand:
+
+| Setting | Source |
+|---|---|
+| `gameday` | the site's `nextRace.roundNumber` |
+| `remaining_races` | the site's `numberOfFutureRaces` |
+
+**This has to run before `fetch_teams.py`**, because both F1 Fantasy endpoints take `gameday` as a path parameter — with a stale value you'd silently snapshot the *previous* week's teams. Pass `--no-settings` to skip the sync and manage those two by hand.
+
+Analysts re-upload as the weekend develops (practice, qualifying), so it's worth re-running before you lock in transfers. Add `--dry-run` to preview without writing, `--list-sims` to see what's published, or `--sim <id>` to pin a specific analyst's simulation.
+
+If you'd rather enter numbers by hand, just edit `sample_data.csv` (or your data file) directly instead — see [CSV format](#csv-format).
+
+**Step 2 — snapshot your teams (before touching the website)**
 
 ```bash
 python fetch_teams.py --save
@@ -125,20 +146,6 @@ python fetch_teams.py --save
 This saves your current pre-transfer teams to `teams_snapshot.json`. All other tools (`transfer_advisor.py`, `wildcard_eval.py`, `diff_ev_plot.py`) automatically load from this snapshot instead of calling the live API, so they always see your teams as they were at the start of the week — not after you've already made transfers.
 
 Run this once per gameweek, before making any changes on the F1 Fantasy website. The snapshot is just overwritten the next time you run `--save`, so there's nothing to clean up.
-
-**Step 2 — refresh your projections**
-
-```bash
-python fetch_projections.py
-```
-
-This pulls the latest analyst projections off `f1fantasytools.com/team-calculator` and rewrites your data file (`settings.json` → `data_file`) with fresh `price`, `xPts` and `xDeltaPrice` for every active driver and constructor. The previous file is kept as `.bak`, and the raw simulation is saved to `projections_snapshot.json`.
-
-Run this at the start of every gameweek alongside `fetch_teams.py --save` — the two together are what refresh the week's inputs. Analysts also re-upload as the weekend develops (practice, qualifying), so it's worth re-running before you lock in transfers.
-
-Add `--dry-run` to preview without writing, `--list-sims` to see what's published, or `--sim <id>` to pin a specific analyst's simulation.
-
-If you'd rather enter numbers by hand, just edit `sample_data.csv` (or your data file) directly instead — see [CSV format](#csv-format).
 
 **Step 3 — run the tools**
 
