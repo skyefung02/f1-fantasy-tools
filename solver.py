@@ -32,6 +32,33 @@ DEFAULT_SETTINGS = {
 }
 
 
+
+def check_codes(locked: set[str], banned: set[str], all_codes: set[str]) -> set[str]:
+    """Validate locked/banned codes against the data file.
+
+    A locked code that isn't in the data is fatal: the constraint can never be
+    satisfied, so silently dropping it would return a team that quietly ignores
+    what you asked for.
+
+    A banned code that isn't in the data is harmless - it's already unpickable -
+    so it only warns. This happens routinely mid-season: an injured or replaced
+    driver drops out of the projections while your ban list still names him.
+    Returns the set of banned codes that were dropped.
+    """
+    missing_locked = locked - all_codes
+    if missing_locked:
+        raise ValueError(f"Locked codes not found in data: {sorted(missing_locked)}")
+
+    missing_banned = banned - all_codes
+    if missing_banned:
+        print(
+            f"  note: banned {', '.join(sorted(missing_banned))} not in the data "
+            f"(already unpickable, ban ignored)",
+            file=sys.stderr,
+        )
+    return missing_banned
+
+
 def load_settings() -> dict:
     if SETTINGS_FILE.exists():
         with open(SETTINGS_FILE) as f:
@@ -78,9 +105,7 @@ def solve(
     constructors = df[df["type"] == "constructor"].reset_index(drop=True)
 
     all_codes = set(df["name"].str.upper())
-    unknown = (locked | banned) - all_codes
-    if unknown:
-        raise ValueError(f"Codes not found in data: {unknown}")
+    banned -= check_codes(locked, banned, all_codes)
 
     n_d = len(drivers)
     n_c = len(constructors)
@@ -419,9 +444,7 @@ def solve_with_transfers(
     constructors = df[df["type"] == "constructor"].reset_index(drop=True)
 
     all_codes = set(df["name"].str.upper())
-    unknown = (locked | banned) - all_codes
-    if unknown:
-        raise ValueError(f"Codes not found in data: {unknown}")
+    banned -= check_codes(locked, banned, all_codes)
 
     n_d = len(drivers)
     n_c = len(constructors)
@@ -681,9 +704,7 @@ def solve_portfolio_transfers(
     n_d, n_c     = len(drivers), len(constructors)
 
     all_codes = set(df["name"].str.upper())
-    unknown   = (locked | banned) - all_codes
-    if unknown:
-        raise ValueError(f"Codes not found in data: {unknown}")
+    banned   -= check_codes(locked, banned, all_codes)
     if n_d < 5:
         raise ValueError(f"Need at least 5 drivers, got {n_d}.")
     if n_c < 2:
