@@ -48,6 +48,11 @@ USER_AGENT     = "f1-fantasy-tools/1.0 (personal fantasy solver; +local script)"
 # million; the value attached is a probability in percent.
 PRICE_STEP = 0.1
 
+# Holding an asset through a race it does not contest is a flat points hit.
+# Not modelled numerically - inactive assets are simply absent from the CSV, so
+# the solver cannot keep them - but it is why the warnings below matter.
+INACTIVE_PENALTY = -35
+
 CSV_COLUMNS = ["type", "code", "price", "xDeltaPrice", "xPts"]
 
 
@@ -216,6 +221,32 @@ def build_rows(sim, entities):
     return rows, skipped
 
 
+def seat_swap_warnings(entities):
+    """Flag inactive entities whose TLA has been taken over by an active one.
+
+    Mid-season seat swaps break the assumption that a TLA identifies an asset.
+    When Lawson moves VCARB -> Red Bull the site keeps both VRB_LAW (inactive,
+    the seat you may still own) and RED_LAW (active, the one being projected).
+    Only the active row reaches the CSV, so a solver matching on TLA will happily
+    value your inactive holding using the other seat's price and points.
+    """
+    active_by_tla = {}
+    for entity in entities.values():
+        if entity.get("isActive", True):
+            active_by_tla.setdefault(entity.get("abbreviation"), []).append(entity)
+
+    collisions, dropped = [], []
+    for entity_id, entity in sorted(entities.items()):
+        if entity.get("isActive", True):
+            continue
+        twins = active_by_tla.get(entity.get("abbreviation"), [])
+        if twins:
+            collisions.append((entity_id, entity, twins[0]))
+        else:
+            dropped.append((entity_id, entity))
+    return collisions, dropped
+
+
 def write_csv(rows, path, backup=True):
     path = Path(path)
     if backup and path.exists():
@@ -339,6 +370,25 @@ def main():
     if skipped:
         print(f"skipped {len(skipped)}: {', '.join(skipped)}")
 
+    collisions, dropped = seat_swap_warnings(entities)
+    for entity_id, entity in dropped:
+        print(
+            f"  note: {entity_id} ({entity['abbreviation']}) is inactive this week "
+            f"and has no projection - not in the CSV, so it will be force-transferred "
+            f"out of any team holding it",
+            file=sys.stderr,
+        )
+    for entity_id, entity, twin in collisions:
+        tla = entity["abbreviation"]
+        print(
+            f"  WARNING: seat swap on {tla}. You may still hold {entity_id} "
+            f"({entity['price']}m, inactive), but the only {tla} row in the CSV is "
+            f"{twin['id']} ({twin['price']}m, active). Anything matching on TLA will "
+            f"mis-price your holding - add {tla} to \"banned\" to force it out "
+            f"(keeping it through the race costs {INACTIVE_PENALTY}).",
+            file=sys.stderr,
+        )
+
     if args.dry_run:
         print_table(rows)
         print(f"\n(dry run - {out_path} untouched)")
@@ -361,6 +411,19 @@ def main():
     if not args.no_settings:
         for key, previous, value in update_settings(meta):
             print(f"settings.json: {key} {previous} -> {value}")
+
+    # Seat-swap bans are meant to be temporary. Once the TLA resolves to a single
+    # active entity again the ban is just silently blocking a legitimate pick.
+    ambiguous = {entity["abbreviation"] for _, entity, _ in collisions}
+    projected = {row["code"] for row in rows}
+    for code in sorted(set(load_settings().get("banned", [])) - ambiguous):
+        if code.upper() in projected:
+            print(
+                f"  note: {code} is banned but is active and unambiguous this week "
+                f"(projected {next(r['xPts'] for r in rows if r['code'] == code.upper())} xPts) "
+                f"- if that ban was for a seat swap, it can go",
+                file=sys.stderr,
+            )
 
     drivers = sum(1 for r in rows if r["type"] == "driver")
     print(

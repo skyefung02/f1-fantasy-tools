@@ -10,9 +10,9 @@
     "pts_per_1m_per_race": 1,
     "remaining_races": 11,
     "portfolio_n": 3,
-    "portfolio_max_overlap": 4,
+    "portfolio_max_overlap": 6,
     "xdelta_confidence": 1,
     "limitless": [],
     "wildcard": [],
-    "reference_team": 2
+    "reference_team": 1
 }

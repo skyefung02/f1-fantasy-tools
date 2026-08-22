@@ -57,8 +57,11 @@ Edit `settings.json` to configure the solver without touching the CLI:
 | `top_n` | Number of ranked solutions to return |
 | `locked` | Picks that **must** appear in the team |
 | `banned` | Picks that **cannot** appear in the team |
+| `portfolio_max_overlap` | Max shared picks between your 3 teams. **Re-derive weekly** — see [Step 3](#gameweek-workflow) |
+| `gameday` | Current race round — **auto-synced** by `fetch_projections.py`, don't hand-edit |
+| `remaining_races` | Races left in the season — **auto-synced** by `fetch_projections.py`, don't hand-edit |
 
-CLI flags (`--budget`, `--top`) override `settings.json` values.
+CLI flags (`--budget`, `--top`, `--overlap`) override `settings.json` values.
 
 ## CSV format
 
@@ -137,6 +140,23 @@ Analysts re-upload as the weekend develops (practice, qualifying), so it's worth
 
 If you'd rather enter numbers by hand, just edit `sample_data.csv` (or your data file) directly instead — see [CSV format](#csv-format).
 
+**Mid-season seat swaps.** A driver's TLA stops being a unique key when he changes team mid-season: after Lawson moved VCARB → Red Bull the site carried both `VRB_LAW` (inactive, the seat you may still own) and `RED_LAW` (active, the one being projected). Only active entities are projected, so the single `LAW` row in the CSV is Red Bull's — and any tool matching on TLA will value your inactive holding at the *other* seat's price and points, silently missing the −35 you take for holding an asset through a race it doesn't contest.
+
+`fetch_projections.py` detects this and warns:
+
+```
+WARNING: seat swap on LAW. You may still hold VRB_LAW (10.3m, inactive), but the
+only LAW row in the CSV is RED_LAW (14.5m, active). ... add LAW to "banned" to
+force it out (keeping it through the race costs -35).
+```
+
+Add the TLA to `banned` for that week. It also warns in reverse once the swap resolves, so a temporary ban doesn't quietly keep blocking a good pick:
+
+```
+note: TSU is banned but is active and unambiguous this week (projected 2.02 xPts)
+      - if that ban was for a seat swap, it can go
+```
+
 **Step 2 — snapshot your teams (before touching the website)**
 
 ```bash
@@ -147,13 +167,40 @@ This saves your current pre-transfer teams to `teams_snapshot.json`. All other t
 
 Run this once per gameweek, before making any changes on the F1 Fantasy website. The snapshot is just overwritten the next time you run `--save`, so there's nothing to clean up.
 
-**Step 3 — run the tools**
+**Step 3 — pick this week's overlap**
+
+```bash
+python overlap_sweep.py
+```
+
+`transfer_advisor.py` reads `portfolio_max_overlap` from `settings.json`, but the right value is **not a stable preference — it changes with the projections every week**. In a week where the top picks are clustered, dropping to overlap 2 may cost almost nothing; in a week where one team dominates, the same drop can be very expensive. Reusing last week's number silently produces worse recommendations, so re-run this sweep every gameweek and update the setting.
+
+**Ignore the "Highest portfolio combined" line.** Overlap is a constraint, and relaxing a constraint can never lower the optimum — so portfolio EV is monotonically non-decreasing in overlap *by construction*, and that line always points at the loosest feasible value. It can never recommend diversification, in any week, with any data.
+
+Read the *step costs* down the Portfolio column instead, and look for the knee — the point past which each further step of differentiation gets sharply more expensive:
+
+| Overlap | Portfolio | Cost vs. loosest | Step cost |
+|---:|---:|---:|---:|
+| 7 | 855.8 | — | — |
+| 6 | 851.5 | 4.3 | 4.3 |
+| 5 | 843.9 | 11.9 | 7.6 |
+| **4** | **832.4** | **23.4** | **11.5** |
+| 3 | 807.0 | 48.8 | 25.4 |
+| 2 | 769.4 | 86.4 | 37.6 |
+
+Here the knee is 4: tightening all the way from 7 to 4 costs 23.4 points, while the single next step to 3 costs 25.4 more on its own. Set `portfolio_max_overlap` accordingly, or pass `--overlap N` to override it for one run.
+
+Bear in mind the sweep prices differentiation but can't value it. Three identical teams have zero portfolio variance — you hit or miss together — and that upside optionality appears nowhere in these numbers. The knee is a floor on the decision, not the decision.
+
+**Step 4 — run the tools**
 
 ```bash
 python transfer_advisor.py   # optimal transfers across all 3 teams
 python wildcard_eval.py      # should you play the wildcard?
 python diff_ev_plot.py       # Pareto frontier: total EV vs differential EV
 ```
+
+`diff_ev_plot.py` is the better instrument if you're chasing league *rank* rather than points — it plots the total-EV vs differential-EV frontier directly, which is the tradeoff the overlap setting only approximates.
 
 ---
 

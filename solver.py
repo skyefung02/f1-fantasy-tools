@@ -33,6 +33,9 @@ DEFAULT_SETTINGS = {
 
 
 
+_warned_missing_banned: set[str] = set()
+
+
 def check_codes(locked: set[str], banned: set[str], all_codes: set[str]) -> set[str]:
     """Validate locked/banned codes against the data file.
 
@@ -50,9 +53,12 @@ def check_codes(locked: set[str], banned: set[str], all_codes: set[str]) -> set[
         raise ValueError(f"Locked codes not found in data: {sorted(missing_locked)}")
 
     missing_banned = banned - all_codes
-    if missing_banned:
+    # Sweeps call the solver dozens of times; warn once per code per process.
+    unreported = missing_banned - _warned_missing_banned
+    if unreported:
+        _warned_missing_banned.update(unreported)
         print(
-            f"  note: banned {', '.join(sorted(missing_banned))} not in the data "
+            f"  note: banned {', '.join(sorted(unreported))} not in the data "
             f"(already unpickable, ban ignored)",
             file=sys.stderr,
         )
