@@ -102,7 +102,10 @@ class F1FantasyClient:
             f"/{gameday}/{gameday}/{gameday}/{gameday}",
             params={"buster": buster},
         )
-        return data.get("Data", {}).get("Value", {}).get("userTeam", [])
+        teams = data.get("Data", {}).get("Value", {}).get("userTeam", [])
+        # The API returns teams in arbitrary order — sort by slot so list
+        # position always matches teamno (everything downstream indexes by it).
+        return sorted(teams, key=lambda t: t.get("teamno", 0))
 
 
 # ── Data enrichment ───────────────────────────────────────────────────────────
@@ -165,7 +168,9 @@ def save_snapshot(teams: list[dict]) -> None:
 def load_snapshot() -> list[dict] | None:
     if SNAPSHOT_FILE.exists():
         with open(SNAPSHOT_FILE) as f:
-            return json.load(f)
+            teams = json.load(f)
+        # Repair snapshots written before teams were sorted at fetch time.
+        return sorted(teams, key=lambda t: t.get("slot", 0))
     return None
 
 

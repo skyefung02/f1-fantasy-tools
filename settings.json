@@ -5,14 +5,14 @@
     "locked": [],
     "banned": ["HAD", "LAW"],
     "free_transfers": [2,2,2],
-    "gameday":13,
+    "gameday":14,
     "user_uuid": "b60abc1c-11f3-11f1-b13d-dbdbcc859276",
     "pts_per_1m_per_race": 1,
-    "remaining_races": 10,
+    "remaining_races": 9,
     "portfolio_n": 3,
-    "portfolio_max_overlap": 6,
+    "portfolio_max_overlap": 5,
     "xdelta_confidence": 1,
     "limitless": [],
-    "wildcard": [1],
+    "wildcard": [],
     "reference_team": 1
 }
