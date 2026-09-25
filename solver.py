@@ -16,7 +16,19 @@ import json
 import argparse
 from pathlib import Path
 import pandas as pd
+import shutil
 import pulp
+
+
+def _cbc_solver():
+    """Prefer a native CBC install (e.g. conda-forge coin-or-cbc) over PuLP's
+    bundled binary, which is x86_64-only on macOS and fails on Apple Silicon."""
+    cbc = Path(sys.executable).parent / "cbc"
+    path = str(cbc) if cbc.exists() else shutil.which("cbc")
+    if path:
+        return pulp.COIN_CMD(path=path, msg=0)
+    return pulp.PULP_CBC_CMD(msg=0)
+
 
 SETTINGS_FILE = Path(__file__).parent / "settings.json"
 DEFAULT_SETTINGS = {
@@ -235,7 +247,7 @@ def solve(
         prob += pulp.lpSum(overlap_vars) <= max_overlap, f"overlap_constraint_{k}"
 
     # ── Solve ─────────────────────────────────────────────────────────────────
-    prob.solve(pulp.PULP_CBC_CMD(msg=0))
+    prob.solve(_cbc_solver())
 
     status = pulp.LpStatus[prob.status]
     if prob.status != 1:  # 1 = Optimal
@@ -546,7 +558,7 @@ def solve_with_transfers(
         prob += pulp.lpSum(overlap_vars) <= max_overlap, f"overlap_constraint_{k}"
 
     # ── Solve ─────────────────────────────────────────────────────────────────
-    prob.solve(pulp.PULP_CBC_CMD(msg=0))
+    prob.solve(_cbc_solver())
 
     if prob.status != 1:
         raise RuntimeError(
@@ -886,7 +898,7 @@ def solve_portfolio_transfers(
         )
 
     # ── Solve ─────────────────────────────────────────────────────────────────
-    prob.solve(pulp.PULP_CBC_CMD(msg=0))
+    prob.solve(_cbc_solver())
 
     if prob.status != 1:
         raise RuntimeError(
