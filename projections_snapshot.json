@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-09-25T06:12:06.296425+00:00",
+  "fetched_at": "2026-09-25T11:45:33.243067+00:00",
   "source": "https://f1fantasytools.com/team-calculator",
   "meta": {
     "next_race": {
@@ -16,35 +16,35 @@
     "number_of_future_races": 8
   },
   "sim": {
-    "id": "rhter_6",
-    "name": "Baku. Post-FP2.",
+    "id": "rhter_9",
+    "name": "Baku. Post-FP3.",
     "new_info_description": "Dry/average conditions.",
     "raceweek": 15,
     "season": 2026,
     "drivers": {
       "pts": {
-        "MCL_NOR": 18.15,
-        "MCL_PIA": 15.72,
-        "MER_RUS": 31.41,
-        "MER_ANT": 37.68,
-        "RED_VER": 24.96,
-        "RED_HAD": 16.17,
-        "FER_LEC": 21.6,
-        "FER_HAM": 20.44,
-        "WIL_ALB": 0.26,
-        "WIL_SAI": -0.3,
-        "VRB_LAW": 7.17,
-        "VRB_LIN": 4.66,
-        "AST_ALO": -5.28,
-        "AST_STR": -4.48,
-        "HAA_OCO": 2.46,
-        "HAA_BEA": 1.18,
-        "AUD_HUL": 3.06,
-        "AUD_BOR": 3.16,
-        "ALP_GAS": 7.34,
-        "ALP_COL": 5.92,
-        "CAD_PER": -2.71,
-        "CAD_BOT": -4.86
+        "MCL_NOR": 20.12,
+        "MCL_PIA": 18.11,
+        "MER_RUS": 28.5,
+        "MER_ANT": 29.62,
+        "RED_VER": 29.2,
+        "RED_HAD": 18.59,
+        "FER_LEC": 24.04,
+        "FER_HAM": 23.42,
+        "WIL_ALB": 1.93,
+        "WIL_SAI": 1.69,
+        "VRB_LAW": 8.35,
+        "VRB_LIN": 6.53,
+        "AST_ALO": -4.42,
+        "AST_STR": -2.9,
+        "HAA_OCO": 1.22,
+        "HAA_BEA": 1.77,
+        "AUD_HUL": 3.73,
+        "AUD_BOR": 3.75,
+        "ALP_GAS": 8.73,
+        "ALP_COL": 7.29,
+        "CAD_PER": -3.49,
+        "CAD_BOT": -3.5
       },
       "price_change_probability": {
         "MCL_NOR": {
@@ -52,13 +52,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 7.76,
+          "pm3": 7.82,
           "pm2": 0,
-          "pm1": 37.32,
+          "pm1": 28.44,
           "pp0": 0,
-          "pp1": 50.14,
+          "pp1": 58.21,
           "pp2": 0,
-          "pp3": 4.78,
+          "pp3": 5.53,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -77,13 +77,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 10.55,
+          "pm3": 9.96,
           "pm2": 0,
-          "pm1": 60.44,
+          "pm1": 50.03,
           "pp0": 0,
-          "pp1": 27.45,
+          "pp1": 36.54,
           "pp2": 0,
-          "pp3": 1.56,
+          "pp3": 3.47,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -102,13 +102,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 5.44,
+          "pm3": 5.39,
           "pm2": 0,
-          "pm1": 4.47,
+          "pm1": 8.62,
           "pp0": 0,
-          "pp1": 64.87,
+          "pp1": 64.96,
           "pp2": 0,
-          "pp3": 25.22,
+          "pp3": 21.03,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -154,11 +154,11 @@
           "pm4": 0,
           "pm3": 0,
           "pm2": 0,
-          "pm1": 8.93,
+          "pm1": 8.65,
           "pp0": 0,
-          "pp1": 27.56,
+          "pp1": 22.78,
           "pp2": 0,
-          "pp3": 63.51,
+          "pp3": 68.57,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -174,19 +174,19 @@
         },
         "RED_HAD": {
           "pm7": 0,
-          "pm6": 0,
+          "pm6": 71.79,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 4.04,
+          "pm2": 22.12,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 11.33,
+          "pp2": 3.17,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 84.63,
+          "pp6": 2.92,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -202,11 +202,11 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 90.03,
+          "pm3": 83.2,
           "pm2": 0,
-          "pm1": 8.73,
+          "pm1": 14.1,
           "pp0": 0,
-          "pp1": 1.24,
+          "pp1": 2.7,
           "pp2": 0,
           "pp3": 0,
           "pp4": 0,
@@ -227,11 +227,11 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 88.82,
+          "pm3": 79.78,
           "pm2": 0,
-          "pm1": 9.96,
+          "pm1": 16.72,
           "pp0": 0,
-          "pp1": 1.22,
+          "pp1": 3.5,
           "pp2": 0,
           "pp3": 0,
           "pp4": 0,
@@ -249,19 +249,19 @@
         },
         "WIL_ALB": {
           "pm7": 0,
-          "pm6": 24.57,
+          "pm6": 24.14,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 1.14,
+          "pm2": 1.17,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 12.06,
+          "pp2": 8.06,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 62.23,
+          "pp6": 66.63,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -274,15 +274,15 @@
         },
         "WIL_SAI": {
           "pm7": 0,
-          "pm6": 99.6,
+          "pm6": 98.2,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.38,
+          "pm2": 1.62,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 0.02,
+          "pp2": 0.18,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
@@ -299,19 +299,19 @@
         },
         "VRB_LAW": {
           "pm7": 0,
-          "pm6": 17.08,
+          "pm6": 83.29,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 36.23,
+          "pm2": 15.59,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 38.75,
+          "pp2": 1.04,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 7.94,
+          "pp6": 0.08,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -324,19 +324,19 @@
         },
         "VRB_LIN": {
           "pm7": 0,
-          "pm6": 18.3,
+          "pm6": 17.91,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 26.41,
+          "pm2": 16.19,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 37.75,
+          "pp2": 36.8,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 17.54,
+          "pp6": 29.1,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -349,15 +349,15 @@
         },
         "AST_ALO": {
           "pm7": 0,
-          "pm6": 99.92,
+          "pm6": 99.4,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.07,
+          "pm2": 0.5,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 0.01,
+          "pp2": 0.1,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
@@ -399,19 +399,19 @@
         },
         "HAA_OCO": {
           "pm7": 0,
-          "pm6": 31.45,
+          "pm6": 35.43,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 31.85,
+          "pm2": 32.9,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 28.73,
+          "pp2": 25.93,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 7.97,
+          "pp6": 5.74,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -424,19 +424,19 @@
         },
         "HAA_BEA": {
           "pm7": 0,
-          "pm6": 42.25,
+          "pm6": 40.41,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 26.63,
+          "pm2": 23.74,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 20.42,
+          "pp2": 21.8,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 10.7,
+          "pp6": 14.05,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -449,11 +449,11 @@
         },
         "AUD_HUL": {
           "pm7": 0,
-          "pm6": 18.97,
+          "pm6": 19.01,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.52,
+          "pm2": 0.85,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
@@ -461,7 +461,7 @@
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 72.76,
+          "pp6": 72.39,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -474,19 +474,19 @@
         },
         "AUD_BOR": {
           "pm7": 0,
-          "pm6": 27.21,
+          "pm6": 26.81,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 37.73,
+          "pm2": 34.46,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 29.61,
+          "pp2": 31.03,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 5.45,
+          "pp6": 7.7,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -499,19 +499,19 @@
         },
         "ALP_GAS": {
           "pm7": 0,
-          "pm6": 19.57,
+          "pm6": 19.86,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 57.2,
+          "pm2": 47.4,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 21.83,
+          "pp2": 29.22,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 1.4,
+          "pp6": 3.52,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -524,19 +524,19 @@
         },
         "ALP_COL": {
           "pm7": 0,
-          "pm6": 15.12,
+          "pm6": 15.38,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 3.23,
+          "pm2": 3.05,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 46.4,
+          "pp2": 36.95,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 35.25,
+          "pp6": 44.62,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -555,13 +555,13 @@
           "pm3": 0,
           "pm2": 0,
           "pm1": 0,
-          "pp0": 91.39,
+          "pp0": 92.38,
           "pp1": 0,
-          "pp2": 4.07,
+          "pp2": 3.36,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 4.54,
+          "pp6": 4.26,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -580,13 +580,13 @@
           "pm3": 0,
           "pm2": 0,
           "pm1": 0,
-          "pp0": 63.58,
+          "pp0": 57.98,
           "pp1": 0,
-          "pp2": 11.42,
+          "pp2": 8.4,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 25,
+          "pp6": 33.62,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -599,62 +599,62 @@
         }
       },
       "dnf_probability": {
-        "MCL_NOR": 7.8,
-        "MCL_PIA": 10.5,
-        "MER_RUS": 8,
+        "MCL_NOR": 8.1,
+        "MCL_PIA": 9.9,
+        "MER_RUS": 7.9,
         "MER_ANT": 8,
-        "RED_VER": 9,
-        "RED_HAD": 15.4,
-        "FER_LEC": 8.1,
-        "FER_HAM": 7.9,
-        "WIL_ALB": 24.6,
-        "WIL_SAI": 25,
-        "VRB_LAW": 14.4,
-        "VRB_LIN": 16.9,
-        "AST_ALO": 40,
-        "AST_STR": 42.1,
-        "HAA_OCO": 27.1,
-        "HAA_BEA": 25.9,
+        "RED_VER": 8.8,
+        "RED_HAD": 15.1,
+        "FER_LEC": 7.6,
+        "FER_HAM": 7.6,
+        "WIL_ALB": 24.2,
+        "WIL_SAI": 24.9,
+        "VRB_LAW": 14.3,
+        "VRB_LIN": 17.2,
+        "AST_ALO": 40.2,
+        "AST_STR": 41.5,
+        "HAA_OCO": 28.7,
+        "HAA_BEA": 25.7,
         "AUD_HUL": 19,
-        "AUD_BOR": 19.4,
-        "ALP_GAS": 15.9,
-        "ALP_COL": 15.2,
-        "CAD_PER": 41.9,
-        "CAD_BOT": 41.2
+        "AUD_BOR": 18.4,
+        "ALP_GAS": 16,
+        "ALP_COL": 15.6,
+        "CAD_PER": 42.6,
+        "CAD_BOT": 41.4
       },
       "fast_lap_probability": {
-        "MCL_NOR": 9.3,
-        "MCL_PIA": 2.3,
-        "MER_RUS": 25.2,
-        "MER_ANT": 36.9,
-        "RED_VER": 9.4,
-        "RED_HAD": 2.6,
-        "FER_LEC": 5.5,
-        "FER_HAM": 4.8,
+        "MCL_NOR": 6.5,
+        "MCL_PIA": 3.4,
+        "MER_RUS": 21.9,
+        "MER_ANT": 22.2,
+        "RED_VER": 18.9,
+        "RED_HAD": 7.7,
+        "FER_LEC": 8,
+        "FER_HAM": 7.4,
         "WIL_ALB": 0.4,
         "WIL_SAI": 0.1,
-        "VRB_LAW": 0.4,
-        "VRB_LIN": 0.3,
-        "AST_ALO": 0.2,
-        "AST_STR": 0.2,
+        "VRB_LAW": 0.3,
+        "VRB_LIN": 0.4,
+        "AST_ALO": 0.3,
+        "AST_STR": 0.1,
         "HAA_OCO": 0.2,
         "HAA_BEA": 0.3,
-        "AUD_HUL": 0.2,
+        "AUD_HUL": 0.3,
         "AUD_BOR": 0.3,
-        "ALP_GAS": 0.5,
-        "ALP_COL": 0.5,
-        "CAD_PER": 0.3,
-        "CAD_BOT": 0.1
+        "ALP_GAS": 0.3,
+        "ALP_COL": 0.6,
+        "CAD_PER": 0.1,
+        "CAD_BOT": 0.4
       },
       "dotd_probability": {
-        "MCL_NOR": 5.1,
-        "MCL_PIA": 2.1,
-        "MER_RUS": 12,
-        "MER_ANT": 47.5,
-        "RED_VER": 12.9,
-        "RED_HAD": 1.6,
-        "FER_LEC": 9.7,
-        "FER_HAM": 8.4,
+        "MCL_NOR": 5.4,
+        "MCL_PIA": 3.9,
+        "MER_RUS": 9,
+        "MER_ANT": 21.4,
+        "RED_VER": 27.3,
+        "RED_HAD": 4.1,
+        "FER_LEC": 14.5,
+        "FER_HAM": 13.7,
         "WIL_ALB": 0,
         "WIL_SAI": 0,
         "VRB_LAW": 0,
@@ -666,120 +666,120 @@
         "AUD_HUL": 0.1,
         "AUD_BOR": 0.1,
         "ALP_GAS": 0.4,
-        "ALP_COL": 0,
+        "ALP_COL": 0.1,
         "CAD_PER": 0,
         "CAD_BOT": 0
       },
       "overtakes": {
-        "MCL_NOR": 5.03,
-        "MCL_PIA": 5.18,
-        "MER_RUS": 4.1,
-        "MER_ANT": 3.59,
-        "RED_VER": 4.65,
-        "RED_HAD": 4.52,
-        "FER_LEC": 4.56,
-        "FER_HAM": 4.85,
-        "WIL_ALB": 3.75,
-        "WIL_SAI": 3.9,
-        "VRB_LAW": 5.87,
-        "VRB_LIN": 5.27,
-        "AST_ALO": 1.27,
-        "AST_STR": 1.5,
-        "HAA_OCO": 5.25,
-        "HAA_BEA": 4.66,
-        "AUD_HUL": 4.75,
-        "AUD_BOR": 4.85,
-        "ALP_GAS": 4.53,
-        "ALP_COL": 4.66,
-        "CAD_PER": 3.98,
-        "CAD_BOT": 2.16
+        "MCL_NOR": 6.04,
+        "MCL_PIA": 6.16,
+        "MER_RUS": 5.14,
+        "MER_ANT": 5.22,
+        "RED_VER": 5.29,
+        "RED_HAD": 5.33,
+        "FER_LEC": 5.58,
+        "FER_HAM": 5.6,
+        "WIL_ALB": 4.91,
+        "WIL_SAI": 4.63,
+        "VRB_LAW": 6.39,
+        "VRB_LIN": 5.98,
+        "AST_ALO": 2.95,
+        "AST_STR": 3.2,
+        "HAA_OCO": 4.51,
+        "HAA_BEA": 4.57,
+        "AUD_HUL": 5.23,
+        "AUD_BOR": 5.19,
+        "ALP_GAS": 5.22,
+        "ALP_COL": 5.3,
+        "CAD_PER": 3.9,
+        "CAD_BOT": 3.45
       },
       "negpts": {
-        "MCL_NOR": -3.07,
-        "MCL_PIA": -3.67,
-        "MER_RUS": -3.29,
-        "MER_ANT": -3.28,
-        "RED_VER": -3.77,
-        "RED_HAD": -6.13,
-        "FER_LEC": -3.69,
-        "FER_HAM": -3.39,
-        "WIL_ALB": -6.17,
-        "WIL_SAI": -7.07,
-        "VRB_LAW": -3.41,
-        "VRB_LIN": -4.49,
-        "AST_ALO": -8.55,
-        "AST_STR": -8.5,
-        "HAA_OCO": -6.89,
-        "HAA_BEA": -7.17,
-        "AUD_HUL": -5.96,
-        "AUD_BOR": -6.04,
-        "ALP_GAS": -5.72,
-        "ALP_COL": -5.55,
-        "CAD_PER": -10.45,
-        "CAD_BOT": -9.96
+        "MCL_NOR": -3.31,
+        "MCL_PIA": -3.64,
+        "MER_RUS": -3.47,
+        "MER_ANT": -3.48,
+        "RED_VER": -3.78,
+        "RED_HAD": -6.11,
+        "FER_LEC": -3.5,
+        "FER_HAM": -3.47,
+        "WIL_ALB": -7.02,
+        "WIL_SAI": -7.76,
+        "VRB_LAW": -3.28,
+        "VRB_LIN": -4.07,
+        "AST_ALO": -10.13,
+        "AST_STR": -9.01,
+        "HAA_OCO": -6.76,
+        "HAA_BEA": -6.3,
+        "AUD_HUL": -5.7,
+        "AUD_BOR": -5.59,
+        "ALP_GAS": -6.16,
+        "ALP_COL": -5.86,
+        "CAD_PER": -11.26,
+        "CAD_BOT": -10.51
       },
       "q_pos": {
-        "MCL_NOR": 6.63,
-        "MCL_PIA": 7.52,
-        "MER_RUS": 3.02,
-        "MER_ANT": 2.43,
-        "RED_VER": 4.12,
-        "RED_HAD": 4.93,
-        "FER_LEC": 4.53,
-        "FER_HAM": 5.42,
-        "WIL_ALB": 16.07,
-        "WIL_SAI": 14.17,
-        "VRB_LAW": 16.77,
-        "VRB_LIN": 14.95,
-        "AST_ALO": 19.62,
-        "AST_STR": 21.39,
-        "HAA_OCO": 15.77,
-        "HAA_BEA": 14.89,
-        "AUD_HUL": 12.8,
-        "AUD_BOR": 12.98,
-        "ALP_GAS": 9.26,
-        "ALP_COL": 10.04,
-        "CAD_PER": 17.22,
-        "CAD_BOT": 18.5
+        "MCL_NOR": 6.45,
+        "MCL_PIA": 7.35,
+        "MER_RUS": 3.84,
+        "MER_ANT": 3.95,
+        "RED_VER": 4.01,
+        "RED_HAD": 4.94,
+        "FER_LEC": 4.91,
+        "FER_HAM": 5.1,
+        "WIL_ALB": 13.19,
+        "WIL_SAI": 11.74,
+        "VRB_LAW": 17.9,
+        "VRB_LIN": 17.42,
+        "AST_ALO": 16.3,
+        "AST_STR": 19.43,
+        "HAA_OCO": 18.04,
+        "HAA_BEA": 17.55,
+        "AUD_HUL": 14.27,
+        "AUD_BOR": 14.1,
+        "ALP_GAS": 8.73,
+        "ALP_COL": 9.83,
+        "CAD_PER": 16.32,
+        "CAD_BOT": 17.61
       },
       "r_pos": {
-        "MCL_NOR": 6.71,
-        "MCL_PIA": 7.29,
-        "MER_RUS": 3.68,
-        "MER_ANT": 3.29,
-        "RED_VER": 5.01,
-        "RED_HAD": 7.2,
-        "FER_LEC": 5.66,
-        "FER_HAM": 6,
-        "WIL_ALB": 15.4,
-        "WIL_SAI": 14.9,
-        "VRB_LAW": 13.37,
-        "VRB_LIN": 13.48,
-        "AST_ALO": 18.14,
-        "AST_STR": 18.34,
-        "HAA_OCO": 14.73,
-        "HAA_BEA": 15.02,
-        "AUD_HUL": 13.35,
-        "AUD_BOR": 13.45,
-        "ALP_GAS": 10.52,
-        "ALP_COL": 11.28,
-        "CAD_PER": 17.45,
-        "CAD_BOT": 18.72
+        "MCL_NOR": 6.48,
+        "MCL_PIA": 7.05,
+        "MER_RUS": 4.54,
+        "MER_ANT": 4.58,
+        "RED_VER": 4.83,
+        "RED_HAD": 7.05,
+        "FER_LEC": 5.57,
+        "FER_HAM": 5.71,
+        "WIL_ALB": 13.74,
+        "WIL_SAI": 13.31,
+        "VRB_LAW": 13.69,
+        "VRB_LIN": 14.15,
+        "AST_ALO": 17.05,
+        "AST_STR": 17.47,
+        "HAA_OCO": 16.33,
+        "HAA_BEA": 16.11,
+        "AUD_HUL": 14.04,
+        "AUD_BOR": 13.97,
+        "ALP_GAS": 10.4,
+        "ALP_COL": 11.14,
+        "CAD_PER": 17.6,
+        "CAD_BOT": 18.2
       }
     },
     "constructors": {
       "pts": {
-        "MCL": 48.83,
-        "MER": 83.53,
-        "RED": 57.38,
-        "FER": 59.85,
-        "WIL": 6.79,
-        "VRB": 22.5,
-        "AST": -5.69,
-        "HAA": 7.54,
-        "AUD": 16.93,
-        "ALP": 24.14,
-        "CAD": -5.78
+        "MCL": 52.67,
+        "MER": 75.39,
+        "RED": 62.16,
+        "FER": 64.23,
+        "WIL": 12.41,
+        "VRB": 24.57,
+        "AST": -2.01,
+        "HAA": 5.43,
+        "AUD": 17.15,
+        "ALP": 26.91,
+        "CAD": -4.53
       },
       "price_change_probability": {
         "MCL": {
@@ -791,9 +791,9 @@
           "pm2": 0,
           "pm1": 0,
           "pp0": 0,
-          "pp1": 0.54,
+          "pp1": 0.64,
           "pp2": 0,
-          "pp3": 99.46,
+          "pp3": 99.36,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -841,9 +841,9 @@
           "pm2": 0,
           "pm1": 0,
           "pp0": 0,
-          "pp1": 0.1,
+          "pp1": 0.15,
           "pp2": 0,
-          "pp3": 99.9,
+          "pp3": 99.85,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -862,13 +862,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 0.56,
+          "pm3": 0.59,
           "pm2": 0,
-          "pm1": 9.06,
+          "pm1": 7.38,
           "pp0": 0,
-          "pp1": 29.22,
+          "pp1": 24.16,
           "pp2": 0,
-          "pp3": 61.16,
+          "pp3": 67.87,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -884,19 +884,19 @@
         },
         "WIL": {
           "pm7": 0,
-          "pm6": 39.13,
+          "pm6": 31.26,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 22.29,
+          "pm2": 17.43,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 30.47,
+          "pp2": 31.28,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 8.11,
+          "pp6": 20.03,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -909,19 +909,19 @@
         },
         "VRB": {
           "pm7": 0,
-          "pm6": 1.73,
+          "pm6": 1.81,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 3.63,
+          "pm2": 2.93,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 14.67,
+          "pp2": 13.48,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 79.97,
+          "pp6": 81.78,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -934,15 +934,15 @@
         },
         "AST": {
           "pm7": 0,
-          "pm6": 99.99,
+          "pm6": 99.9,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.01,
+          "pm2": 0.09,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 0,
+          "pp2": 0.01,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
@@ -959,19 +959,19 @@
         },
         "HAA": {
           "pm7": 0,
-          "pm6": 16.03,
+          "pm6": 20.52,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 20.69,
+          "pm2": 19.7,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 10.09,
+          "pp2": 10.52,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 53.19,
+          "pp6": 49.26,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -984,7 +984,7 @@
         },
         "AUD": {
           "pm7": 0,
-          "pm6": 0.05,
+          "pm6": 0.06,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
@@ -992,11 +992,11 @@
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 1.26,
+          "pp2": 1.3,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 97.16,
+          "pp6": 97.11,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1012,13 +1012,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 0.53,
+          "pm3": 0.49,
           "pm2": 0,
-          "pm1": 1.86,
+          "pm1": 1.9,
           "pp0": 0,
-          "pp1": 15.25,
+          "pp1": 12.47,
           "pp2": 0,
-          "pp3": 82.36,
+          "pp3": 85.14,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -1040,13 +1040,13 @@
           "pm3": 0,
           "pm2": 0,
           "pm1": 0,
-          "pp0": 71.75,
+          "pp0": 71.11,
           "pp1": 0,
-          "pp2": 3.44,
+          "pp2": 2.8,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 24.81,
+          "pp6": 26.09,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1059,34 +1059,34 @@
         }
       },
       "pts_pitstop": {
-        "MCL": 6.51,
-        "MER": 10.4,
-        "RED": 7.83,
-        "FER": 9.81,
-        "WIL": 4.8,
-        "VRB": 9.18,
-        "AST": 4.88,
-        "HAA": 2.05,
-        "AUD": 7.1,
-        "ALP": 3.86,
+        "MCL": 6.55,
+        "MER": 10.5,
+        "RED": 7.85,
+        "FER": 10,
+        "WIL": 4.72,
+        "VRB": 9.22,
+        "AST": 4.82,
+        "HAA": 2.04,
+        "AUD": 6.93,
+        "ALP": 3.89,
         "CAD": 1.57
       },
       "negpts": {
-        "MCL": -5.89,
-        "MER": -5.99,
-        "RED": -9.1,
-        "FER": -6.3,
-        "WIL": -12.3,
-        "VRB": -7.09,
-        "AST": -17.56,
-        "HAA": -12.89,
-        "AUD": -10.92,
-        "ALP": -10.33,
-        "CAD": -19.69
+        "MCL": -5.96,
+        "MER": -6.18,
+        "RED": -9.01,
+        "FER": -6.08,
+        "WIL": -13.66,
+        "VRB": -7.04,
+        "AST": -18.42,
+        "HAA": -12.45,
+        "AUD": -10.14,
+        "ALP": -10.95,
+        "CAD": -20.78
       }
     },
-    "version": "Scenario C - mean(rw10,rw11,sim)",
-    "version_description": "With HAD returning to RED and LAW to VRB, we don't know what values F1 Fantasy will give them for R13 and R14 in the price change calculations. In this version of the sim, we assume the scores from their last active rounds: mean(rw10,rw11,sim) which results in balanced expected price changes based on the upcoming result and the performance of the drivers in their previous active rounds.",
+    "version": "Scenario A - mean(0,0,sim)",
+    "version_description": "With HAD returning to RED and LAW to VRB, we don't know what values F1 Fantasy will give them for R13 and R14 in the price change calculations. In this version of the sim, we assume scores of 0: mean(0,0,sim) which results in low expected price changes.",
     "extra_data_info": [
       {
         "id": "dnf_probability",
@@ -1124,10 +1124,10 @@
     ],
     "analyst": "rhter",
     "analyst_id": "rhter",
-    "date_uploaded": "2026-09-24T14:36:07.631Z",
-    "autopilot_storage_path": "simulations/2026/15/rhter_6/autopilot.json",
+    "date_uploaded": "2026-09-25T11:23:36.236Z",
+    "autopilot_storage_path": "simulations/2026/15/rhter_9/autopilot.json",
     "active": true,
-    "sort_order": 2,
+    "sort_order": 0,
     "early_raceweeks": [
       16,
       17
@@ -1402,8 +1402,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        13,
-        14
+        14,
+        13
       ]
     },
     "ALP_GAS": {
@@ -1674,8 +1674,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        4,
-        14
+        14,
+        4
       ]
     },
     "AST_ALO": {
@@ -1946,8 +1946,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        4,
-        -10
+        -10,
+        4
       ]
     },
     "AST_STR": {
@@ -2218,8 +2218,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -22,
-        -10
+        -10,
+        -22
       ]
     },
     "AUD_BOR": {
@@ -2490,8 +2490,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        0,
-        14
+        14,
+        0
       ]
     },
     "AUD_HUL": {
@@ -2762,8 +2762,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        2,
-        14
+        14,
+        2
       ]
     },
     "CAD_BOT": {
@@ -3034,8 +3034,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        1,
-        4
+        4,
+        1
       ]
     },
     "CAD_PER": {
@@ -3306,8 +3306,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -18,
-        13
+        13,
+        -18
       ]
     },
     "FER_HAM": {
@@ -3578,8 +3578,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -13,
-        26
+        26,
+        -13
       ]
     },
     "FER_LEC": {
@@ -3850,8 +3850,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        19,
-        -12
+        -12,
+        19
       ]
     },
     "HAA_BEA": {
@@ -4122,8 +4122,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        3,
-        4
+        4,
+        3
       ]
     },
     "HAA_OCO": {
@@ -4394,8 +4394,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        5,
-        10
+        10,
+        5
       ]
     },
     "MCL_NOR": {
@@ -4666,8 +4666,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        23,
-        32
+        32,
+        23
       ]
     },
     "MCL_PIA": {
@@ -4938,8 +4938,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        9,
-        35
+        35,
+        9
       ]
     },
     "MER_ANT": {
@@ -5210,8 +5210,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        35,
-        93
+        93,
+        35
       ]
     },
     "MER_RUS": {
@@ -5482,8 +5482,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        27,
-        33
+        33,
+        27
       ]
     },
     "RED_HAD": {
@@ -6026,8 +6026,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        16,
-        25
+        25,
+        16
       ]
     },
     "RED_VER": {
@@ -6298,8 +6298,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        38,
-        37
+        37,
+        38
       ]
     },
     "VRB_LAW": {
@@ -6842,8 +6842,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        5,
-        11
+        11,
+        5
       ]
     },
     "VRB_TSU": {
@@ -7114,8 +7114,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        1,
-        17
+        17,
+        1
       ]
     },
     "WIL_ALB": {
@@ -7386,8 +7386,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        4,
-        17
+        17,
+        4
       ]
     },
     "WIL_SAI": {
@@ -7658,8 +7658,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -18,
-        14
+        14,
+        -18
       ]
     },
     "ALP": {
@@ -7978,8 +7978,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        24,
-        38
+        38,
+        24
       ]
     },
     "AST": {
@@ -8298,8 +8298,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -17,
-        -21
+        -21,
+        -17
       ]
     },
     "AUD": {
@@ -8618,8 +8618,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        10,
-        41
+        41,
+        10
       ]
     },
     "CAD": {
@@ -8938,8 +8938,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -16,
-        16
+        16,
+        -16
       ]
     },
     "FER": {
@@ -9258,8 +9258,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        18,
-        24
+        24,
+        18
       ]
     },
     "HAA": {
@@ -9578,8 +9578,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        11,
-        17
+        17,
+        11
       ]
     },
     "MCL": {
@@ -9898,8 +9898,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        44,
-        77
+        77,
+        44
       ]
     },
     "MER": {
@@ -10218,8 +10218,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        87,
-        128
+        128,
+        87
       ]
     },
     "RED": {
@@ -10538,8 +10538,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        59,
-        69
+        69,
+        59
       ]
     },
     "VRB": {
@@ -10858,8 +10858,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        13,
-        33
+        33,
+        13
       ]
     },
     "WIL": {
@@ -11178,8 +11178,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -11,
-        34
+        34,
+        -11
       ]
     }
   }
