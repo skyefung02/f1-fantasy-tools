@@ -6,3 +6,4 @@ venv/
 .env
 *.csv.bak
 sample_data.csv
+plan_week_frontier.json

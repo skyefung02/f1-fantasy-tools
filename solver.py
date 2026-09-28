@@ -660,6 +660,7 @@ def solve_portfolio_transfers(
     wildcard_teams: list[int] | None = None,
     diff_ev_weight: float = 0.0,
     diff_ev_reference_tlas: set[str] | None = None,
+    max_total_shared_ev: float | None = None,
 ) -> list[dict]:
     """
     Solve optimal transfers for all teams jointly in a single ILP.
@@ -696,6 +697,12 @@ def solve_portfolio_transfers(
                              Ignored when diff_ev_reference_tlas is None or empty.
     diff_ev_reference_tlas : Set of uppercase asset codes defining the reference team.
                              Typically loaded from settings.json reference_team_picks.
+    max_total_shared_ev    : Cap on shared EV summed over every team pair. Shared EV
+                             for a pair is the xPts-weighted version of overlap: each
+                             shared driver or constructor contributes its xPts, and a
+                             shared turbo contributes the driver's xPts again.
+                             None = no cap. Limitless teams are measured on pre-chip
+                             picks, as above; Limitless–Limitless pairs are excluded.
     """
     n_teams       = len(current_teams)
     limitless_set = set(limitless_teams or [])
@@ -835,6 +842,7 @@ def solve_portfolio_transfers(
     # So overlap with a Limitless team is measured against its PRE-Limitless
     # (current) picks — those are what the other teams will face next week.
     # This simplifies to a linear constraint (no auxiliary variables needed).
+    shared_ev_terms = []   # one xPts-weighted shared expression per constrained pair
     for a, b in [(a, b) for a in range(n_teams) for b in range(a + 1, n_teams)]:
         a_lim = a in limitless_set
         b_lim = b in limitless_set
@@ -872,6 +880,21 @@ def solve_portfolio_transfers(
                     if drivers.loc[i, "name"].upper() == fix_turbo
                 )
             prob += overlap_expr <= max_pairwise_overlap, f"overlap_{a}{b}"
+
+            if max_total_shared_ev is not None:
+                shared_ev_expr = pulp.lpSum(
+                    x_d[opt_k][i] * drivers.loc[i, "expected_points"] for i in range(n_d)
+                    if drivers.loc[i, "name"].upper() in fix_d
+                ) + pulp.lpSum(
+                    x_c[opt_k][j] * constructors.loc[j, "expected_points"] for j in range(n_c)
+                    if constructors.loc[j, "name"].upper() in fix_c
+                )
+                if fix_turbo:
+                    shared_ev_expr += pulp.lpSum(
+                        t_d[opt_k][i] * drivers.loc[i, "expected_points"] for i in range(n_d)
+                        if drivers.loc[i, "name"].upper() == fix_turbo
+                    )
+                shared_ev_terms.append(shared_ev_expr)
             continue
 
         # Neither team is Limitless — standard auxiliary-variable linearisation.
@@ -896,6 +919,15 @@ def solve_portfolio_transfers(
             pulp.lpSum(z_d) + pulp.lpSum(z_c) + pulp.lpSum(w_t) <= max_pairwise_overlap,
             f"overlap_{a}{b}",
         )
+
+        if max_total_shared_ev is not None:
+            shared_ev_terms.append(
+                pulp.lpSum((z_d[i] + w_t[i]) * drivers.loc[i, "expected_points"] for i in range(n_d))
+                + pulp.lpSum(z_c[j] * constructors.loc[j, "expected_points"] for j in range(n_c))
+            )
+
+    if max_total_shared_ev is not None and shared_ev_terms:
+        prob += pulp.lpSum(shared_ev_terms) <= max_total_shared_ev, "total_shared_ev"
 
     # ── Solve ─────────────────────────────────────────────────────────────────
     prob.solve(_cbc_solver())
