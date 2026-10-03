@@ -14,16 +14,20 @@ driver — the xPts-weighted version of portfolio_max_overlap.
 
 Each frontier row is a complete portfolio (all 3 teams with transfers):
 
-    Cost       EV given up vs the unconstrained optimum (row 1)
-    Diff gain  total shared EV removed vs row 1 — differentiation bought
-    vs row above: EV lost / diff gained / EV per diff pt
+    Port EV    net xPts + budget value, summed over the teams
+    Cost       Port EV given up vs the unconstrained optimum (row 1), split into
+               Pts now (points this week) and Budget (budget value)
+    Diff gain  total shared EV removed vs row 1 — differentiation bought;
+               Cut is the same as a share of row 1's total shared EV
+    vs row above: EV lost / diff gained
                what moving one row down costs and buys
-    Worst pair the most similar pair's shared EV — a check that the total isn't
-               falling while two teams stay near-identical
+    Turbos     distinct turbo drivers across the portfolio
+    Hits       transfer penalty points taken
+    Changes    lineup swaps vs row 1's portfolio (* = turbo)
 
 Every row gains differentiation over the row above (dominated rows are dropped).
 "Chosen if r" gives the exchange rates r — EV you'd give up per point of diff
-gain — under which that row maximises EV + r × diff gain. Rows marked "never" sit
+gain — under which that row maximises EV + r × diff gain. Rows without a ▸ sit
 in a dent of the frontier: no single rate picks them, but they are real options.
 
 Usage
@@ -306,6 +310,26 @@ def _fmt_rate_range(row: dict) -> str:
     return f"{_fmt_rate(row['r_lo'])} – {_fmt_rate(row['r_hi'])}"
 
 
+def _team_changes(base: dict, new: dict) -> list[str]:
+    """Lineup swaps turning one team's base result into new, priciest first; * marks the turbo."""
+    def tag(asset: dict) -> str:
+        return asset["name"] + ("*" if asset.get("is_turbo") else "")
+
+    swaps = []
+    for key in ("drivers", "constructors"):
+        old = {a["name"]: a for a in base[key]}
+        cur = {a["name"]: a for a in new[key]}
+        outs = sorted((old[n] for n in old.keys() - cur.keys()), key=lambda a: -a["price"])
+        ins  = sorted((cur[n] for n in cur.keys() - old.keys()), key=lambda a: -a["price"])
+        swaps += [f"{tag(o)}→{tag(n)}" for o, n in zip(outs, ins)]
+
+    # Turbo moved onto a driver both lineups hold — no swap above shows it
+    turbo = new["turbo_driver"]
+    if turbo != base["turbo_driver"] and any(d["name"] == turbo for d in base["drivers"]):
+        swaps.append(f"turbo→{turbo}")
+    return swaps
+
+
 def print_frontier(
     frontier: list[dict],
     n_teams: int,
@@ -313,55 +337,87 @@ def print_frontier(
     rate_pick: int | None,
     metric: str,
 ) -> None:
-    pairs = [(a, b) for a in range(n_teams) for b in range(a + 1, n_teams)]
     sweep_teams = [k for k in range(n_teams) if k not in limitless_set]
+    top = frontier[0]
 
-    group = f"{'─ vs row above ─':^28}"
+    def pts_now(row: dict) -> float:
+        return sum(row["results"][k]["total_points"] for k in sweep_teams)
+
+    top_pts    = pts_now(top)
+    top_budget = top["port_ev"] - top_pts
+
+    rate_w = 14 if rate_pick is None else 22   # room for the ◄ rate marker
+    group = f"{'':17}{' vs row 1 ':─^42}  {' vs row above ':─^17}"
     hdr = (
-        f"  {'#':>3}  {'Cost':>6}  {'Diff gain':>9}  "
-        f"{'EV lost':>8}  {'Diff +':>8}  {'EV/pt':>6}  "
-        f"{'Worst pair':>10}  "
+        f"  {'#':>3}  {'Port EV':>8}  {'Cost':>6}  {'Pts now':>8}  {'Budget':>7}  "
+        f"{'Diff gain':>9}  {'Cut':>4}  {'EV lost':>8}  {'Diff +':>7}  "
+        f"{'Turbos':>6}  {'Hits':>5}  {'Chosen if r':<{rate_w}}  Changes vs row 1"
     )
-    hdr += "".join(f"{f'T{a+1}–T{b+1}':>7}  " for a, b in pairs)
-    hdr += f"{'Port EV':>8}  {'Xfers':>7}  {'Chosen if r':>14}"
     width = len(hdr)
 
-    print(f"\n{'EV vs DIFFERENTIATION FRONTIER':^{width}}")
-    print("=" * width)
-    print(f"  {'':3}  {'':6}  {'':9}  {group}")
-    print(hdr)
-    print("  " + "─" * (width - 2))
-
+    lines = []
+    seen_changes: dict[tuple, int] = {}
     prev = None
     for i, row in enumerate(frontier, 1):
         if prev is None:
-            lost_str, gain_str, per_pt_str = "—", "—", "—"
+            pts_str, budget_str, lost_str, gain_str = "—", "—", "—", "—"
         else:
-            lost = row["cost"] - prev["cost"]
-            gain = row["diff_gain"] - prev["diff_gain"]
-            lost_str, gain_str, per_pt_str = f"{lost:.1f}", f"{gain:.1f}", f"{lost / gain:.2f}"
+            pts    = pts_now(row) - top_pts
+            budget = (row["port_ev"] - pts_now(row)) - top_budget
+            pts_str, budget_str = f"{pts:+.1f}", f"{budget:+.1f}"
+            lost_str = f"{row['cost'] - prev['cost']:.1f}"
+            gain_str = f"{row['diff_gain'] - prev['diff_gain']:.1f}"
 
-        line = (
-            f"  {i:>3}  {row['cost']:>6.1f}  {row['diff_gain']:>9.1f}  "
-            f"{lost_str:>8}  {gain_str:>8}  {per_pt_str:>6}  "
-            f"{row['worst_pair']:>10.1f}  "
-        )
-        for pair in pairs:
-            val = row["shared"].get(pair)
-            line += f"{'—' if val is None else f'{val:.1f}':>7}  "
-        xfers  = "+".join(str(row["results"][k]["n_transfers"]) for k in sweep_teams)
+        cut    = row["diff_gain"] / top["total_shared"] if top["total_shared"] else 0.0
+        turbos = len({row["results"][k]["turbo_driver"] for k in sweep_teams})
+        hits   = sum(r["penalty_pts"] for r in row["results"])
+
+        changes = []
+        for k in sweep_teams:
+            swaps = _team_changes(top["results"][k], row["results"][k])
+            if not swaps:
+                continue
+            # Long changes already spelled out on an earlier row are referenced, not repeated
+            first = seen_changes.setdefault((k, *swaps), i)
+            text  = f"as row {first}" if first != i and len(swaps) > 2 else ", ".join(swaps)
+            changes.append(f"T{k + 1}: {text}")
+
+        rate   = _fmt_rate_range(row) if row["supported"] else "·"
         marker = "  ◄ rate" if rate_pick == i - 1 else ""
-        line += f"{row['port_ev']:>8.1f}  {xfers:>7}  {_fmt_rate_range(row):>14}{marker}"
-        print(line)
+        lines.append(
+            f" {'▸' if row['supported'] else ' '}{i:>3}  {row['port_ev']:>8.1f}  {row['cost']:>6.1f}  "
+            f"{pts_str:>8}  {budget_str:>7}  "
+            f"{row['diff_gain']:>9.1f}  {cut:>4.0%}  {lost_str:>8}  {gain_str:>7}  "
+            f"{turbos:>6}  {f'-{hits:g}' if hits else '—':>5}  {rate + marker:<{rate_w}}  "
+            f"{' | '.join(changes) or '—'}"
+        )
         prev = row
 
+    print(f"\n{'EV vs DIFFERENTIATION FRONTIER':^{width}}")
     print("=" * width)
-    print(f"  Cost        : EV given up vs row 1  (EV = {metric}, summed over non-Limitless teams)")
-    print("  Diff gain   : total shared EV (all pairs) removed vs row 1 — differentiation bought")
-    print("  vs row above: EV lost and diff gained moving down one row, and EV lost per diff point")
-    print("  Worst pair  : shared EV of the most similar pair; T–T columns show every pair")
+    print(
+        f"  Baseline (row 1): {top_pts:.1f} pts + {top_budget:.1f} budget value"
+        f"   |   total shared EV {top['total_shared']:.1f}\n"
+    )
+    print(group)
+    print(hdr)
+    print("  " + "─" * (width - 2))
+    for line in lines:
+        print(line)
+
+    print("=" * width)
+    print(f"  Port EV     : {metric}, summed over non-Limitless teams")
+    print("  Cost        : Port EV given up vs row 1, split into points this week (Pts now)")
+    print("                and budget value (Budget):  Pts now + Budget = −Cost")
+    print("  Diff gain   : total shared EV (all pairs) removed vs row 1 — differentiation bought;")
+    print("                Cut is the same as a share of row 1's total shared EV")
+    print("  vs row above: EV lost and diff gained moving down one row")
+    print("  Turbos      : distinct turbo drivers across the portfolio")
+    print("  Hits        : transfer penalty points taken, all teams")
     print("  Chosen if r : rates r (EV per diff point) under which this row maximises")
-    print("                EV + r × diff gain; 'never' = in a dent of the frontier, pick by eye")
+    print("                EV + r × diff gain. ▸ rows are picked by some rate; · rows sit in a")
+    print("                dent of the frontier — no rate picks them, but they are real options")
+    print("  Changes     : lineup swaps vs row 1's portfolio, * = turbo")
     print("\n  Next: python plan_week.py --pick N   (add --log to record the implied rate)")
 
 
