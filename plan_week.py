@@ -37,6 +37,9 @@ Usage
     python plan_week.py --pick 3         # print full transfer plans for row 3 (no re-solve)
     python plan_week.py --pick 3 --log   # ...and log the choice + implied rate
 
+Each table run also writes plan_week_frontier.html — the same table, to keep open
+beside the terminal while --pick prints transfer plans.
+
 --pick reads the frontier saved by the last table run, so it is instant. It
 refuses if the projections, teams, settings or solve flags have changed since
 that run — re-run the table first so the row numbers mean what you saw.
@@ -49,6 +52,7 @@ import sys
 import json
 import hashlib
 import argparse
+from html import escape
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -60,6 +64,7 @@ from transfer_advisor import print_transfer_plan, print_portfolio_summary
 
 LOG_PATH   = Path(__file__).parent / "plan_week_log.csv"
 CACHE_PATH = Path(__file__).parent / "tmp" / "plan_week_frontier.json"
+HTML_PATH  = Path(__file__).parent / "plan_week_frontier.html"
 
 
 def team_budget(team: dict) -> float:
@@ -330,13 +335,8 @@ def _team_changes(base: dict, new: dict) -> list[str]:
     return swaps
 
 
-def print_frontier(
-    frontier: list[dict],
-    n_teams: int,
-    limitless_set: set[int],
-    rate_pick: int | None,
-    metric: str,
-) -> None:
+def frontier_table(frontier: list[dict], n_teams: int, limitless_set: set[int]) -> dict:
+    """Display values behind the frontier table — shared by the terminal and HTML views."""
     sweep_teams = [k for k in range(n_teams) if k not in limitless_set]
     top = frontier[0]
 
@@ -346,6 +346,59 @@ def print_frontier(
     top_pts    = pts_now(top)
     top_budget = top["port_ev"] - top_pts
 
+    rows = []
+    seen_changes: dict[tuple, int] = {}
+    prev = None
+    for i, row in enumerate(frontier, 1):
+        changes = []
+        for k in sweep_teams:
+            swaps = _team_changes(top["results"][k], row["results"][k])
+            if not swaps:
+                continue
+            # Long changes already spelled out on an earlier row are referenced, not repeated
+            first = seen_changes.setdefault((k, *swaps), i)
+            text  = f"as row {first}" if first != i and len(swaps) > 2 else ", ".join(swaps)
+            changes.append((k + 1, text))
+
+        rows.append({
+            "n":       i,
+            "row":     row,
+            "pts":     None if prev is None else pts_now(row) - top_pts,
+            "budget":  None if prev is None else (row["port_ev"] - pts_now(row)) - top_budget,
+            "lost":    None if prev is None else row["cost"] - prev["cost"],
+            "gain":    None if prev is None else row["diff_gain"] - prev["diff_gain"],
+            "cut":     row["diff_gain"] / top["total_shared"] if top["total_shared"] else 0.0,
+            "turbos":  len({row["results"][k]["turbo_driver"] for k in sweep_teams}),
+            "hits":    sum(r["penalty_pts"] for r in row["results"]),
+            "changes": changes,
+        })
+        prev = row
+
+    return {"top_pts": top_pts, "top_budget": top_budget, "total_shared": top["total_shared"], "rows": rows}
+
+
+def _legend(metric: str) -> list[tuple[str, list[str]]]:
+    return [
+        ("Port EV",      [f"{metric}, summed over non-Limitless teams"]),
+        ("Cost",         ["Port EV given up vs row 1, split into points this week (Pts now)",
+                          "and budget value (Budget):  Pts now + Budget = −Cost"]),
+        ("Diff gain",    ["total shared EV (all pairs) removed vs row 1 — differentiation bought;",
+                          "Cut is the same as a share of row 1's total shared EV"]),
+        ("vs row above", ["EV lost and diff gained moving down one row"]),
+        ("Turbos",       ["distinct turbo drivers across the portfolio"]),
+        ("Hits",         ["transfer penalty points taken, all teams"]),
+        ("Chosen if r",  ["rates r (EV per diff point) under which this row maximises",
+                          "EV + r × diff gain. ▸ rows are picked by some rate; · rows sit in a",
+                          "dent of the frontier — no rate picks them, but they are real options"]),
+        ("Changes",      ["lineup swaps vs row 1's portfolio, * = turbo"]),
+    ]
+
+
+def _fmt_opt(value: float | None, spec: str) -> str:
+    return "—" if value is None else format(value, spec)
+
+
+def print_frontier(table: dict, rate_pick: int | None, metric: str) -> None:
     rate_w = 14 if rate_pick is None else 22   # room for the ◄ rate marker
     group = f"{'':17}{' vs row 1 ':─^42}  {' vs row above ':─^17}"
     hdr = (
@@ -355,70 +408,194 @@ def print_frontier(
     )
     width = len(hdr)
 
-    lines = []
-    seen_changes: dict[tuple, int] = {}
-    prev = None
-    for i, row in enumerate(frontier, 1):
-        if prev is None:
-            pts_str, budget_str, lost_str, gain_str = "—", "—", "—", "—"
-        else:
-            pts    = pts_now(row) - top_pts
-            budget = (row["port_ev"] - pts_now(row)) - top_budget
-            pts_str, budget_str = f"{pts:+.1f}", f"{budget:+.1f}"
-            lost_str = f"{row['cost'] - prev['cost']:.1f}"
-            gain_str = f"{row['diff_gain'] - prev['diff_gain']:.1f}"
-
-        cut    = row["diff_gain"] / top["total_shared"] if top["total_shared"] else 0.0
-        turbos = len({row["results"][k]["turbo_driver"] for k in sweep_teams})
-        hits   = sum(r["penalty_pts"] for r in row["results"])
-
-        changes = []
-        for k in sweep_teams:
-            swaps = _team_changes(top["results"][k], row["results"][k])
-            if not swaps:
-                continue
-            # Long changes already spelled out on an earlier row are referenced, not repeated
-            first = seen_changes.setdefault((k, *swaps), i)
-            text  = f"as row {first}" if first != i and len(swaps) > 2 else ", ".join(swaps)
-            changes.append(f"T{k + 1}: {text}")
-
-        rate   = _fmt_rate_range(row) if row["supported"] else "·"
-        marker = "  ◄ rate" if rate_pick == i - 1 else ""
-        lines.append(
-            f" {'▸' if row['supported'] else ' '}{i:>3}  {row['port_ev']:>8.1f}  {row['cost']:>6.1f}  "
-            f"{pts_str:>8}  {budget_str:>7}  "
-            f"{row['diff_gain']:>9.1f}  {cut:>4.0%}  {lost_str:>8}  {gain_str:>7}  "
-            f"{turbos:>6}  {f'-{hits:g}' if hits else '—':>5}  {rate + marker:<{rate_w}}  "
-            f"{' | '.join(changes) or '—'}"
-        )
-        prev = row
-
     print(f"\n{'EV vs DIFFERENTIATION FRONTIER':^{width}}")
     print("=" * width)
     print(
-        f"  Baseline (row 1): {top_pts:.1f} pts + {top_budget:.1f} budget value"
-        f"   |   total shared EV {top['total_shared']:.1f}\n"
+        f"  Baseline (row 1): {table['top_pts']:.1f} pts + {table['top_budget']:.1f} budget value"
+        f"   |   total shared EV {table['total_shared']:.1f}\n"
     )
     print(group)
     print(hdr)
     print("  " + "─" * (width - 2))
-    for line in lines:
-        print(line)
+
+    for t in table["rows"]:
+        row     = t["row"]
+        rate    = _fmt_rate_range(row) if row["supported"] else "·"
+        marker  = "  ◄ rate" if rate_pick == t["n"] - 1 else ""
+        changes = " | ".join(f"T{team}: {text}" for team, text in t["changes"])
+        hits    = f"-{t['hits']:g}" if t["hits"] else "—"
+        print(
+            f" {'▸' if row['supported'] else ' '}{t['n']:>3}  {row['port_ev']:>8.1f}  {row['cost']:>6.1f}  "
+            f"{_fmt_opt(t['pts'], '+.1f'):>8}  {_fmt_opt(t['budget'], '+.1f'):>7}  "
+            f"{row['diff_gain']:>9.1f}  {t['cut']:>4.0%}  "
+            f"{_fmt_opt(t['lost'], '.1f'):>8}  {_fmt_opt(t['gain'], '.1f'):>7}  "
+            f"{t['turbos']:>6}  {hits:>5}  {rate + marker:<{rate_w}}  "
+            f"{changes or '—'}"
+        )
 
     print("=" * width)
-    print(f"  Port EV     : {metric}, summed over non-Limitless teams")
-    print("  Cost        : Port EV given up vs row 1, split into points this week (Pts now)")
-    print("                and budget value (Budget):  Pts now + Budget = −Cost")
-    print("  Diff gain   : total shared EV (all pairs) removed vs row 1 — differentiation bought;")
-    print("                Cut is the same as a share of row 1's total shared EV")
-    print("  vs row above: EV lost and diff gained moving down one row")
-    print("  Turbos      : distinct turbo drivers across the portfolio")
-    print("  Hits        : transfer penalty points taken, all teams")
-    print("  Chosen if r : rates r (EV per diff point) under which this row maximises")
-    print("                EV + r × diff gain. ▸ rows are picked by some rate; · rows sit in a")
-    print("                dent of the frontier — no rate picks them, but they are real options")
-    print("  Changes     : lineup swaps vs row 1's portfolio, * = turbo")
+    for term, text in _legend(metric):
+        print(f"  {term:<12}: {text[0]}")
+        for extra in text[1:]:
+            print(f"  {'':<12}  {extra}")
     print("\n  Next: python plan_week.py --pick N   (add --log to record the implied rate)")
+
+
+_HTML_STYLE = """
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff; --fg: #1f2328; --muted: #656d76; --line: #d0d7de; --head: #f6f8fa;
+  --accent: #0969da; --tint: rgba(9, 105, 218, .08); --bar: rgba(9, 105, 218, .16);
+  --pick: rgba(191, 135, 0, .18); --pos: #1a7f37; --neg: #cf222e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117; --fg: #e6edf3; --muted: #8d96a0; --line: #30363d; --head: #161b22;
+    --accent: #4493f8; --tint: rgba(68, 147, 248, .12); --bar: rgba(68, 147, 248, .25);
+    --pick: rgba(210, 153, 34, .22); --pos: #3fb950; --neg: #f85149;
+  }
+}
+body { margin: 0; padding: 16px 20px 32px; background: var(--bg); color: var(--fg);
+       font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+h1 { font-size: 16px; margin: 0 0 2px; }
+.meta, .baseline { color: var(--muted); margin: 0 0 4px; }
+.baseline b { color: var(--fg); font-weight: 600; }
+table { border-collapse: separate; border-spacing: 0; font-variant-numeric: tabular-nums; }
+table.frontier { margin-top: 16px; }
+thead { position: sticky; top: 0; z-index: 1; }
+th { background: var(--head); font-weight: 600; text-align: right; white-space: nowrap;
+     padding: 4px 10px; border-bottom: 1px solid var(--line); }
+th.group { text-align: center; color: var(--muted); font-weight: 500; }
+th.left, td.left { text-align: left; }
+td { padding: 3px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+.edge { border-left: 1px solid var(--line); }
+tbody tr:hover td { background-color: var(--tint); }
+tr.hull td { background-color: var(--tint); }
+tr.hull td.n { color: var(--accent); font-weight: 700; }
+tr.pick td { background-color: var(--pick); }
+td.n { color: var(--muted); }
+.pos { color: var(--pos); } .neg { color: var(--neg); } .dim { color: var(--muted); }
+td.cut { background-image: linear-gradient(to right, var(--bar) var(--w), transparent var(--w)); }
+td.changes { white-space: normal; min-width: 260px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+.team { display: inline-block; margin-right: 12px; }
+.team b { color: var(--accent); font-family: system-ui, sans-serif; margin-right: 4px; }
+.teams { display: flex; gap: 14px; margin-top: 12px; }
+.card { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.card h2 { margin: 0; padding: 5px 10px; font-size: 13px; font-weight: 600; background: var(--head); }
+.card h2 b { color: var(--accent); margin-right: 6px; }
+.card th { font-weight: 500; color: var(--muted); }
+.card td.asset { font-weight: 600; min-width: 120px; }
+.card tr.total td { border-bottom: 0; font-weight: 600; }
+.tag { margin-left: 6px; padding: 0 6px; border-radius: 8px; background: var(--accent); color: var(--bg); font-size: 11px; }
+.tag.new { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); font-weight: 400; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 18px 0 0; color: var(--muted); max-width: 900px; }
+dt { font-weight: 600; color: var(--fg); } dd { margin: 0; }
+"""
+
+
+def _baseline_html(results: list[dict], team_names: list[str]) -> str:
+    """Row 1's portfolio as one card per team, side by side — what "Changes vs row 1" is measured against."""
+    cards = []
+    for k, (result, name) in enumerate(zip(results, team_names), start=1):
+        new  = set(result["driver_transfers_in"]) | set(result["constructor_transfers_in"])
+        chip = " ★ Limitless" if result.get("is_limitless") else " ★ Wildcard" if result.get("is_wildcard") else ""
+        rows = []
+        for asset in result["drivers"] + result["constructors"]:
+            turbo = asset.get("is_turbo", False)
+            delta = asset["xDeltaPrice"]
+            css   = "pos" if delta >= 0.005 else "neg" if delta <= -0.005 else "dim"
+            rows.append(
+                f'<tr><td class="left asset">{escape(asset["name"])}'
+                + ('<span class="tag">turbo</span>' if turbo else "")
+                + ('<span class="tag new">new</span>' if asset["name"].upper() in new else "")
+                + f'</td><td>{asset["price"]:.1f}</td>'
+                f'<td>{asset["expected_points"] * (2 if turbo else 1):.1f}</td>'
+                f'<td class="{css}">{delta:+.2f}</td></tr>'
+            )
+        delta_total = sum(a["xDeltaPrice"] for a in result["drivers"] + result["constructors"])
+        hit = f' <span class="neg">(−{result["penalty_pts"]:g} hit)</span>' if result["penalty_pts"] else ""
+        cards.append(
+            f'<div class="card"><h2><b>T{k}</b>{escape(name)}{chip}</h2><table>'
+            '<tr><th class="left">Asset</th><th>Price</th><th>xPts</th><th>ΔPrice</th></tr>'
+            + "".join(rows)
+            + f'<tr class="total"><td class="left">Net{hit}</td><td>{result["total_price"]:.1f}</td>'
+            f'<td>{result["total_points"]:.1f}</td><td>{delta_total:+.2f}</td></tr></table></div>'
+        )
+    return f'<div class="teams">{"".join(cards)}</div>'
+
+
+def write_frontier_html(
+    table: dict, rate_pick: int | None, metric: str, meta: list[str], team_names: list[str],
+) -> None:
+    """Write the frontier table as a standalone page — it stays open while --pick scrolls the terminal."""
+    def signed(value: float | None) -> str:
+        if value is None:
+            return '<td class="dim">—</td>'
+        css = "pos" if value >= 0.05 else "neg" if value <= -0.05 else "dim"
+        return f'<td class="{css}">{value:+.1f}</td>'
+
+    body = []
+    for t in table["rows"]:
+        row     = t["row"]
+        picked  = rate_pick == t["n"] - 1
+        classes = " ".join(c for c, on in (("hull", row["supported"]), ("pick", picked)) if on)
+        rate    = escape(_fmt_rate_range(row)) if row["supported"] else '<span class="dim">·</span>'
+        changes = "".join(
+            f'<span class="team"><b>T{team}</b>{escape(text)}</span>' for team, text in t["changes"]
+        ) or '<span class="dim">—</span>'
+        body.append(
+            f'<tr class="{classes}" title="python plan_week.py --pick {t["n"]}">'
+            f'<td class="n">{"▸ " if row["supported"] else ""}{t["n"]}</td>'
+            f'<td>{row["port_ev"]:.1f}</td>'
+            f'<td class="edge">{row["cost"]:.1f}</td>{signed(t["pts"])}{signed(t["budget"])}'
+            f'<td>{row["diff_gain"]:.1f}</td>'
+            f'<td class="cut" style="--w: {min(max(t["cut"], 0.0), 1.0):.0%}">{t["cut"]:.0%}</td>'
+            f'<td class="edge">{_fmt_opt(t["lost"], ".1f")}</td><td>{_fmt_opt(t["gain"], ".1f")}</td>'
+            f'<td class="edge">{t["turbos"]}</td>'
+            + (f'<td class="neg">-{t["hits"]:g}</td>' if t["hits"] else '<td class="dim">—</td>')
+            + f'<td class="left">{rate}{"<span class=tag>rate</span>" if picked else ""}</td>'
+            f'<td class="left changes">{changes}</td></tr>'
+        )
+
+    legend = "".join(
+        f"<dt>{escape(term)}</dt><dd>{escape(' '.join(text))}</dd>" for term, text in _legend(metric)
+    )
+    HTML_PATH.write_text(f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Frontier</title>
+<style>{_HTML_STYLE}</style>
+</head>
+<body>
+<h1>EV vs differentiation frontier</h1>
+<p class="meta">{escape("  ·  ".join(meta))}</p>
+<p class="baseline">Baseline (row 1): <b>{table['top_pts']:.1f}</b> pts + <b>{table['top_budget']:.1f}</b> budget value
+  &nbsp;|&nbsp; total shared EV <b>{table['total_shared']:.1f}</b></p>
+{_baseline_html(table['rows'][0]['row']['results'], team_names)}
+<table class="frontier">
+<thead>
+<tr>
+  <th rowspan="2">#</th><th rowspan="2">Port EV</th>
+  <th class="group edge" colspan="5">vs row 1</th>
+  <th class="group edge" colspan="2">vs row above</th>
+  <th class="edge" rowspan="2">Turbos</th><th rowspan="2">Hits</th>
+  <th class="left" rowspan="2">Chosen if r</th><th class="left" rowspan="2">Changes vs row 1</th>
+</tr>
+<tr>
+  <th class="edge">Cost</th><th>Pts now</th><th>Budget</th><th>Diff gain</th><th>Cut</th>
+  <th class="edge">EV lost</th><th>Diff +</th>
+</tr>
+</thead>
+<tbody>
+{chr(10).join(body)}
+</tbody>
+</table>
+<dl>{legend}</dl>
+</body>
+</html>
+""")
+    print(f"  Table saved to {HTML_PATH.name}")
 
 
 def log_pick(settings: dict, row_no: int, row: dict) -> None:
@@ -526,7 +703,17 @@ def main():
         add_rate_ranges(frontier)
         save_frontier(frontier, fingerprint)
         rate_pick = pick_for_rate(frontier, args.rate) if args.rate is not None else None
-        print_frontier(frontier, len(current_teams), limitless_set, rate_pick, metric)
+        table = frontier_table(frontier, len(current_teams), limitless_set)
+        print_frontier(table, rate_pick, metric)
+        meta = [
+            f"solved {datetime.now():%a %d %b %H:%M}",
+            f"gameday {settings.get('gameday')}",
+            f"{budget_pts_weight:g} pts/M budget value",
+            f"step {args.step:g}",
+        ]
+        if args.max_transfers is not None:
+            meta.append(f"max {args.max_transfers} transfers per team")
+        write_frontier_html(table, rate_pick, metric, meta, [t["name"] for t in current_teams])
         return
 
     frontier = load_frontier(fingerprint)

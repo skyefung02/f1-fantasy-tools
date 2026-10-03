@@ -7,3 +7,4 @@ venv/
 *.csv.bak
 sample_data.csv
 plan_week_frontier.json
+plan_week_frontier.html
