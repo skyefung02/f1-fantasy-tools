@@ -247,6 +247,24 @@ def seat_swap_warnings(entities):
     return collisions, dropped
 
 
+def previously_inactive():
+    """Ids that were already inactive in the last saved snapshot.
+
+    The site keeps dead seats (VRB_TSU, RED_LAW) in its entity list for the rest
+    of the season, so without this the same notes repeat every week.
+    """
+    try:
+        with SNAPSHOT_FILE.open() as handle:
+            entities = json.load(handle).get("entities") or {}
+    except (OSError, ValueError):
+        return set()
+    return {
+        entity_id
+        for entity_id, entity in entities.items()
+        if not entity.get("isActive", True)
+    }
+
+
 def write_csv(rows, path, backup=True):
     path = Path(path)
     if backup and path.exists():
@@ -371,7 +389,12 @@ def main():
         print(f"skipped {len(skipped)}: {', '.join(skipped)}")
 
     collisions, dropped = seat_swap_warnings(entities)
+    # Only report what changed since the last fetch; `collisions` itself stays
+    # complete because the stale-ban check below needs every ambiguous TLA.
+    known = previously_inactive()
     for entity_id, entity in dropped:
+        if entity_id in known:
+            continue
         print(
             f"  note: {entity_id} ({entity['abbreviation']}) is inactive this week "
             f"and has no projection - not in the CSV, so it will be force-transferred "
@@ -379,6 +402,8 @@ def main():
             file=sys.stderr,
         )
     for entity_id, entity, twin in collisions:
+        if entity_id in known:
+            continue
         tla = entity["abbreviation"]
         print(
             f"  WARNING: seat swap on {tla}. You may still hold {entity_id} "

@@ -179,6 +179,13 @@ def get_current_teams(settings: dict) -> list[dict]:
     snapshot = load_snapshot()
     if snapshot is not None:
         print(f"Using snapshot: {SNAPSHOT_FILE}  (run 'python fetch_teams.py --save' to refresh)")
+        # The snapshot bakes in free_transfers as of --save; settings.json is the
+        # source of truth, so an edit there must not need a re-save to take effect.
+        ft_list = settings.get("free_transfers", [])
+        for team in snapshot:
+            slot = team.get("slot", 0)
+            if 1 <= slot <= len(ft_list):
+                team["free_transfers"] = ft_list[slot - 1]
         return snapshot
 
     # ── Live fallback ─────────────────────────────────────────────────────────

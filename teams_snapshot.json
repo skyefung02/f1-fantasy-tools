@@ -2,103 +2,103 @@
   {
     "slot": 1,
     "name": "Two Drivers, One CSV",
-    "budget_remaining": 0.0,
+    "budget_remaining": 0.8,
     "free_transfers": 3,
     "drivers": [
       {
+        "name": "Isack Hadjar",
+        "tla": "HAD",
+        "price": 15.7,
+        "season_score": 193,
+        "is_turbo": false
+      },
+      {
         "name": "Nico Hulkenberg",
         "tla": "HUL",
-        "price": 5.4,
-        "season_score": 4,
+        "price": 6.0,
+        "season_score": 23,
         "is_turbo": false
       },
       {
         "name": "Arvid Lindblad",
         "tla": "LIN",
-        "price": 8.8,
-        "season_score": 107,
+        "price": 9.4,
+        "season_score": 135,
         "is_turbo": false
       },
       {
         "name": "Charles Leclerc",
         "tla": "LEC",
-        "price": 23.7,
-        "season_score": 351,
-        "is_turbo": false
-      },
-      {
-        "name": "Valtteri Bottas",
-        "tla": "BOT",
-        "price": 3.6,
-        "season_score": -67,
+        "price": 23.8,
+        "season_score": 384,
         "is_turbo": false
       },
       {
         "name": "Kimi Antonelli",
         "tla": "ANT",
-        "price": 26.9,
-        "season_score": 622,
+        "price": 27.0,
+        "season_score": 651,
         "is_turbo": true
       }
     ],
     "turbo_driver": "Kimi Antonelli",
     "constructors": [
       {
-        "name": "Ferrari",
-        "tla": "FER",
-        "price": 27.6,
-        "season_score": 927,
+        "name": "Racing Bulls",
+        "tla": "VRB",
+        "price": 15.9,
+        "season_score": 494,
         "is_turbo": false
       },
       {
         "name": "Mercedes",
         "tla": "MER",
-        "price": 33.8,
-        "season_score": 1269,
+        "price": 34.0,
+        "season_score": 1308,
         "is_turbo": false
       }
     ],
-    "total_price": 129.8
+    "total_price": 131.8
   },
   {
     "slot": 2,
     "name": "Melbourne Moneyball",
-    "budget_remaining": 0.4,
+    "budget_remaining": 2.8,
     "free_transfers": 3,
     "drivers": [
       {
-        "name": "Alexander Albon",
-        "tla": "ALB",
-        "price": 5.8,
-        "season_score": 13,
+        "name": "Isack Hadjar",
+        "tla": "HAD",
+        "price": 15.7,
+        "season_score": 193,
+        "is_turbo": false
+      },
+      {
+        "name": "Franco Colapinto",
+        "tla": "COL",
+        "price": 9.4,
+        "season_score": 151,
         "is_turbo": false
       },
       {
         "name": "Nico Hulkenberg",
         "tla": "HUL",
-        "price": 5.4,
-        "season_score": 4,
+        "price": 6.0,
+        "season_score": 23,
         "is_turbo": false
       },
       {
-        "name": "Kimi Antonelli",
-        "tla": "ANT",
-        "price": 26.9,
-        "season_score": 622,
-        "is_turbo": false
-      },
-      {
-        "name": "Valtteri Bottas",
-        "tla": "BOT",
-        "price": 3.6,
-        "season_score": -67,
+        "name": "Arvid Lindblad",
+        "tla": "LIN",
+        "price": 9.4,
+        "season_score": 135,
         "is_turbo": false
       },
       {
         "name": "Max Verstappen",
         "tla": "VER",
-        "price": 27.6,
-        "season_score": 376,
+        "price": 27.9,
+        "season_score": 433,
         "is_turbo": true
       }
     ],
@@ -107,59 +107,59 @@
       {
         "name": "Ferrari",
         "tla": "FER",
-        "price": 27.6,
-        "season_score": 927,
+        "price": 27.9,
+        "season_score": 1007,
         "is_turbo": false
       },
       {
         "name": "Mercedes",
         "tla": "MER",
-        "price": 33.8,
-        "season_score": 1269,
+        "price": 34.0,
+        "season_score": 1308,
         "is_turbo": false
       }
     ],
-    "total_price": 130.7
+    "total_price": 130.3
   },
   {
     "slot": 3,
     "name": "Scarlet Regression",
-    "budget_remaining": 1.0,
+    "budget_remaining": 0.0,
     "free_transfers": 3,
     "drivers": [
       {
+        "name": "Isack Hadjar",
+        "tla": "HAD",
+        "price": 15.7,
+        "season_score": 193,
+        "is_turbo": false
+      },
+      {
+        "name": "Franco Colapinto",
+        "tla": "COL",
+        "price": 9.4,
+        "season_score": 151,
+        "is_turbo": false
+      },
+      {
         "name": "Nico Hulkenberg",
         "tla": "HUL",
-        "price": 5.4,
-        "season_score": 4,
+        "price": 6.0,
+        "season_score": 23,
         "is_turbo": false
       },
       {
-        "name": "Kimi Antonelli",
-        "tla": "ANT",
-        "price": 26.9,
-        "season_score": 622,
-        "is_turbo": false
-      },
-      {
-        "name": "Sergio Perez",
-        "tla": "PER",
-        "price": 3.0,
-        "season_score": 19,
-        "is_turbo": false
-      },
-      {
-        "name": "Lance Stroll",
-        "tla": "STR",
-        "price": 3.0,
-        "season_score": -142,
+        "name": "Arvid Lindblad",
+        "tla": "LIN",
+        "price": 9.4,
+        "season_score": 135,
         "is_turbo": false
       },
       {
         "name": "George Russell",
         "tla": "RUS",
-        "price": 28.1,
-        "season_score": 413,
+        "price": 28.0,
+        "season_score": 408,
         "is_turbo": true
       }
     ],
@@ -168,18 +168,18 @@
       {
         "name": "Ferrari",
         "tla": "FER",
-        "price": 27.6,
-        "season_score": 927,
+        "price": 27.9,
+        "season_score": 1007,
         "is_turbo": false
       },
       {
         "name": "Mercedes",
         "tla": "MER",
-        "price": 33.8,
-        "season_score": 1269,
+        "price": 34.0,
+        "season_score": 1308,
         "is_turbo": false
       }
     ],
-    "total_price": 127.8
+    "total_price": 130.4
   }
 ]
