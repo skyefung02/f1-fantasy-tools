@@ -682,9 +682,11 @@ def solve_portfolio_transfers(
     limitless_teams        : 0-indexed list of teams playing the Limitless chip.
                              Limitless teams are solved with unlimited budget, no
                              transfer penalty, and pure xPts (no xDeltaPrice).
-                             Overlap constraints against Limitless teams use their
-                             pre-Limitless (current) picks, since those picks revert
-                             next race week.
+                             Overlap is measured on the Limitless picks themselves —
+                             the lineup that scores this week — so they are chosen
+                             jointly with the other teams. The reported budget value
+                             is that of the pre-chip lineup, which is what the team
+                             reverts to and so whose price changes it experiences.
     wildcard_teams         : 0-indexed list of teams playing the Wildcard chip.
                              Wildcard teams keep their normal budget but pay no
                              transfer penalty (all transfers are free). Budget value
@@ -701,8 +703,7 @@ def solve_portfolio_transfers(
                              for a pair is the xPts-weighted version of overlap: each
                              shared driver or constructor contributes its xPts, and a
                              shared turbo contributes the driver's xPts again.
-                             None = no cap. Limitless teams are measured on pre-chip
-                             picks, as above; Limitless–Limitless pairs are excluded.
+                             Negative xPts count as zero. None = no cap.
     """
     n_teams       = len(current_teams)
     limitless_set = set(limitless_teams or [])
@@ -777,8 +778,9 @@ def solve_portfolio_transfers(
             x_c[k][j] * _c_coeff(j) * constructors.loc[j, "expected_points"]
             for j in range(n_c)
         )
-        # Limitless teams optimise pure xPts only — their picks revert next week
-        # so xDeltaPrice gains are irrelevant.
+        # Limitless teams optimise pure xPts only — their picks revert next week,
+        # so the price changes they experience are the pre-chip lineup's, whatever
+        # is picked here.
         if has_delta and k not in limitless_set:
             score += pulp.lpSum(
                 x_d[k][i] * drivers.loc[i, "xDeltaPrice"] * budget_pts_weight for i in range(n_d)
@@ -838,66 +840,10 @@ def solve_portfolio_transfers(
     # picks + same turbo. Requires auxiliary binary vars to linearise AND of
     # two binary variables: z = x_a AND x_b  ⟺  z≤x_a, z≤x_b, z≥x_a+x_b-1
     #
-    # Limitless teams: their this-week picks are one-off and revert next race.
-    # So overlap with a Limitless team is measured against its PRE-Limitless
-    # (current) picks — those are what the other teams will face next week.
-    # This simplifies to a linear constraint (no auxiliary variables needed).
-    shared_ev_terms = []   # one xPts-weighted shared expression per constrained pair
+    # Limitless teams are treated like any other: overlap is about the lineups
+    # that score this week, and a Limitless team scores with its chip picks.
+    shared_ev_terms = []   # one xPts-weighted shared expression per pair
     for a, b in [(a, b) for a in range(n_teams) for b in range(a + 1, n_teams)]:
-        a_lim = a in limitless_set
-        b_lim = b in limitless_set
-
-        if a_lim and b_lim:
-            # Both teams revert — no persistent next-week overlap to enforce.
-            continue
-
-        if a_lim or b_lim:
-            # One team is Limitless: use its current (pre-Limitless) picks as
-            # fixed constants. The constraint is linear — no auxiliary vars.
-            opt_k = b if a_lim else a   # team being optimised
-            fix_k = a if a_lim else b   # Limitless team (fixed at current picks)
-
-            fix_d = {d["tla"].upper() for d in current_teams[fix_k]["drivers"]}
-            fix_c = {c["tla"].upper() for c in current_teams[fix_k]["constructors"]}
-            fix_turbo = next(
-                (d["tla"].upper() for d in current_teams[fix_k]["drivers"] if d["is_turbo"]),
-                None,
-            )
-
-            overlap_expr = (
-                pulp.lpSum(
-                    x_d[opt_k][i] for i in range(n_d)
-                    if drivers.loc[i, "name"].upper() in fix_d
-                )
-                + pulp.lpSum(
-                    x_c[opt_k][j] for j in range(n_c)
-                    if constructors.loc[j, "name"].upper() in fix_c
-                )
-            )
-            if fix_turbo:
-                overlap_expr += pulp.lpSum(
-                    t_d[opt_k][i] for i in range(n_d)
-                    if drivers.loc[i, "name"].upper() == fix_turbo
-                )
-            prob += overlap_expr <= max_pairwise_overlap, f"overlap_{a}{b}"
-
-            if max_total_shared_ev is not None:
-                shared_ev_expr = pulp.lpSum(
-                    x_d[opt_k][i] * drivers.loc[i, "expected_points"] for i in range(n_d)
-                    if drivers.loc[i, "name"].upper() in fix_d
-                ) + pulp.lpSum(
-                    x_c[opt_k][j] * constructors.loc[j, "expected_points"] for j in range(n_c)
-                    if constructors.loc[j, "name"].upper() in fix_c
-                )
-                if fix_turbo:
-                    shared_ev_expr += pulp.lpSum(
-                        t_d[opt_k][i] * drivers.loc[i, "expected_points"] for i in range(n_d)
-                        if drivers.loc[i, "name"].upper() == fix_turbo
-                    )
-                shared_ev_terms.append(shared_ev_expr)
-            continue
-
-        # Neither team is Limitless — standard auxiliary-variable linearisation.
         z_d = [pulp.LpVariable(f"z_d_{a}{b}_{i}", cat="Binary") for i in range(n_d)]
         z_c = [pulp.LpVariable(f"z_c_{a}{b}_{j}", cat="Binary") for j in range(n_c)]
         w_t = [pulp.LpVariable(f"w_t_{a}{b}_{i}", cat="Binary") for i in range(n_d)]
@@ -921,9 +867,10 @@ def solve_portfolio_transfers(
         )
 
         if max_total_shared_ev is not None:
+            # Floored at zero: sharing a negative-xPts asset must not buy headroom
             shared_ev_terms.append(
-                pulp.lpSum((z_d[i] + w_t[i]) * drivers.loc[i, "expected_points"] for i in range(n_d))
-                + pulp.lpSum(z_c[j] * constructors.loc[j, "expected_points"] for j in range(n_c))
+                pulp.lpSum((z_d[i] + w_t[i]) * max(drivers.loc[i, "expected_points"], 0.0) for i in range(n_d))
+                + pulp.lpSum(z_c[j] * max(constructors.loc[j, "expected_points"], 0.0) for j in range(n_c))
             )
 
     if max_total_shared_ev is not None and shared_ev_terms:
@@ -940,6 +887,7 @@ def solve_portfolio_transfers(
     # ── Parse one result dict per team ────────────────────────────────────────
     has_delta_d = "xDeltaPrice" in drivers.columns
     has_delta_c = "xDeltaPrice" in constructors.columns
+    x_delta     = dict(zip(df["name"].str.upper(), df["xDeltaPrice"])) if "xDeltaPrice" in df.columns else {}
     results     = []
 
     for k, (team, budget) in enumerate(zip(current_teams, budgets)):
@@ -983,13 +931,16 @@ def solve_portfolio_transfers(
         ) + sum(c["expected_points"] for c in sel_constructors)
         is_limitless = k in limitless_set
         is_wildcard  = k in wildcard_set
-        # Limitless picks revert next week — price gains and transfer penalties
-        # are both irrelevant for these teams.
+        # Limitless picks revert next week — the team pays no transfer penalty and
+        # experiences the price changes of its pre-chip lineup, not of these picks.
         # Wildcard keeps normal budget/picks but pays no transfer penalty.
-        budget_value = 0.0 if is_limitless else (
-            sum(d["xDeltaPrice"] for d in sel_drivers)
-            + sum(c["xDeltaPrice"] for c in sel_constructors)
-        ) * budget_pts_weight
+        if is_limitless:
+            budget_value = sum(x_delta.get(tla, 0.0) for tla in current_d | current_c) * budget_pts_weight
+        else:
+            budget_value = (
+                sum(d["xDeltaPrice"] for d in sel_drivers)
+                + sum(c["xDeltaPrice"] for c in sel_constructors)
+            ) * budget_pts_weight
 
         driver_out  = sorted(current_d - new_d_tlas)
         driver_in   = sorted(new_d_tlas - current_d)

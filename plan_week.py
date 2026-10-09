@@ -10,7 +10,8 @@ differentiation, in one joint solve per point:
 The cap is swept downwards from the unconstrained optimum until the problem
 becomes infeasible. Shared EV between two teams = xPts of every shared driver
 and constructor, plus the turbo driver's xPts again if both turbo the same
-driver — the xPts-weighted version of portfolio_max_overlap.
+driver — the xPts-weighted version of portfolio_max_overlap. Negative xPts
+count as zero, so sharing a poor asset never reads as differentiation.
 
 Each frontier row is a complete portfolio (all 3 teams with transfers):
 
@@ -105,40 +106,17 @@ def _picks_from_result(result: dict) -> tuple[set[str], set[str], str]:
     )
 
 
-def _picks_from_current(team: dict) -> tuple[set[str], set[str], str]:
-    turbo = next((d["tla"] for d in team["drivers"] if d["is_turbo"]), "")
-    return (
-        {d["tla"].upper() for d in team["drivers"]},
-        {c["tla"].upper() for c in team["constructors"]},
-        turbo.upper(),
-    )
-
-
-def pairwise_shared_ev(
-    results: list[dict],
-    current_teams: list[dict],
-    limitless_set: set[int],
-    xpts: dict[str, float],
-) -> dict[tuple[int, int], float]:
-    """
-    Shared EV for every team pair, measured the same way the solver constrains it.
-    Limitless teams are measured on their pre-chip picks; Limitless–Limitless
-    pairs are skipped (both revert, nothing persists).
-    """
-    picks = [
-        _picks_from_current(current_teams[k]) if k in limitless_set else _picks_from_result(r)
-        for k, r in enumerate(results)
-    ]
+def pairwise_shared_ev(results: list[dict], xpts: dict[str, float]) -> dict[tuple[int, int], float]:
+    """Shared EV for every team pair, measured the same way the solver constrains it."""
+    picks  = [_picks_from_result(r) for r in results]
     shared = {}
     for a in range(len(results)):
         for b in range(a + 1, len(results)):
-            if a in limitless_set and b in limitless_set:
-                continue
             d_a, c_a, t_a = picks[a]
             d_b, c_b, t_b = picks[b]
-            ev = sum(xpts.get(x, 0.0) for x in (d_a & d_b) | (c_a & c_b))
+            ev = sum(max(xpts.get(x, 0.0), 0.0) for x in (d_a & d_b) | (c_a & c_b))
             if t_a and t_a == t_b:
-                ev += xpts.get(t_a, 0.0)
+                ev += max(xpts.get(t_a, 0.0), 0.0)
             shared[(a, b)] = round(ev, 2)
     return shared
 
@@ -149,7 +127,6 @@ def run_frontier(
     df: pd.DataFrame,
     current_teams: list[dict],
     solve_kwargs: dict,
-    limitless_set: set[int],
     budget_pts_weight: float,
     xdelta_confidence: float,
     step: float,
@@ -175,16 +152,15 @@ def run_frontier(
             print(" infeasible — frontier complete")
             break
 
-        shared = pairwise_shared_ev(results, current_teams, limitless_set, xpts)
+        shared = pairwise_shared_ev(results, xpts)
         if not shared:
-            print(" no constrained pairs — nothing to sweep")
+            print(" no team pairs — nothing to sweep")
             break
 
         total_shared = round(sum(shared.values()), 2)
         port_ev = sum(
             r["total_points"] + (r.get("budget_value", 0.0) * xdelta_confidence if budget_pts_weight else 0.0)
-            for k, r in enumerate(results)
-            if k not in limitless_set
+            for r in results
         )
         print(f" EV {port_ev:.1f}, total shared {total_shared:.1f}")
         rows.append({
@@ -335,13 +311,12 @@ def _team_changes(base: dict, new: dict) -> list[str]:
     return swaps
 
 
-def frontier_table(frontier: list[dict], n_teams: int, limitless_set: set[int]) -> dict:
+def frontier_table(frontier: list[dict]) -> dict:
     """Display values behind the frontier table — shared by the terminal and HTML views."""
-    sweep_teams = [k for k in range(n_teams) if k not in limitless_set]
     top = frontier[0]
 
     def pts_now(row: dict) -> float:
-        return sum(row["results"][k]["total_points"] for k in sweep_teams)
+        return sum(r["total_points"] for r in row["results"])
 
     top_pts    = pts_now(top)
     top_budget = top["port_ev"] - top_pts
@@ -351,8 +326,8 @@ def frontier_table(frontier: list[dict], n_teams: int, limitless_set: set[int]) 
     prev = None
     for i, row in enumerate(frontier, 1):
         changes = []
-        for k in sweep_teams:
-            swaps = _team_changes(top["results"][k], row["results"][k])
+        for k, (base, new) in enumerate(zip(top["results"], row["results"])):
+            swaps = _team_changes(base, new)
             if not swaps:
                 continue
             # Long changes already spelled out on an earlier row are referenced, not repeated
@@ -368,7 +343,7 @@ def frontier_table(frontier: list[dict], n_teams: int, limitless_set: set[int]) 
             "lost":    None if prev is None else row["cost"] - prev["cost"],
             "gain":    None if prev is None else row["diff_gain"] - prev["diff_gain"],
             "cut":     row["diff_gain"] / top["total_shared"] if top["total_shared"] else 0.0,
-            "turbos":  len({row["results"][k]["turbo_driver"] for k in sweep_teams}),
+            "turbos":  len({r["turbo_driver"] for r in row["results"]}),
             "hits":    sum(r["penalty_pts"] for r in row["results"]),
             "changes": changes,
         })
@@ -379,7 +354,7 @@ def frontier_table(frontier: list[dict], n_teams: int, limitless_set: set[int]) 
 
 def _legend(metric: str) -> list[tuple[str, list[str]]]:
     return [
-        ("Port EV",      [f"{metric}, summed over non-Limitless teams"]),
+        ("Port EV",      [f"{metric}, summed over the teams"]),
         ("Cost",         ["Port EV given up vs row 1, split into points this week (Pts now)",
                           "and budget value (Budget):  Pts now + Budget = −Cost"]),
         ("Diff gain",    ["total shared EV (all pairs) removed vs row 1 — differentiation bought;",
@@ -512,14 +487,18 @@ def _baseline_html(results: list[dict], team_names: list[str]) -> str:
                 f'<td>{asset["expected_points"] * (2 if turbo else 1):.1f}</td>'
                 f'<td class="{css}">{delta:+.2f}</td></tr>'
             )
-        delta_total = sum(a["xDeltaPrice"] for a in result["drivers"] + result["constructors"])
+        # Limitless picks revert, so their price changes are never realised
+        delta_total = (
+            '<td class="dim">—</td>' if result.get("is_limitless") else
+            f'<td>{sum(a["xDeltaPrice"] for a in result["drivers"] + result["constructors"]):+.2f}</td>'
+        )
         hit = f' <span class="neg">(−{result["penalty_pts"]:g} hit)</span>' if result["penalty_pts"] else ""
         cards.append(
             f'<div class="card"><h2><b>T{k}</b>{escape(name)}{chip}</h2><table>'
             '<tr><th class="left">Asset</th><th>Price</th><th>xPts</th><th>ΔPrice</th></tr>'
             + "".join(rows)
             + f'<tr class="total"><td class="left">Net{hit}</td><td>{result["total_price"]:.1f}</td>'
-            f'<td>{result["total_points"]:.1f}</td><td>{delta_total:+.2f}</td></tr></table></div>'
+            f'<td>{result["total_points"]:.1f}</td>{delta_total}</tr></table></div>'
         )
     return f'<div class="teams">{"".join(cards)}</div>'
 
@@ -663,7 +642,6 @@ def main():
     budgets         = [team_budget(t) for t in current_teams]
     limitless_teams = [t - 1 for t in settings.get("limitless", [])]
     wildcard_teams  = [t - 1 for t in settings.get("wildcard",  [])]
-    limitless_set   = set(limitless_teams)
 
     solve_kwargs = dict(
         budgets=budgets,
@@ -681,8 +659,8 @@ def main():
         print(f"  pts/1M/race : {args.pts_per_1m}  ×  {args.remaining_races} races  =  {budget_pts_weight:.1f} pts/M total")
     if args.max_transfers is not None:
         print(f"  max transfers per team : {args.max_transfers}")
-    if limitless_set:
-        print(f"  limitless   : {'+'.join(f'T{k+1}' for k in sorted(limitless_set))}  (shared EV measured vs pre-chip picks)")
+    if limitless_teams:
+        print(f"  limitless   : {'+'.join(f'T{k+1}' for k in sorted(limitless_teams))}  (budget value fixed at the pre-chip lineup's)")
 
     fingerprint = input_fingerprint(
         args.csv_file, current_teams, solve_kwargs,
@@ -692,7 +670,7 @@ def main():
     if args.pick is None:
         print(f"\nSweeping total shared-EV cap (step {args.step:g})...")
         rows = run_frontier(
-            df, current_teams, solve_kwargs, limitless_set,
+            df, current_teams, solve_kwargs,
             budget_pts_weight, xdelta_confidence, args.step, args.max_solves,
         )
         if not rows:
@@ -703,7 +681,7 @@ def main():
         add_rate_ranges(frontier)
         save_frontier(frontier, fingerprint)
         rate_pick = pick_for_rate(frontier, args.rate) if args.rate is not None else None
-        table = frontier_table(frontier, len(current_teams), limitless_set)
+        table = frontier_table(frontier)
         print_frontier(table, rate_pick, metric)
         meta = [
             f"solved {datetime.now():%a %d %b %H:%M}",

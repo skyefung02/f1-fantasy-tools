@@ -119,10 +119,12 @@ def print_transfer_plan(
     if result["penalty_pts"]:
         print(f"  Penalty      : -{result['penalty_pts']:.0f}  ({extra} extra transfer(s) × 10 pts)")
     print(f"  Net xPts     : {result['total_points']:.2f}")
-    if show_delta and not is_limitless:
+    if show_delta:
         bv = result.get("budget_value", 0.0) * xdelta_confidence
         conf_note = f" × {xdelta_confidence:.0%} confidence" if xdelta_confidence != 1.0 else ""
-        print(f"  Budget value : {bv:+.2f}  (xDeltaPrice × {budget_pts_weight:.1f} pts/M{conf_note})")
+        # Limitless picks revert, so the price changes realised are the pre-chip lineup's
+        source = "pre-chip lineup's xDeltaPrice" if is_limitless else "xDeltaPrice"
+        print(f"  Budget value : {bv:+.2f}  ({source} × {budget_pts_weight:.1f} pts/M{conf_note})")
         print(f"  Combined     : {result['total_points'] + bv:.2f}")
     if is_limitless:
         print(f"  Spent        : {result['total_price']:.1f}m  (over normal budget by {-result['remaining_budget']:.1f}m)" if result['remaining_budget'] < 0 else f"  Spent        : {result['total_price']:.1f}m  (within normal budget)")

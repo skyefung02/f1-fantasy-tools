@@ -92,8 +92,7 @@ def print_sweep(
     limitless_set = set(limitless_teams or [])
     show_combined = budget_pts_weight != 0.0
     n_teams = len(rows[0]["results"]) if rows[0]["feasible"] else 3
-    # Only show columns for non-Limitless teams — their result is constant across overlaps
-    sweep_indices = [k for k in range(n_teams) if k not in limitless_set]
+    sweep_indices = list(range(n_teams))
 
     sep  = "─" * (18 + len(sweep_indices) * (22 if show_combined else 12) + 14)
     wide = "=" * len(sep)
@@ -101,7 +100,7 @@ def print_sweep(
     title = "OVERLAP SWEEP  (2 free transfers)"
     if limitless_set:
         lim_labels = "+".join(f"T{k+1}" for k in sorted(limitless_set))
-        title += f"  [{lim_labels} Limitless — overlap vs pre-chip picks]"
+        title += f"  [{lim_labels} Limitless]"
     print(f"\n{title:^{len(sep)}}")
     print(wide)
 
@@ -127,8 +126,7 @@ def print_sweep(
         results       = row["results"]
         team_nets     = [r["total_points"] for r in results]
         team_combined = [r["total_points"] + r.get("budget_value", 0.0) * xdelta_confidence for r in results]
-        # Portfolio score only counts non-Limitless teams (Limitless is constant)
-        port_comb     = sum(team_combined[k] for k in sweep_indices)
+        port_comb     = sum(team_combined)
         transfers     = "+".join(str(results[k]["n_transfers"]) for k in sweep_indices)
         actual_ol     = "/".join(str(o) for o in row["actual_overlaps"])
 
@@ -167,6 +165,7 @@ def print_banking_section(
     limitless_set = set(limitless_teams or [])
     show_combined = budget_pts_weight != 0.0
     metric        = "Combined" if show_combined else "Net xPts"
+    _port_sweep   = _port_combined
 
     wide = "=" * 68
     sep  = "─" * 68
@@ -174,19 +173,11 @@ def print_banking_section(
     title = "FREE TRANSFER BANKING COST  (1FT hard cap vs 2FT)"
     if limitless_set:
         lim_labels = "+".join(f"T{k+1}" for k in sorted(limitless_set))
-        title += f"  [excl. {lim_labels} Limitless]"
+        title += f"  [{lim_labels} Limitless]"
     print(f"\n{title:^68}")
     print(wide)
     print(f"  {'Overlap':>7}  {'2FT Port':>10}  {'1FT Port':>10}  {'Delta':>8}  {'Transfers(1FT)':>14}")
     print(f"  {'─'*7}  {'─'*10}  {'─'*10}  {'─'*8}  {'─'*14}")
-
-    def _port_sweep(results, xdc):
-        """Portfolio score excluding Limitless teams (their score is constant)."""
-        return sum(
-            r["total_points"] + r.get("budget_value", 0.0) * xdc
-            for k, r in enumerate(results)
-            if k not in limitless_set
-        )
 
     for row_2, row_1 in zip(rows_2ft, rows_1ft):
         overlap = row_2["overlap"]
@@ -206,10 +197,7 @@ def print_banking_section(
             p1        = _port_sweep(row_1["results"], xdelta_confidence)
             p1_str    = f"{p1:>10.1f}"
             delta_str = f"{p1 - p2:>+8.1f}" if p2 is not None else "       n/a"
-            xfer_str  = "+".join(
-                str(r["n_transfers"]) for k, r in enumerate(row_1["results"])
-                if k not in limitless_set
-            )
+            xfer_str  = "+".join(str(r["n_transfers"]) for r in row_1["results"])
 
         print(f"  {overlap:>7}  {p2_str}  {p1_str}  {delta_str}  {xfer_str:>14}{marker}")
 
@@ -221,7 +209,7 @@ def print_banking_section(
         row_1 = rows_1ft[best_overlap]
         if row_2["feasible"]:
             p2      = _port_sweep(row_2["results"], xdelta_confidence)
-            n_sweep = sum(1 for k in range(len(row_2["results"])) if k not in limitless_set)
+            n_sweep = len(row_2["results"])
             print(f"\n  At optimal overlap ({best_overlap}) — banking cost:")
             print(f"    {metric} with 2FT : {p2:.1f}")
             if row_1["feasible"]:
@@ -310,7 +298,7 @@ def main():
         print(f"  team weights: {args.weights}")
     if limitless_teams:
         lim_labels = "+".join(f"T{k+1}" for k in sorted(limitless_teams))
-        print(f"  limitless   : {lim_labels}  (overlap enforced vs pre-chip picks; {lim_labels} excluded from sweep table)")
+        print(f"  limitless   : {lim_labels}  (overlap measured on the Limitless picks)")
     print("\nRunning overlap sweep (0–8) × 2 FT scenarios (18 solves)...")
 
     rows_2ft = run_sweep(
