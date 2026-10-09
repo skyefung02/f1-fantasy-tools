@@ -1,3 +1,0 @@
-pulp>=2.7
-pandas>=2.0
-requests>=2.28

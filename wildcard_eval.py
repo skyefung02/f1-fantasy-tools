@@ -16,7 +16,7 @@ import requests
 
 from fetch_teams import F1FantasyClient, enrich_team, load_cookie, load_settings, get_current_teams
 from solver import solve_portfolio_transfers
-from transfer_advisor import team_budget
+from plan_week import team_budget
 
 
 SEP  = "─" * 64

@@ -287,10 +287,15 @@ def print_table(rows):
 # --------------------------------------------------------------------------- #
 
 def load_settings():
-    if SETTINGS_FILE.exists():
-        with SETTINGS_FILE.open() as handle:
-            return json.load(handle)
-    return {}
+    if not SETTINGS_FILE.exists():
+        print(
+            f"Error: {SETTINGS_FILE.name} not found. Copy settings.example.json to "
+            f"{SETTINGS_FILE.name} and fill in your user_uuid.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    with SETTINGS_FILE.open() as handle:
+        return json.load(handle)
 
 
 def update_settings(meta):

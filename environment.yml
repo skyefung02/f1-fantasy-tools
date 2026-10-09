@@ -6,6 +6,8 @@ dependencies:
   - python=3.11
   - pandas
   - requests
+  - matplotlib
+  - coin-or-cbc
   - pip
   - pip:
     - pulp

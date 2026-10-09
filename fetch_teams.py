@@ -33,11 +33,9 @@ SNAPSHOT_FILE  = Path(__file__).parent / "teams_snapshot.json"
 BASE_URL       = "https://fantasy.formula1.com"
 
 DEFAULT_SETTINGS = {
-    "budget": 100.0,
     "data_file": "sample_data.csv",
     "locked": [],
     "banned": [],
-    "top_n": 5,
     "gameday": 1,
     "user_uuid": None,
 }
@@ -54,10 +52,17 @@ TLA_ALIASES: dict[str, str] = {
 # ── Settings / env ────────────────────────────────────────────────────────────
 
 def load_settings() -> dict:
-    if SETTINGS_FILE.exists():
-        with open(SETTINGS_FILE) as f:
-            return {**DEFAULT_SETTINGS, **json.load(f)}
-    return DEFAULT_SETTINGS
+    # settings.json is per-user and untracked — running on silent defaults would
+    # solve with no budget value and no teams configured
+    if not SETTINGS_FILE.exists():
+        print(
+            f"Error: {SETTINGS_FILE.name} not found. Copy settings.example.json to "
+            f"{SETTINGS_FILE.name} and fill in your user_uuid.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    with open(SETTINGS_FILE) as f:
+        return {**DEFAULT_SETTINGS, **json.load(f)}
 
 
 def load_cookie() -> str | None:

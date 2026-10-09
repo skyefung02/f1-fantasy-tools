@@ -10,7 +10,7 @@ differentiation, in one joint solve per point:
 The cap is swept downwards from the unconstrained optimum until the problem
 becomes infeasible. Shared EV between two teams = xPts of every shared driver
 and constructor, plus the turbo driver's xPts again if both turbo the same
-driver — the xPts-weighted version of portfolio_max_overlap. Negative xPts
+driver — an xPts-weighted count of the picks two teams share. Negative xPts
 count as zero, so sharing a poor asset never reads as differentiation.
 
 Each frontier row is a complete portfolio (all 3 teams with transfers):
@@ -61,7 +61,6 @@ import pandas as pd
 
 from fetch_teams import load_settings, get_current_teams
 from solver import solve_portfolio_transfers, compute_overlap
-from transfer_advisor import print_transfer_plan, print_portfolio_summary
 
 LOG_PATH   = Path(__file__).parent / "plan_week_log.csv"
 CACHE_PATH = Path(__file__).parent / "tmp" / "plan_week_frontier.json"
@@ -600,6 +599,184 @@ def log_pick(settings: dict, row_no: int, row: dict) -> None:
             row["supported"],
         ])
     print(f"\n  Logged pick to {LOG_PATH.name}")
+
+
+# ── Transfer plan (--pick) ────────────────────────────────────────────────────
+
+def print_transfer_plan(
+    result: dict,
+    current_team: dict,
+    budget: float,
+    team_idx: int,
+    budget_pts_weight: float = 0.0,
+    xdelta_confidence: float = 1.0,
+) -> None:
+    sep = "─" * 60
+    wide = "=" * 60
+
+    is_limitless = result.get("is_limitless", False)
+    is_wildcard  = result.get("is_wildcard",  False)
+
+    print(f"\n{wide}")
+    chip_tag = "  ★ LIMITLESS" if is_limitless else ("  ★ WILDCARD" if is_wildcard else "")
+    print(f"  TEAM {team_idx}  —  {current_team['name']}{chip_tag}")
+    print(f"  Budget available: {budget:.1f}m" + ("  (unlimited this week)" if is_limitless else ""))
+    print(wide)
+
+    # ── Transfers summary ────────────────────────────────────────────────────
+    n = result["n_transfers"]
+    free = 2
+    extra = max(0, n - free)
+    if n == 0:
+        print("\n  No changes — current team is already optimal.")
+    else:
+        penalty_note = (
+            "  (Limitless — no penalty)" if is_limitless else
+            "  (Wildcard — no penalty)"  if is_wildcard  else
+            (f"  (-{result['penalty_pts']:.0f} pts penalty)" if extra else "  (all free)")
+        )
+        print(f"\n  TRANSFERS: {n}{penalty_note}")
+        print(f"  {'─'*56}")
+
+        for tla in result["driver_transfers_out"]:
+            print(f"    OUT  (driver)     : {tla}")
+        for tla in result["driver_transfers_in"]:
+            print(f"     IN  (driver)     : {tla}")
+
+        for tla in result["constructor_transfers_out"]:
+            print(f"    OUT  (constructor): {tla}")
+        for tla in result["constructor_transfers_in"]:
+            print(f"     IN  (constructor): {tla}")
+
+    # ── New team ─────────────────────────────────────────────────────────────
+    new_picks = (
+        set(result["driver_transfers_in"])
+        | set(result["constructor_transfers_in"])
+    )
+
+    show_delta = budget_pts_weight != 0.0
+
+    print(f"\n  NEW TEAM")
+    if show_delta:
+        print(f"  {'TLA':<8} {'Price':>6}  {'xPts':>6}  {'ΔPrice':>7}  {'Note'}")
+        print(f"  {'─'*8} {'─'*6}  {'─'*6}  {'─'*7}  {'─'*20}")
+    else:
+        print(f"  {'TLA':<8} {'Price':>6}  {'xPts':>6}  {'Note'}")
+        print(f"  {'─'*8} {'─'*6}  {'─'*6}  {'─'*20}")
+
+    for d in result["drivers"]:
+        tla = d["name"].upper()
+        tag = " ★ TURBO (2x)" if d["is_turbo"] else ""
+        new_tag = "  ← NEW" if tla in new_picks else ""
+        pts_disp = f"{d['expected_points'] * 2:.1f}" if d["is_turbo"] else f"{d['expected_points']:.1f}"
+        if show_delta:
+            delta_str = f"{d.get('xDeltaPrice', 0.0):+.2f}"
+            print(f"  {tla:<8} {d['price']:>6.1f}  {pts_disp:>6}  {delta_str:>7}  {tag}{new_tag}")
+        else:
+            print(f"  {tla:<8} {d['price']:>6.1f}  {pts_disp:>6}  {tag}{new_tag}")
+
+    for c in result["constructors"]:
+        tla = c["name"].upper()
+        new_tag = "  ← NEW" if tla in new_picks else ""
+        if show_delta:
+            delta_str = f"{c.get('xDeltaPrice', 0.0):+.2f}"
+            print(f"  {tla:<8} {c['price']:>6.1f}  {c['expected_points']:>6.1f}  {delta_str:>7}  {new_tag}")
+        else:
+            print(f"  {tla:<8} {c['price']:>6.1f}  {c['expected_points']:>6.1f}  {new_tag}")
+
+    # ── Points breakdown ─────────────────────────────────────────────────────
+    print(f"\n{sep}")
+    print(f"  Gross xPts   : {result['gross_points']:.2f}")
+    if result["penalty_pts"]:
+        print(f"  Penalty      : -{result['penalty_pts']:.0f}  ({extra} extra transfer(s) × 10 pts)")
+    print(f"  Net xPts     : {result['total_points']:.2f}")
+    if show_delta:
+        bv = result.get("budget_value", 0.0) * xdelta_confidence
+        conf_note = f" × {xdelta_confidence:.0%} confidence" if xdelta_confidence != 1.0 else ""
+        # Limitless picks revert, so the price changes realised are the pre-chip lineup's
+        source = "pre-chip lineup's xDeltaPrice" if is_limitless else "xDeltaPrice"
+        print(f"  Budget value : {bv:+.2f}  ({source} × {budget_pts_weight:.1f} pts/M{conf_note})")
+        print(f"  Combined     : {result['total_points'] + bv:.2f}")
+    if is_limitless:
+        print(f"  Spent        : {result['total_price']:.1f}m  (over normal budget by {-result['remaining_budget']:.1f}m)" if result['remaining_budget'] < 0 else f"  Spent        : {result['total_price']:.1f}m  (within normal budget)")
+    else:
+        print(f"  Spent        : {result['total_price']:.1f}m  (remaining: {result['remaining_budget']:.1f}m)")
+    print(sep)
+
+
+def print_portfolio_summary(
+    results: list[dict],
+    current_teams: list[dict],
+    max_pairwise_overlap: int,
+    budget_pts_weight: float = 0.0,
+    xdelta_confidence: float = 1.0,
+) -> None:
+    if len(results) < 2:
+        return
+
+    show_combined = budget_pts_weight != 0.0
+
+    sep = "─" * 60
+    print(f"\n{'PORTFOLIO SUMMARY':^60}")
+    print(sep)
+    print(f"  Max pairwise overlap : {max_pairwise_overlap} / 8")
+    print()
+
+    # Per-team stats
+    if show_combined:
+        print(f"  {'Team':<10} {'Net xPts':>10}  {'Combined':>10}  {'Transfers':>10}  {'Penalty':>8}")
+        print(f"  {'─'*10} {'─'*10}  {'─'*10}  {'─'*10}  {'─'*8}")
+        for i, (r, t) in enumerate(zip(results, current_teams), 1):
+            combined = r['total_points'] + r.get('budget_value', 0.0) * xdelta_confidence
+            print(
+                f"  Team {i:<5}  {r['total_points']:>10.2f}"
+                f"  {combined:>10.2f}"
+                f"  {r['n_transfers']:>10}"
+                f"  {r['penalty_pts']:>8.0f}"
+            )
+    else:
+        print(f"  {'Team':<10} {'Net xPts':>10}  {'Transfers':>10}  {'Penalty':>8}")
+        print(f"  {'─'*10} {'─'*10}  {'─'*10}  {'─'*8}")
+        for i, (r, t) in enumerate(zip(results, current_teams), 1):
+            print(
+                f"  Team {i:<5}  {r['total_points']:>10.2f}"
+                f"  {r['n_transfers']:>10}"
+                f"  {r['penalty_pts']:>8.0f}"
+            )
+
+    # Pairwise overlap matrix
+    print()
+    print(f"  Pairwise overlap (out of 8 decisions):")
+    header = f"  {'':10}" + "".join(f"  T{j+1}" for j in range(len(results)))
+    print(header)
+    for i, t1 in enumerate(results):
+        row = f"  Team {i+1:<5}"
+        for j, t2 in enumerate(results):
+            if j <= i:
+                row += "    —"
+            else:
+                ov = compute_overlap(t1, t2)
+                row += f"  {ov:>3}"
+        print(row)
+
+    # Shared picks breakdown per pair
+    print()
+    for i in range(len(results)):
+        for j in range(i + 1, len(results)):
+            t1, t2 = results[i], results[j]
+            d1 = {d["name"].upper() for d in t1["drivers"]}
+            d2 = {d["name"].upper() for d in t2["drivers"]}
+            c1 = {c["name"].upper() for c in t1["constructors"]}
+            c2 = {c["name"].upper() for c in t2["constructors"]}
+            shared_d = sorted(d1 & d2)
+            shared_c = sorted(c1 & c2)
+            same_turbo = t1["turbo_driver"].upper() == t2["turbo_driver"].upper()
+            print(f"  Team {i+1} vs Team {j+1}:")
+            print(f"    Shared drivers      : {', '.join(shared_d) or 'none'}")
+            print(f"    Shared constructors : {', '.join(shared_c) or 'none'}")
+            print(f"    Same turbo          : {'yes (' + t1['turbo_driver'] + ')' if same_turbo else 'no'}")
+
+    print(sep)
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
