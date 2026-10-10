@@ -74,9 +74,11 @@ Check `free_transfers` (one number per team), and set `limitless` or `wildcard` 
 python plan_week.py
 ```
 
-This prints a table and writes the same table to `plan_week_frontier.html`, which is easier to keep open while you work. Each row is a complete plan for all three teams.
+This prints a table and writes the same table to `plan_week_frontier.html`. Each row is a complete plan for all three teams; on the page, click a row to see its lineups and transfers, and use ↑/↓ to step through rows.
 
 **Step 5 — pick a row**
+
+Browse rows on the page, then use the terminal for the full printout or to record your choice:
 
 ```bash
 python plan_week.py --pick 4          # full transfer plans for row 4

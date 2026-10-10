@@ -38,8 +38,8 @@ Usage
     python plan_week.py --pick 3         # print full transfer plans for row 3 (no re-solve)
     python plan_week.py --pick 3 --log   # ...and log the choice + implied rate
 
-Each table run also writes plan_week_frontier.html — the same table, to keep open
-beside the terminal while --pick prints transfer plans.
+Each table run also writes plan_week_frontier.html — the same table, where clicking
+a row opens that row's full plan for all three teams.
 
 --pick reads the frontier saved by the last table run, so it is instant. It
 refuses if the projections, teams, settings or solve flags have changed since
@@ -463,11 +463,50 @@ td.changes { white-space: normal; min-width: 260px; font-family: ui-monospace, S
 .card td.asset { font-weight: 600; min-width: 120px; }
 .avatar { width: 26px; height: 26px; border-radius: 50%; margin: -2px 8px -2px 0; vertical-align: middle;
           background: var(--head); box-shadow: 0 0 0 1px var(--line); }
-.card tr.total td { border-bottom: 0; font-weight: 600; }
+.card tr.total td { font-weight: 600; }
+.card tr.out td { border-bottom: 0; text-align: left; white-space: normal; color: var(--muted); }
+.card tr.out b { color: var(--fg); font-weight: 600; }
+table.frontier tbody tr { cursor: pointer; }
+dialog { background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 8px;
+         padding: 16px 20px 20px; max-width: 96vw; }
+dialog::backdrop { background: rgba(0, 0, 0, .55); }
+dialog h2.row { margin: 0 0 4px; font-size: 15px; }
+dialog h2.row b { color: var(--accent); }
+dialog p { margin: 0 0 4px; color: var(--muted); }
+dialog p b { color: var(--fg); font-weight: 600; }
+dialog code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--fg);
+              background: var(--head); padding: 1px 6px; border-radius: 4px; user-select: all; }
+dialog .close { float: right; margin: -4px -6px 0 12px; border: 0; background: none; color: var(--muted);
+                font-size: 20px; line-height: 1; cursor: pointer; }
 .tag { margin-left: 6px; padding: 0 6px; border-radius: 8px; background: var(--accent); color: var(--bg); font-size: 11px; }
 .tag.new { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); font-weight: 400; }
 dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 18px 0 0; color: var(--muted); max-width: 900px; }
 dt { font-weight: 600; color: var(--fg); } dd { margin: 0; }
+"""
+
+
+# Clicking a frontier row opens its plan; ↑/↓ step through rows while it is open.
+_HTML_SCRIPT = """
+const plan = document.getElementById("plan");
+const last = document.querySelectorAll("table.frontier tbody tr").length;
+let shown = 0;
+function show(n) {
+  if (n < 1 || n > last) return;
+  shown = n;
+  plan.replaceChildren(document.getElementById("row-" + n).content.cloneNode(true));
+  if (!plan.open) plan.showModal();
+}
+document.querySelector("table.frontier tbody").addEventListener("click", e => {
+  const tr = e.target.closest("tr[data-row]");
+  if (tr && !getSelection().toString()) show(+tr.dataset.row);
+});
+plan.addEventListener("click", e => {
+  if (e.target === plan || e.target.closest(".close")) plan.close();
+});
+plan.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown") { show(shown + 1); e.preventDefault(); }
+  if (e.key === "ArrowUp")   { show(shown - 1); e.preventDefault(); }
+});
 """
 
 
@@ -480,8 +519,8 @@ def _avatar_html(code: str) -> str:
     return f'<img class="avatar" src="{escape(src)}" alt="">'
 
 
-def _baseline_html(results: list[dict], team_names: list[str]) -> str:
-    """Row 1's portfolio as one card per team, side by side — what "Changes vs row 1" is measured against."""
+def _teams_html(results: list[dict], team_names: list[str]) -> str:
+    """One row's portfolio as a card per team, side by side."""
     cards = []
     for k, (result, name) in enumerate(zip(results, team_names), start=1):
         new  = set(result["driver_transfers_in"]) | set(result["constructor_transfers_in"])
@@ -505,12 +544,15 @@ def _baseline_html(results: list[dict], team_names: list[str]) -> str:
             f'<td>{sum(a["xDeltaPrice"] for a in result["drivers"] + result["constructors"]):+.2f}</td>'
         )
         hit = f' <span class="neg">(−{result["penalty_pts"]:g} hit)</span>' if result["penalty_pts"] else ""
+        out = result["driver_transfers_out"] + result["constructor_transfers_out"]
+        out = f'Out: <b>{escape(", ".join(out))}</b>' if out else "No transfers"
         cards.append(
             f'<div class="card"><h2><b>T{k}</b>{escape(name)}{chip}</h2><table>'
             '<tr><th class="left">Asset</th><th>Price</th><th>xPts</th><th>ΔPrice</th></tr>'
             + "".join(rows)
             + f'<tr class="total"><td class="left">Net{hit}</td><td>{result["total_price"]:.1f}</td>'
-            f'<td>{result["total_points"]:.1f}</td>{delta_total}</tr></table></div>'
+            f'<td>{result["total_points"]:.1f}</td>{delta_total}</tr>'
+            f'<tr class="out"><td colspan="4">{out}</td></tr></table></div>'
         )
     return f'<div class="teams">{"".join(cards)}</div>'
 
@@ -518,24 +560,33 @@ def _baseline_html(results: list[dict], team_names: list[str]) -> str:
 def write_frontier_html(
     table: dict, rate_pick: int | None, metric: str, meta: list[str], team_names: list[str],
 ) -> None:
-    """Write the frontier table as a standalone page — it stays open while --pick scrolls the terminal."""
+    """Write the frontier table as a standalone page; each row opens that row's full plan."""
     def signed(value: float | None) -> str:
         if value is None:
             return '<td class="dim">—</td>'
         css = "pos" if value >= 0.05 else "neg" if value <= -0.05 else "dim"
         return f'<td class="{css}">{value:+.1f}</td>'
 
-    body = []
+    body, popups = [], []
     for t in table["rows"]:
         row     = t["row"]
         picked  = rate_pick == t["n"] - 1
+        popups.append(
+            f'<template id="row-{t["n"]}"><button class="close" aria-label="Close">×</button>'
+            f'<h2 class="row"><b>Row {t["n"]}</b></h2>'
+            f'<p>Port EV <b>{row["port_ev"]:.1f}</b> &nbsp;·&nbsp; cost <b>{row["cost"]:.1f}</b>'
+            f' &nbsp;·&nbsp; diff gain <b>{row["diff_gain"]:.1f}</b>'
+            f' &nbsp;·&nbsp; chosen if r <b>{escape(_fmt_rate_range(row))}</b></p>'
+            f'<p>To log this choice: <code>python plan_week.py --pick {t["n"]} --log</code></p>'
+            f'{_teams_html(row["results"], team_names)}</template>'
+        )
         classes = " ".join(c for c, on in (("hull", row["supported"]), ("pick", picked)) if on)
         rate    = escape(_fmt_rate_range(row)) if row["supported"] else '<span class="dim">·</span>'
         changes = "".join(
             f'<span class="team"><b>T{team}</b>{escape(text)}</span>' for team, text in t["changes"]
         ) or '<span class="dim">—</span>'
         body.append(
-            f'<tr class="{classes}" title="python plan_week.py --pick {t["n"]}">'
+            f'<tr class="{classes}" data-row="{t["n"]}" title="Click for the full plan">'
             f'<td class="n">{"▸ " if row["supported"] else ""}{t["n"]}</td>'
             f'<td>{row["port_ev"]:.1f}</td>'
             f'<td class="edge">{row["cost"]:.1f}</td>{signed(t["pts"])}{signed(t["budget"])}'
@@ -563,7 +614,7 @@ def write_frontier_html(
 <p class="meta">{escape("  ·  ".join(meta))}</p>
 <p class="baseline">Baseline (row 1): <b>{table['top_pts']:.1f}</b> pts + <b>{table['top_budget']:.1f}</b> budget value
   &nbsp;|&nbsp; total shared EV <b>{table['total_shared']:.1f}</b></p>
-{_baseline_html(table['rows'][0]['row']['results'], team_names)}
+{_teams_html(table['rows'][0]['row']['results'], team_names)}
 <table class="frontier">
 <thead>
 <tr>
@@ -583,6 +634,9 @@ def write_frontier_html(
 </tbody>
 </table>
 <dl>{legend}</dl>
+{chr(10).join(popups)}
+<dialog id="plan"></dialog>
+<script>{_HTML_SCRIPT}</script>
 </body>
 </html>
 """)
