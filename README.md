@@ -227,6 +227,7 @@ If you get an authentication error, your cookie has expired. Repeat Step 1 above
 | `fetch_projections.py` | Fetches xPts/price projections from f1fantasytools.com into your data file |
 | `fetch_teams.py` | Fetches your teams from the F1 Fantasy website |
 | `wildcard_eval.py`, `diff_ev_plot.py` | Side tools |
+| `make_avatars.py`, `avatars/` | Cartoon driver avatars and team badges for the frontier page. Re-run after a driver changes team or joins the grid |
 | `settings.example.json` | Template for `settings.json` |
 | `settings.json` | Your configuration and this week's state (untracked) |
 | `sample_data.csv` | Your working projections (generated, untracked) |

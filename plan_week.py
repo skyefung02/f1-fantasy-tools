@@ -48,6 +48,7 @@ that run — re-run the table first so the row numbers mean what you saw.
     python plan_week.py --max-transfers 1   # banking scenario (1FT hard cap)
 """
 
+import os
 import csv
 import sys
 import json
@@ -65,6 +66,7 @@ from solver import solve_portfolio_transfers, compute_overlap
 LOG_PATH   = Path(__file__).parent / "plan_week_log.csv"
 CACHE_PATH = Path(__file__).parent / "tmp" / "plan_week_frontier.json"
 HTML_PATH  = Path(__file__).parent / "plan_week_frontier.html"
+AVATAR_DIR = Path(__file__).parent / "avatars"   # optional, drawn by make_avatars.py
 
 
 def team_budget(team: dict) -> float:
@@ -459,12 +461,23 @@ td.changes { white-space: normal; min-width: 260px; font-family: ui-monospace, S
 .card h2 b { color: var(--accent); margin-right: 6px; }
 .card th { font-weight: 500; color: var(--muted); }
 .card td.asset { font-weight: 600; min-width: 120px; }
+.avatar { width: 26px; height: 26px; border-radius: 50%; margin: -2px 8px -2px 0; vertical-align: middle;
+          background: var(--head); box-shadow: 0 0 0 1px var(--line); }
 .card tr.total td { border-bottom: 0; font-weight: 600; }
 .tag { margin-left: 6px; padding: 0 6px; border-radius: 8px; background: var(--accent); color: var(--bg); font-size: 11px; }
 .tag.new { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); font-weight: 400; }
 dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 18px 0 0; color: var(--muted); max-width: 900px; }
 dt { font-weight: 600; color: var(--fg); } dd { margin: 0; }
 """
+
+
+def _avatar_html(code: str) -> str:
+    """The asset's avatar as an <img>, or nothing if make_avatars.py hasn't drawn one."""
+    path = AVATAR_DIR / f"{code.upper()}.svg"
+    if not path.exists():
+        return ""
+    src = Path(os.path.relpath(path, HTML_PATH.parent)).as_posix()
+    return f'<img class="avatar" src="{escape(src)}" alt="">'
 
 
 def _baseline_html(results: list[dict], team_names: list[str]) -> str:
@@ -479,7 +492,7 @@ def _baseline_html(results: list[dict], team_names: list[str]) -> str:
             delta = asset["xDeltaPrice"]
             css   = "pos" if delta >= 0.005 else "neg" if delta <= -0.005 else "dim"
             rows.append(
-                f'<tr><td class="left asset">{escape(asset["name"])}'
+                f'<tr><td class="left asset">{_avatar_html(asset["name"])}{escape(asset["name"])}'
                 + ('<span class="tag">turbo</span>' if turbo else "")
                 + ('<span class="tag new">new</span>' if asset["name"].upper() in new else "")
                 + f'</td><td>{asset["price"]:.1f}</td>'
