@@ -1,51 +1,245 @@
 {
-  "fetched_at": "2026-10-09T23:10:53.816610+00:00",
+  "fetched_at": "2026-10-12T00:27:14.468155+00:00",
   "source": "https://f1fantasytools.com/team-calculator",
   "meta": {
     "next_race": {
-      "id": "17",
-      "name": "Singapore Grand Prix",
-      "roundNumber": 17,
-      "sprint": true,
-      "countryName": "Singapore",
+      "id": "18",
+      "name": "United States Grand Prix",
+      "roundNumber": 18,
+      "sprint": false,
+      "countryName": "United States",
       "start_times": {
-        "sprint": "2026-10-10T09:00:00.000Z",
-        "qualifying": "2026-10-10T13:00:00.000Z",
-        "race": "2026-10-11T12:00:00.000Z"
+        "qualifying": "2026-10-24T21:00:00.000Z",
+        "race": "2026-10-25T20:00:00.000Z"
       }
     },
-    "number_of_future_races": 6
+    "number_of_future_races": 5
   },
   "sim": {
-    "id": "rhter_4",
-    "name": "Singapore. Post-SQ.",
-    "new_info_description": "Dry/average conditions. Penalties: RUS: back.",
-    "raceweek": 17,
+    "id": "rhter_4-r18",
+    "active": true,
+    "analyst": "rhter",
+    "analyst_id": "rhter",
+    "name": "COTA. Very Early.",
+    "new_info_description": "Dry/average conditions. ",
+    "raceweek": 18,
     "season": 2026,
     "drivers": {
       "pts": {
-        "MCL_NOR": 31.24,
-        "MCL_PIA": 27.18,
-        "MER_RUS": 33.5,
-        "MER_ANT": 29.18,
-        "RED_VER": 33.94,
-        "RED_HAD": 19.96,
-        "FER_LEC": 30.29,
-        "FER_HAM": 28.2,
-        "WIL_ALB": 3.26,
-        "WIL_SAI": 3.74,
-        "VRB_LAW": 3.92,
-        "VRB_LIN": 7.74,
-        "AST_ALO": -5.15,
-        "AST_STR": -8.21,
-        "HAA_OCO": 3.7,
-        "HAA_BEA": 2.9,
-        "AUD_HUL": 1.14,
-        "AUD_BOR": 2.74,
-        "ALP_GAS": 4.72,
-        "ALP_COL": 3.6,
-        "CAD_PER": -3.67,
-        "CAD_BOT": -6.48
+        "MCL_NOR": 24,
+        "MCL_PIA": 17.56,
+        "MER_RUS": 24.94,
+        "MER_ANT": 31.07,
+        "RED_VER": 27.6,
+        "RED_HAD": 12.13,
+        "FER_LEC": 26.89,
+        "FER_HAM": 23.62,
+        "WIL_ALB": 1.62,
+        "WIL_SAI": 1.33,
+        "VRB_LAW": 4.92,
+        "VRB_LIN": 5.07,
+        "AST_ALO": -4.46,
+        "AST_STR": -7.47,
+        "HAA_OCO": 3.15,
+        "HAA_BEA": 3.18,
+        "AUD_HUL": 3.57,
+        "AUD_BOR": 3.36,
+        "ALP_GAS": 4.37,
+        "ALP_COL": 2.02,
+        "CAD_PER": -3.74,
+        "CAD_BOT": -5.27
+      },
+      "nonneg_pts": {
+        "MCL_NOR": 28.25,
+        "MCL_PIA": 22,
+        "MER_RUS": 29.77,
+        "MER_ANT": 35.3,
+        "RED_VER": 31.48,
+        "RED_HAD": 17.51,
+        "FER_LEC": 31.19,
+        "FER_HAM": 27.87,
+        "WIL_ALB": 6.68,
+        "WIL_SAI": 6.32,
+        "VRB_LAW": 10.19,
+        "VRB_LIN": 10.28,
+        "AST_ALO": 4.06,
+        "AST_STR": 3.3,
+        "HAA_OCO": 7.29,
+        "HAA_BEA": 7.64,
+        "AUD_HUL": 9.49,
+        "AUD_BOR": 8.79,
+        "ALP_GAS": 9.86,
+        "ALP_COL": 7.45,
+        "CAD_PER": 4.47,
+        "CAD_BOT": 2.98
+      },
+      "negpts": {
+        "MCL_NOR": -4.25,
+        "MCL_PIA": -4.44,
+        "MER_RUS": -4.82,
+        "MER_ANT": -4.22,
+        "RED_VER": -3.88,
+        "RED_HAD": -5.38,
+        "FER_LEC": -4.3,
+        "FER_HAM": -4.25,
+        "WIL_ALB": -5.05,
+        "WIL_SAI": -4.98,
+        "VRB_LAW": -5.26,
+        "VRB_LIN": -5.21,
+        "AST_ALO": -8.51,
+        "AST_STR": -10.76,
+        "HAA_OCO": -4.14,
+        "HAA_BEA": -4.46,
+        "AUD_HUL": -5.92,
+        "AUD_BOR": -5.42,
+        "ALP_GAS": -5.49,
+        "ALP_COL": -5.43,
+        "CAD_PER": -8.21,
+        "CAD_BOT": -8.25
+      },
+      "q_pos": {
+        "MCL_NOR": 5.12,
+        "MCL_PIA": 5.37,
+        "MER_RUS": 4.03,
+        "MER_ANT": 3.08,
+        "RED_VER": 4.53,
+        "RED_HAD": 6.04,
+        "FER_LEC": 4.22,
+        "FER_HAM": 4.69,
+        "WIL_ALB": 16.7,
+        "WIL_SAI": 16.42,
+        "VRB_LAW": 10.41,
+        "VRB_LIN": 10.31,
+        "AST_ALO": 19.72,
+        "AST_STR": 20.86,
+        "HAA_OCO": 15.96,
+        "HAA_BEA": 15.5,
+        "AUD_HUL": 12.08,
+        "AUD_BOR": 12.15,
+        "ALP_GAS": 11.7,
+        "ALP_COL": 12.82,
+        "CAD_PER": 20.56,
+        "CAD_BOT": 20.75
+      },
+      "r_pos": {
+        "MCL_NOR": 5.77,
+        "MCL_PIA": 6.79,
+        "MER_RUS": 5.44,
+        "MER_ANT": 4.34,
+        "RED_VER": 5.12,
+        "RED_HAD": 8.24,
+        "FER_LEC": 5.19,
+        "FER_HAM": 5.74,
+        "WIL_ALB": 15.35,
+        "WIL_SAI": 15.37,
+        "VRB_LAW": 11.27,
+        "VRB_LIN": 11.2,
+        "AST_ALO": 17.97,
+        "AST_STR": 18.82,
+        "HAA_OCO": 14.62,
+        "HAA_BEA": 14.37,
+        "AUD_HUL": 12.45,
+        "AUD_BOR": 12.61,
+        "ALP_GAS": 11.99,
+        "ALP_COL": 13.55,
+        "CAD_PER": 18.13,
+        "CAD_BOT": 18.66
+      },
+      "dnf_probability": {
+        "MCL_NOR": 10.8,
+        "MCL_PIA": 10.2,
+        "MER_RUS": 11.6,
+        "MER_ANT": 9.9,
+        "RED_VER": 9.5,
+        "RED_HAD": 12.6,
+        "FER_LEC": 10.4,
+        "FER_HAM": 10.1,
+        "WIL_ALB": 21.1,
+        "WIL_SAI": 20.4,
+        "VRB_LAW": 16,
+        "VRB_LIN": 15.7,
+        "AST_ALO": 40.5,
+        "AST_STR": 52.7,
+        "HAA_OCO": 16.5,
+        "HAA_BEA": 17.4,
+        "AUD_HUL": 19.9,
+        "AUD_BOR": 17.8,
+        "ALP_GAS": 18.1,
+        "ALP_COL": 17.6,
+        "CAD_PER": 39.9,
+        "CAD_BOT": 40.2
+      },
+      "fast_lap_probability": {
+        "MCL_NOR": 12.5,
+        "MCL_PIA": 2.5,
+        "MER_RUS": 13.7,
+        "MER_ANT": 27,
+        "RED_VER": 17,
+        "RED_HAD": 0.9,
+        "FER_LEC": 17.3,
+        "FER_HAM": 9.2,
+        "WIL_ALB": 0,
+        "WIL_SAI": 0,
+        "VRB_LAW": 0,
+        "VRB_LIN": 0,
+        "AST_ALO": 0,
+        "AST_STR": 0,
+        "HAA_OCO": 0,
+        "HAA_BEA": 0,
+        "AUD_HUL": 0,
+        "AUD_BOR": 0,
+        "ALP_GAS": 0,
+        "ALP_COL": 0,
+        "CAD_PER": 0,
+        "CAD_BOT": 0
+      },
+      "dotd_probability": {
+        "MCL_NOR": 12.8,
+        "MCL_PIA": 4.3,
+        "MER_RUS": 8.6,
+        "MER_ANT": 16.3,
+        "RED_VER": 22.5,
+        "RED_HAD": 2.3,
+        "FER_LEC": 16,
+        "FER_HAM": 15.5,
+        "WIL_ALB": 0,
+        "WIL_SAI": 0,
+        "VRB_LAW": 0.4,
+        "VRB_LIN": 0.4,
+        "AST_ALO": 0,
+        "AST_STR": 0,
+        "HAA_OCO": 0,
+        "HAA_BEA": 0,
+        "AUD_HUL": 0.2,
+        "AUD_BOR": 0.2,
+        "ALP_GAS": 0.3,
+        "ALP_COL": 0.1,
+        "CAD_PER": 0,
+        "CAD_BOT": 0
+      },
+      "overtakes": {
+        "MCL_NOR": 5.2,
+        "MCL_PIA": 4.44,
+        "MER_RUS": 4.69,
+        "MER_ANT": 4.31,
+        "RED_VER": 5.07,
+        "RED_HAD": 3.73,
+        "FER_LEC": 4.9,
+        "FER_HAM": 4.89,
+        "WIL_ALB": 3.76,
+        "WIL_SAI": 3.6,
+        "VRB_LAW": 4.44,
+        "VRB_LIN": 4.47,
+        "AST_ALO": 1.77,
+        "AST_STR": 1.43,
+        "HAA_OCO": 4.36,
+        "HAA_BEA": 4.61,
+        "AUD_HUL": 4.9,
+        "AUD_BOR": 4.77,
+        "ALP_GAS": 4.94,
+        "ALP_COL": 4.43,
+        "CAD_PER": 2.02,
+        "CAD_BOT": 0.96
       },
       "price_change_probability": {
         "MCL_NOR": {
@@ -53,13 +247,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 75.44,
+          "pm3": 14.83,
           "pm2": 0,
-          "pm1": 23.31,
+          "pm1": 66.84,
           "pp0": 0,
-          "pp1": 1.26,
+          "pp1": 16.65,
           "pp2": 0,
-          "pp3": 0,
+          "pp3": 1.68,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -78,13 +272,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 15.88,
+          "pm3": 10.91,
           "pm2": 0,
-          "pm1": 56.74,
+          "pm1": 76.04,
           "pp0": 0,
-          "pp1": 23.93,
+          "pp1": 11.8,
           "pp2": 0,
-          "pp3": 3.46,
+          "pp3": 1.25,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -103,13 +297,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 11.81,
+          "pm3": 82.29,
           "pm2": 0,
-          "pm1": 34.5,
+          "pm1": 17.43,
           "pp0": 0,
-          "pp1": 52.39,
+          "pp1": 0.28,
           "pp2": 0,
-          "pp3": 1.3,
+          "pp3": 0,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -128,13 +322,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 4.26,
+          "pm3": 1.27,
           "pm2": 0,
-          "pm1": 11.32,
+          "pm1": 9.11,
           "pp0": 0,
-          "pp1": 59.7,
+          "pp1": 46.87,
           "pp2": 0,
-          "pp3": 24.71,
+          "pp3": 42.74,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -155,11 +349,11 @@
           "pm4": 0,
           "pm3": 0,
           "pm2": 0,
-          "pm1": 0.08,
+          "pm1": 0,
           "pp0": 0,
-          "pp1": 7.37,
+          "pp1": 7.79,
           "pp2": 0,
-          "pp3": 92.55,
+          "pp3": 92.21,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -175,19 +369,19 @@
         },
         "RED_HAD": {
           "pm7": 0,
-          "pm6": 0.43,
+          "pm6": 12.49,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 6.44,
+          "pm2": 22.39,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 7.96,
+          "pp2": 59.2,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 85.16,
+          "pp6": 5.91,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -203,13 +397,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 1.79,
+          "pm3": 0,
           "pm2": 0,
-          "pm1": 10.8,
+          "pm1": 5.28,
           "pp0": 0,
-          "pp1": 41.26,
+          "pp1": 5.83,
           "pp2": 0,
-          "pp3": 46.15,
+          "pp3": 88.89,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -228,13 +422,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 8.11,
+          "pm3": 0,
           "pm2": 0,
-          "pm1": 13.07,
+          "pm1": 10.08,
           "pp0": 0,
-          "pp1": 57.79,
+          "pp1": 35.33,
           "pp2": 0,
-          "pp3": 21.04,
+          "pp3": 54.6,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -250,11 +444,11 @@
         },
         "WIL_ALB": {
           "pm7": 0,
-          "pm6": 99.98,
+          "pm6": 100,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.02,
+          "pm2": 0,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
@@ -275,19 +469,19 @@
         },
         "WIL_SAI": {
           "pm7": 0,
-          "pm6": 25.79,
+          "pm6": 21.26,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 9.14,
+          "pm2": 35.04,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 20.39,
+          "pp2": 39.8,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 44.68,
+          "pp6": 3.9,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -300,19 +494,19 @@
         },
         "VRB_LAW": {
           "pm7": 0,
-          "pm6": 19.72,
+          "pm6": 7.04,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 25.48,
+          "pm2": 8.9,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 38.36,
+          "pp2": 1.76,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 16.44,
+          "pp6": 82.3,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -325,19 +519,19 @@
         },
         "VRB_LIN": {
           "pm7": 0,
-          "pm6": 0.53,
+          "pm6": 15.48,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.85,
+          "pm2": 0.53,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 9.71,
+          "pp2": 25.2,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 88.91,
+          "pp6": 58.78,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -350,19 +544,19 @@
         },
         "AST_ALO": {
           "pm7": 0,
-          "pm6": 78.47,
+          "pm6": 28.7,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 14.8,
+          "pm2": 11.61,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 5.29,
+          "pp2": 0.18,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 1.44,
+          "pp6": 59.51,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -381,134 +575,9 @@
           "pm3": 0,
           "pm2": 0,
           "pm1": 0,
-          "pp0": 99.03,
+          "pp0": 100,
           "pp1": 0,
-          "pp2": 0.47,
-          "pp3": 0,
-          "pp4": 0,
-          "pp5": 0,
-          "pp6": 0.49,
-          "pp7": 0,
-          "pp8": 0,
-          "pp9": 0,
-          "pp10": 0,
-          "pp11": 0,
-          "pp12": 0,
-          "pp13": 0,
-          "pp14": 0,
-          "pp15": 0
-        },
-        "HAA_OCO": {
-          "pm7": 0,
-          "pm6": 17.79,
-          "pm5": 0,
-          "pm4": 0,
-          "pm3": 0,
-          "pm2": 11.41,
-          "pm1": 0,
-          "pp0": 0,
-          "pp1": 0,
-          "pp2": 38.9,
-          "pp3": 0,
-          "pp4": 0,
-          "pp5": 0,
-          "pp6": 31.89,
-          "pp7": 0,
-          "pp8": 0,
-          "pp9": 0,
-          "pp10": 0,
-          "pp11": 0,
-          "pp12": 0,
-          "pp13": 0,
-          "pp14": 0,
-          "pp15": 0
-        },
-        "HAA_BEA": {
-          "pm7": 0,
-          "pm6": 23.35,
-          "pm5": 0,
-          "pm4": 0,
-          "pm3": 0,
-          "pm2": 11.74,
-          "pm1": 0,
-          "pp0": 0,
-          "pp1": 0,
-          "pp2": 25.47,
-          "pp3": 0,
-          "pp4": 0,
-          "pp5": 0,
-          "pp6": 39.44,
-          "pp7": 0,
-          "pp8": 0,
-          "pp9": 0,
-          "pp10": 0,
-          "pp11": 0,
-          "pp12": 0,
-          "pp13": 0,
-          "pp14": 0,
-          "pp15": 0
-        },
-        "AUD_HUL": {
-          "pm7": 0,
-          "pm6": 3.43,
-          "pm5": 0,
-          "pm4": 0,
-          "pm3": 0,
-          "pm2": 6.87,
-          "pm1": 0,
-          "pp0": 0,
-          "pp1": 0,
-          "pp2": 8.49,
-          "pp3": 0,
-          "pp4": 0,
-          "pp5": 0,
-          "pp6": 81.22,
-          "pp7": 0,
-          "pp8": 0,
-          "pp9": 0,
-          "pp10": 0,
-          "pp11": 0,
-          "pp12": 0,
-          "pp13": 0,
-          "pp14": 0,
-          "pp15": 0
-        },
-        "AUD_BOR": {
-          "pm7": 0,
-          "pm6": 33.3,
-          "pm5": 0,
-          "pm4": 0,
-          "pm3": 0,
-          "pm2": 32.83,
-          "pm1": 0,
-          "pp0": 0,
-          "pp1": 0,
-          "pp2": 25.8,
-          "pp3": 0,
-          "pp4": 0,
-          "pp5": 0,
-          "pp6": 8.07,
-          "pp7": 0,
-          "pp8": 0,
-          "pp9": 0,
-          "pp10": 0,
-          "pp11": 0,
-          "pp12": 0,
-          "pp13": 0,
-          "pp14": 0,
-          "pp15": 0
-        },
-        "ALP_GAS": {
-          "pm7": 0,
-          "pm6": 99.78,
-          "pm5": 0,
-          "pm4": 0,
-          "pm3": 0,
-          "pm2": 0.19,
-          "pm1": 0,
-          "pp0": 0,
-          "pp1": 0,
-          "pp2": 0.03,
+          "pp2": 0,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
@@ -523,21 +592,146 @@
           "pp14": 0,
           "pp15": 0
         },
-        "ALP_COL": {
+        "HAA_OCO": {
           "pm7": 0,
-          "pm6": 98.36,
+          "pm6": 16.51,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 1.39,
+          "pm2": 10.45,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 0.19,
+          "pp2": 59.65,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 0.06,
+          "pp6": 13.38,
+          "pp7": 0,
+          "pp8": 0,
+          "pp9": 0,
+          "pp10": 0,
+          "pp11": 0,
+          "pp12": 0,
+          "pp13": 0,
+          "pp14": 0,
+          "pp15": 0
+        },
+        "HAA_BEA": {
+          "pm7": 0,
+          "pm6": 16.28,
+          "pm5": 0,
+          "pm4": 0,
+          "pm3": 0,
+          "pm2": 1.1,
+          "pm1": 0,
+          "pp0": 0,
+          "pp1": 0,
+          "pp2": 0.28,
+          "pp3": 0,
+          "pp4": 0,
+          "pp5": 0,
+          "pp6": 82.35,
+          "pp7": 0,
+          "pp8": 0,
+          "pp9": 0,
+          "pp10": 0,
+          "pp11": 0,
+          "pp12": 0,
+          "pp13": 0,
+          "pp14": 0,
+          "pp15": 0
+        },
+        "AUD_HUL": {
+          "pm7": 0,
+          "pm6": 0,
+          "pm5": 0,
+          "pm4": 0,
+          "pm3": 0,
+          "pm2": 6.91,
+          "pm1": 0,
+          "pp0": 0,
+          "pp1": 0,
+          "pp2": 12.06,
+          "pp3": 0,
+          "pp4": 0,
+          "pp5": 0,
+          "pp6": 81.03,
+          "pp7": 0,
+          "pp8": 0,
+          "pp9": 0,
+          "pp10": 0,
+          "pp11": 0,
+          "pp12": 0,
+          "pp13": 0,
+          "pp14": 0,
+          "pp15": 0
+        },
+        "AUD_BOR": {
+          "pm7": 0,
+          "pm6": 100,
+          "pm5": 0,
+          "pm4": 0,
+          "pm3": 0,
+          "pm2": 0,
+          "pm1": 0,
+          "pp0": 0,
+          "pp1": 0,
+          "pp2": 0,
+          "pp3": 0,
+          "pp4": 0,
+          "pp5": 0,
+          "pp6": 0,
+          "pp7": 0,
+          "pp8": 0,
+          "pp9": 0,
+          "pp10": 0,
+          "pp11": 0,
+          "pp12": 0,
+          "pp13": 0,
+          "pp14": 0,
+          "pp15": 0
+        },
+        "ALP_GAS": {
+          "pm7": 0,
+          "pm6": 91.86,
+          "pm5": 0,
+          "pm4": 0,
+          "pm3": 0,
+          "pm2": 7.84,
+          "pm1": 0,
+          "pp0": 0,
+          "pp1": 0,
+          "pp2": 0.29,
+          "pp3": 0,
+          "pp4": 0,
+          "pp5": 0,
+          "pp6": 0.01,
+          "pp7": 0,
+          "pp8": 0,
+          "pp9": 0,
+          "pp10": 0,
+          "pp11": 0,
+          "pp12": 0,
+          "pp13": 0,
+          "pp14": 0,
+          "pp15": 0
+        },
+        "ALP_COL": {
+          "pm7": 0,
+          "pm6": 99.99,
+          "pm5": 0,
+          "pm4": 0,
+          "pm3": 0,
+          "pm2": 0.01,
+          "pm1": 0,
+          "pp0": 0,
+          "pp1": 0,
+          "pp2": 0,
+          "pp3": 0,
+          "pp4": 0,
+          "pp5": 0,
+          "pp6": 0,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -550,19 +744,19 @@
         },
         "CAD_PER": {
           "pm7": 0,
-          "pm6": 0,
+          "pm6": 73.83,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0,
+          "pm2": 18.05,
           "pm1": 0,
-          "pp0": 37.89,
+          "pp0": 0,
           "pp1": 0,
-          "pp2": 1.49,
+          "pp2": 6.73,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 60.62,
+          "pp6": 1.39,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -581,13 +775,13 @@
           "pm3": 0,
           "pm2": 0,
           "pm1": 0,
-          "pp0": 99.97,
+          "pp0": 100,
           "pp1": 0,
-          "pp2": 0.02,
+          "pp2": 0,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 0.01,
+          "pp6": 0,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -598,333 +792,60 @@
           "pp14": 0,
           "pp15": 0
         }
-      },
-      "dnf_probability": {
-        "MCL_NOR": 10.7,
-        "MCL_PIA": 10.5,
-        "MER_RUS": 11.7,
-        "MER_ANT": 10,
-        "RED_VER": 9.4,
-        "RED_HAD": 12.6,
-        "FER_LEC": 10.3,
-        "FER_HAM": 10.2,
-        "WIL_ALB": 21,
-        "WIL_SAI": 20.5,
-        "VRB_LAW": 15.9,
-        "VRB_LIN": 15.9,
-        "AST_ALO": 40.7,
-        "AST_STR": 52.6,
-        "HAA_OCO": 16.7,
-        "HAA_BEA": 17.7,
-        "AUD_HUL": 19.8,
-        "AUD_BOR": 17.6,
-        "ALP_GAS": 17.9,
-        "ALP_COL": 17.1,
-        "CAD_PER": 39.6,
-        "CAD_BOT": 40.1
-      },
-      "dnf_probability_sprint": {
-        "MCL_NOR": 6.4,
-        "MCL_PIA": 7,
-        "MER_RUS": 6.1,
-        "MER_ANT": 6.1,
-        "RED_VER": 6.5,
-        "RED_HAD": 6.9,
-        "FER_LEC": 6.5,
-        "FER_HAM": 6.5,
-        "WIL_ALB": 14.8,
-        "WIL_SAI": 16.2,
-        "VRB_LAW": 8.9,
-        "VRB_LIN": 8,
-        "AST_ALO": 21.7,
-        "AST_STR": 23.5,
-        "HAA_OCO": 7.9,
-        "HAA_BEA": 9,
-        "AUD_HUL": 18.4,
-        "AUD_BOR": 11.2,
-        "ALP_GAS": 13.3,
-        "ALP_COL": 9.1,
-        "CAD_PER": 25.5,
-        "CAD_BOT": 25.7
-      },
-      "fast_lap_probability": {
-        "MCL_NOR": 12.5,
-        "MCL_PIA": 7.2,
-        "MER_RUS": 13.2,
-        "MER_ANT": 12,
-        "RED_VER": 20.4,
-        "RED_HAD": 5.1,
-        "FER_LEC": 12.5,
-        "FER_HAM": 11.5,
-        "WIL_ALB": 0.1,
-        "WIL_SAI": 0.4,
-        "VRB_LAW": 0.5,
-        "VRB_LIN": 0.4,
-        "AST_ALO": 0.3,
-        "AST_STR": 0.3,
-        "HAA_OCO": 0.5,
-        "HAA_BEA": 0.5,
-        "AUD_HUL": 0.5,
-        "AUD_BOR": 0.5,
-        "ALP_GAS": 0.6,
-        "ALP_COL": 0.6,
-        "CAD_PER": 0.2,
-        "CAD_BOT": 0.1
-      },
-      "fast_lap_probability_sprint": {
-        "MCL_NOR": 13.4,
-        "MCL_PIA": 8.1,
-        "MER_RUS": 14.9,
-        "MER_ANT": 12.7,
-        "RED_VER": 20.6,
-        "RED_HAD": 5.4,
-        "FER_LEC": 10.6,
-        "FER_HAM": 8.8,
-        "WIL_ALB": 0.1,
-        "WIL_SAI": 0.5,
-        "VRB_LAW": 0.6,
-        "VRB_LIN": 0.4,
-        "AST_ALO": 0.4,
-        "AST_STR": 0.4,
-        "HAA_OCO": 0.2,
-        "HAA_BEA": 0.2,
-        "AUD_HUL": 0.5,
-        "AUD_BOR": 0.6,
-        "ALP_GAS": 0.7,
-        "ALP_COL": 0.5,
-        "CAD_PER": 0.3,
-        "CAD_BOT": 0
-      },
-      "dotd_probability": {
-        "MCL_NOR": 14.4,
-        "MCL_PIA": 9.1,
-        "MER_RUS": 1.8,
-        "MER_ANT": 16,
-        "RED_VER": 20.5,
-        "RED_HAD": 5.6,
-        "FER_LEC": 13.4,
-        "FER_HAM": 16.8,
-        "WIL_ALB": 0,
-        "WIL_SAI": 0,
-        "VRB_LAW": 0.5,
-        "VRB_LIN": 0.5,
-        "AST_ALO": 0,
-        "AST_STR": 0,
-        "HAA_OCO": 0.1,
-        "HAA_BEA": 0.1,
-        "AUD_HUL": 0.1,
-        "AUD_BOR": 0.2,
-        "ALP_GAS": 0.7,
-        "ALP_COL": 0.4,
-        "CAD_PER": 0,
-        "CAD_BOT": 0
-      },
-      "overtakes": {
-        "MCL_NOR": 5.37,
-        "MCL_PIA": 4.74,
-        "MER_RUS": 9.3,
-        "MER_ANT": 5.5,
-        "RED_VER": 3.6,
-        "RED_HAD": 4.45,
-        "FER_LEC": 4.37,
-        "FER_HAM": 5.36,
-        "WIL_ALB": 4.96,
-        "WIL_SAI": 5.1,
-        "VRB_LAW": 4.12,
-        "VRB_LIN": 5.82,
-        "AST_ALO": 3.32,
-        "AST_STR": 2.31,
-        "HAA_OCO": 5.31,
-        "HAA_BEA": 5.12,
-        "AUD_HUL": 4.77,
-        "AUD_BOR": 5.01,
-        "ALP_GAS": 4.5,
-        "ALP_COL": 4.73,
-        "CAD_PER": 2.24,
-        "CAD_BOT": 1.24
-      },
-      "overtakes_r": {
-        "MCL_NOR": 3.39,
-        "MCL_PIA": 3.23,
-        "MER_RUS": 8.48,
-        "MER_ANT": 3.42,
-        "RED_VER": 3.3,
-        "RED_HAD": 3.02,
-        "FER_LEC": 3.16,
-        "FER_HAM": 3.4,
-        "WIL_ALB": 3.5,
-        "WIL_SAI": 3.44,
-        "VRB_LAW": 3.7,
-        "VRB_LIN": 3.69,
-        "AST_ALO": 2.53,
-        "AST_STR": 1.67,
-        "HAA_OCO": 3.81,
-        "HAA_BEA": 3.95,
-        "AUD_HUL": 3.83,
-        "AUD_BOR": 3.72,
-        "ALP_GAS": 3.58,
-        "ALP_COL": 3.76,
-        "CAD_PER": 1.6,
-        "CAD_BOT": 0.92
-      },
-      "overtakes_s": {
-        "MCL_NOR": 1.98,
-        "MCL_PIA": 1.51,
-        "MER_RUS": 0.82,
-        "MER_ANT": 2.08,
-        "RED_VER": 0.3,
-        "RED_HAD": 1.43,
-        "FER_LEC": 1.21,
-        "FER_HAM": 1.95,
-        "WIL_ALB": 1.46,
-        "WIL_SAI": 1.65,
-        "VRB_LAW": 0.42,
-        "VRB_LIN": 2.13,
-        "AST_ALO": 0.79,
-        "AST_STR": 0.64,
-        "HAA_OCO": 1.49,
-        "HAA_BEA": 1.17,
-        "AUD_HUL": 0.95,
-        "AUD_BOR": 1.29,
-        "ALP_GAS": 0.91,
-        "ALP_COL": 0.97,
-        "CAD_PER": 0.64,
-        "CAD_BOT": 0.32
-      },
-      "negpts": {
-        "MCL_NOR": -6.47,
-        "MCL_PIA": -7,
-        "MER_RUS": -4.56,
-        "MER_ANT": -5.7,
-        "RED_VER": -6.29,
-        "RED_HAD": -7,
-        "FER_LEC": -6.8,
-        "FER_HAM": -6.16,
-        "WIL_ALB": -7.16,
-        "WIL_SAI": -7.19,
-        "VRB_LAW": -7.75,
-        "VRB_LIN": -6.73,
-        "AST_ALO": -13.43,
-        "AST_STR": -14.65,
-        "HAA_OCO": -6.38,
-        "HAA_BEA": -7.26,
-        "AUD_HUL": -9.94,
-        "AUD_BOR": -7.85,
-        "ALP_GAS": -9.08,
-        "ALP_COL": -7.94,
-        "CAD_PER": -10.73,
-        "CAD_BOT": -11.23
-      },
-      "q_pos": {
-        "MCL_NOR": 4.35,
-        "MCL_PIA": 4.46,
-        "MER_RUS": 4.54,
-        "MER_ANT": 4.99,
-        "RED_VER": 4.23,
-        "RED_HAD": 5.36,
-        "FER_LEC": 4.11,
-        "FER_HAM": 4.97,
-        "WIL_ALB": 17.16,
-        "WIL_SAI": 16.52,
-        "VRB_LAW": 11.44,
-        "VRB_LIN": 11.24,
-        "AST_ALO": 17.94,
-        "AST_STR": 19.72,
-        "HAA_OCO": 15.24,
-        "HAA_BEA": 14.57,
-        "AUD_HUL": 13.47,
-        "AUD_BOR": 13.49,
-        "ALP_GAS": 10.79,
-        "ALP_COL": 11.76,
-        "CAD_PER": 21.33,
-        "CAD_BOT": 21.31
-      },
-      "r_pos": {
-        "MCL_NOR": 5.17,
-        "MCL_PIA": 5.54,
-        "MER_RUS": 11.25,
-        "MER_ANT": 5.4,
-        "RED_VER": 4.96,
-        "RED_HAD": 6.95,
-        "FER_LEC": 5.22,
-        "FER_HAM": 5.56,
-        "WIL_ALB": 15.15,
-        "WIL_SAI": 15.06,
-        "VRB_LAW": 11.61,
-        "VRB_LIN": 11.54,
-        "AST_ALO": 16.82,
-        "AST_STR": 18,
-        "HAA_OCO": 14.29,
-        "HAA_BEA": 13.94,
-        "AUD_HUL": 13.46,
-        "AUD_BOR": 13.49,
-        "ALP_GAS": 11.27,
-        "ALP_COL": 12.29,
-        "CAD_PER": 17.79,
-        "CAD_BOT": 18.26
-      },
-      "sq_pos": {
-        "MCL_NOR": 5,
-        "MCL_PIA": 4,
-        "MER_RUS": 2,
-        "MER_ANT": 7,
-        "RED_VER": 1,
-        "RED_HAD": 8,
-        "FER_LEC": 3,
-        "FER_HAM": 6,
-        "WIL_ALB": 19,
-        "WIL_SAI": 21,
-        "VRB_LAW": 9,
-        "VRB_LIN": 17,
-        "AST_ALO": 15,
-        "AST_STR": 18,
-        "HAA_OCO": 16,
-        "HAA_BEA": 13,
-        "AUD_HUL": 12,
-        "AUD_BOR": 14,
-        "ALP_GAS": 10,
-        "ALP_COL": 11,
-        "CAD_PER": 22,
-        "CAD_BOT": 20
-      },
-      "s_pos": {
-        "MCL_NOR": 5.61,
-        "MCL_PIA": 5.39,
-        "MER_RUS": 3.4,
-        "MER_ANT": 6.96,
-        "RED_VER": 2.62,
-        "RED_HAD": 7.91,
-        "FER_LEC": 4.36,
-        "FER_HAM": 6.55,
-        "WIL_ALB": 17.29,
-        "WIL_SAI": 18.27,
-        "VRB_LAW": 9.94,
-        "VRB_LIN": 14.84,
-        "AST_ALO": 15.94,
-        "AST_STR": 17.84,
-        "HAA_OCO": 15.26,
-        "HAA_BEA": 12.96,
-        "AUD_HUL": 13.12,
-        "AUD_BOR": 13.77,
-        "ALP_GAS": 10.83,
-        "ALP_COL": 11.2,
-        "CAD_PER": 19.63,
-        "CAD_BOT": 19.32
       }
     },
     "constructors": {
       "pts": {
-        "MCL": 72.03,
-        "MER": 80.88,
-        "RED": 69.54,
-        "FER": 75.1,
-        "WIL": 12.52,
-        "VRB": 24.76,
-        "AST": -8.6,
-        "HAA": 10.69,
-        "AUD": 14.64,
-        "ALP": 18.16,
-        "CAD": -9.72
+        "MCL": 55.74,
+        "MER": 73.6,
+        "RED": 55.47,
+        "FER": 66.94,
+        "WIL": 8.62,
+        "VRB": 24.22,
+        "AST": -7.58,
+        "HAA": 9.9,
+        "AUD": 18.58,
+        "ALP": 15.15,
+        "CAD": -8.58
+      },
+      "nonneg_pts": {
+        "MCL": 63.57,
+        "MER": 81.92,
+        "RED": 63.9,
+        "FER": 74.68,
+        "WIL": 18.09,
+        "VRB": 33.87,
+        "AST": 12.25,
+        "HAA": 17.72,
+        "AUD": 28.95,
+        "ALP": 25.12,
+        "CAD": 8.55
+      },
+      "negpts": {
+        "MCL": -7.83,
+        "MER": -8.32,
+        "RED": -8.43,
+        "FER": -7.74,
+        "WIL": -9.46,
+        "VRB": -9.65,
+        "AST": -19.83,
+        "HAA": -7.83,
+        "AUD": -10.37,
+        "ALP": -9.97,
+        "CAD": -17.13
+      },
+      "pts_pitstop": {
+        "MCL": 6.04,
+        "MER": 10.11,
+        "RED": 8.42,
+        "FER": 9.66,
+        "WIL": 4.96,
+        "VRB": 8.2,
+        "AST": 5.35,
+        "HAA": 2,
+        "AUD": 7.71,
+        "ALP": 4.91,
+        "CAD": 1.43
       },
       "price_change_probability": {
         "MCL": {
@@ -932,13 +853,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 0.4,
+          "pm3": 0,
           "pm2": 0,
-          "pm1": 3.47,
+          "pm1": 0.69,
           "pp0": 0,
-          "pp1": 19.23,
+          "pp1": 7,
           "pp2": 0,
-          "pp3": 76.9,
+          "pp3": 92.3,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -959,8 +880,8 @@
           "pm4": 0,
           "pm3": 0,
           "pm2": 0,
-          "pm1": 0,
-          "pp0": 100,
+          "pm1": 0.05,
+          "pp0": 99.95,
           "pp1": 0,
           "pp2": 0,
           "pp3": 0,
@@ -1029,19 +950,19 @@
         },
         "WIL": {
           "pm7": 0,
-          "pm6": 46.03,
+          "pm6": 46.42,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 26.38,
+          "pm2": 38.63,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 20.69,
+          "pp2": 12.14,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 6.89,
+          "pp6": 2.81,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1054,19 +975,19 @@
         },
         "VRB": {
           "pm7": 0,
-          "pm6": 0.01,
+          "pm6": 0,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.12,
+          "pm2": 0,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 1.25,
+          "pp2": 0.35,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 98.63,
+          "pp6": 99.65,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1079,19 +1000,19 @@
         },
         "AST": {
           "pm7": 0,
-          "pm6": 78.24,
+          "pm6": 28.91,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 4.94,
+          "pm2": 16.57,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 5.95,
+          "pp2": 13.71,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 10.87,
+          "pp6": 40.82,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1104,19 +1025,19 @@
         },
         "HAA": {
           "pm7": 0,
-          "pm6": 3.62,
+          "pm6": 1.26,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 6.1,
+          "pm2": 1.49,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 15.16,
+          "pp2": 5.37,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 75.12,
+          "pp6": 91.87,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1129,19 +1050,19 @@
         },
         "AUD": {
           "pm7": 0,
-          "pm6": 0.04,
+          "pm6": 4.05,
           "pm5": 0,
           "pm4": 0,
           "pm3": 0,
-          "pm2": 0.24,
+          "pm2": 11.39,
           "pm1": 0,
           "pp0": 0,
           "pp1": 0,
-          "pp2": 0.92,
+          "pp2": 11.87,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 98.8,
+          "pp6": 72.68,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1157,13 +1078,13 @@
           "pm6": 0,
           "pm5": 0,
           "pm4": 0,
-          "pm3": 59.92,
+          "pm3": 77.17,
           "pm2": 0,
-          "pm1": 33.87,
+          "pm1": 21.33,
           "pp0": 0,
-          "pp1": 5.86,
+          "pp1": 1.47,
           "pp2": 0,
-          "pp3": 0.35,
+          "pp3": 0.03,
           "pp4": 0,
           "pp5": 0,
           "pp6": 0,
@@ -1185,13 +1106,13 @@
           "pm3": 0,
           "pm2": 0,
           "pm1": 0,
-          "pp0": 73.73,
+          "pp0": 100,
           "pp1": 0,
-          "pp2": 2.56,
+          "pp2": 0,
           "pp3": 0,
           "pp4": 0,
           "pp5": 0,
-          "pp6": 23.71,
+          "pp6": 0,
           "pp7": 0,
           "pp8": 0,
           "pp9": 0,
@@ -1202,34 +1123,9 @@
           "pp14": 0,
           "pp15": 0
         }
-      },
-      "pts_pitstop": {
-        "MCL": 6.05,
-        "MER": 10.09,
-        "RED": 8.38,
-        "FER": 9.73,
-        "WIL": 4.93,
-        "VRB": 8.18,
-        "AST": 5.35,
-        "HAA": 2.02,
-        "AUD": 7.69,
-        "ALP": 4.87,
-        "CAD": 1.43
-      },
-      "negpts": {
-        "MCL": -12.3,
-        "MER": -8.29,
-        "RED": -12.34,
-        "FER": -11.9,
-        "WIL": -13.35,
-        "VRB": -13.05,
-        "AST": -27.42,
-        "HAA": -12.23,
-        "AUD": -16.26,
-        "ALP": -15.71,
-        "CAD": -22.27
       }
     },
+    "date_uploaded": "2026-10-09T22:50:43.836Z",
     "extra_data_info": [
       {
         "id": "dnf_probability",
@@ -1277,16 +1173,9 @@
         "colName": "xNP"
       }
     ],
-    "analyst": "rhter",
-    "analyst_id": "rhter",
-    "date_uploaded": "2026-10-09T22:50:43.836Z",
-    "autopilot_storage_path": "simulations/2026/17/rhter_4/autopilot.json",
-    "active": true,
-    "sort_order": 0,
-    "early_raceweeks": [
-      18,
-      19
-    ]
+    "is_early": true,
+    "source_sim_id": "rhter_4",
+    "source_raceweek": 17
   },
   "entities": {
     "ALP_COL": {
@@ -1295,7 +1184,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#ff87bc",
-      "price": 9.4,
+      "price": 8.8,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -1315,6 +1204,7 @@
           0,
           2,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -1333,7 +1223,8 @@
           -1,
           1,
           0,
-          3
+          3,
+          0
         ],
         "sprint_overtake_points": [
           2,
@@ -1351,9 +1242,11 @@
           4,
           1,
           1,
-          2
+          2,
+          0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -1387,9 +1280,11 @@
           0,
           0,
           -10,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -1423,9 +1318,11 @@
           3,
           2,
           1,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -1459,6 +1356,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -1476,6 +1374,7 @@
           0,
           2,
           6,
+          0,
           0,
           0
         ],
@@ -1495,7 +1394,8 @@
           -2,
           2,
           0,
-          8
+          8,
+          0
         ],
         "race_overtake_points": [
           4,
@@ -1513,9 +1413,11 @@
           11,
           3,
           1,
-          5
+          5,
+          2
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -1549,6 +1451,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -1567,9 +1470,11 @@
           0,
           0,
           -20,
-          0
+          0,
+          -20
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -1589,8 +1494,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        13,
-        -18
+        -28,
+        13
       ]
     },
     "ALP_GAS": {
@@ -1599,7 +1504,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#ff87bc",
-      "price": 10.8,
+      "price": 10.2,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -1617,6 +1522,7 @@
           0,
           1,
           2,
+          0,
           0,
           0,
           0
@@ -1637,7 +1543,8 @@
           -2,
           1,
           0,
-          -3
+          -3,
+          1
         ],
         "sprint_overtake_points": [
           2,
@@ -1655,9 +1562,11 @@
           2,
           1,
           1,
+          2,
           2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -1691,9 +1600,11 @@
           0,
           0,
           -10,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -1727,9 +1638,11 @@
           10,
           0,
           4,
-          2
+          2,
+          3
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -1763,6 +1676,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -1779,6 +1693,7 @@
           0,
           1,
           6,
+          0,
           0,
           0,
           0
@@ -1799,7 +1714,8 @@
           -6,
           2,
           0,
-          -7
+          -7,
+          -4
         ],
         "race_overtake_points": [
           6,
@@ -1817,9 +1733,11 @@
           4,
           2,
           1,
-          5
+          5,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -1853,6 +1771,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -1871,9 +1790,11 @@
           0,
           0,
           -20,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -1893,8 +1814,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        0,
-        -15
+        3,
+        0
       ]
     },
     "AST_ALO": {
@@ -1903,7 +1824,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#006f62",
-      "price": 5.6,
+      "price": 5.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -1923,7 +1844,8 @@
           0,
           0,
           0,
-          1
+          1,
+          0
         ],
         "sprint_pos_gained_points": [
           0,
@@ -1941,7 +1863,8 @@
           0,
           0,
           0,
-          2
+          2,
+          4
         ],
         "sprint_overtake_points": [
           2,
@@ -1959,9 +1882,11 @@
           4,
           2,
           2,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -1995,9 +1920,11 @@
           -10,
           0,
           -10,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2031,9 +1958,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -2067,6 +1996,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -2085,7 +2015,8 @@
           0,
           0,
           0,
-          4
+          4,
+          0
         ],
         "race_pos_gained_points": [
           0,
@@ -2103,6 +2034,7 @@
           0,
           0,
           0,
+          4,
           4
         ],
         "race_overtake_points": [
@@ -2121,9 +2053,11 @@
           10,
           4,
           6,
-          9
+          9,
+          2
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -2157,6 +2091,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -2175,9 +2110,11 @@
           -20,
           0,
           -20,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2197,8 +2134,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        17,
-        -14
+        11,
+        17
       ]
     },
     "AST_STR": {
@@ -2227,6 +2164,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -2245,7 +2183,8 @@
           0,
           0,
           0,
-          1
+          1,
+          0
         ],
         "sprint_overtake_points": [
           1,
@@ -2263,9 +2202,11 @@
           4,
           1,
           0,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -2299,9 +2240,11 @@
           -10,
           -10,
           -10,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2335,6 +2278,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
@@ -2353,9 +2297,11 @@
           0,
           -5,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2389,6 +2335,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -2407,7 +2354,8 @@
           0,
           0,
           0,
-          2
+          2,
+          0
         ],
         "race_overtake_points": [
           2,
@@ -2425,9 +2373,11 @@
           10,
           3,
           0,
-          9
+          9,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -2461,6 +2411,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -2479,9 +2430,11 @@
           -20,
           -20,
           -20,
-          0
+          0,
+          -20
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2501,8 +2454,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        11,
-        -20
+        -28,
+        11
       ]
     },
     "AUD_BOR": {
@@ -2511,7 +2464,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#FF2E01",
-      "price": 7.6,
+      "price": 7,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -2526,6 +2479,7 @@
           0,
           0,
           1,
+          0,
           0,
           0,
           0,
@@ -2549,7 +2503,8 @@
           -1,
           -1,
           1,
-          -3
+          -3,
+          0
         ],
         "sprint_overtake_points": [
           3,
@@ -2567,9 +2522,11 @@
           5,
           1,
           2,
-          4
+          4,
+          0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -2603,13 +2560,15 @@
           0,
           0,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
           0,
           0,
           0,
           -10,
+          0,
           0,
           0,
           0,
@@ -2639,9 +2598,11 @@
           0,
           0,
           0,
-          1
+          1,
+          0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -2675,6 +2636,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -2688,6 +2650,7 @@
           0,
           4,
           4,
+          0,
           0,
           0,
           0,
@@ -2711,7 +2674,8 @@
           -1,
           -1,
           2,
-          -8
+          -8,
+          0
         ],
         "race_overtake_points": [
           9,
@@ -2729,9 +2693,11 @@
           15,
           1,
           6,
-          11
+          11,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -2765,6 +2731,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -2783,9 +2750,11 @@
           0,
           0,
           0,
-          0
+          0,
+          -20
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2805,8 +2774,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        4,
-        8
+        -29,
+        4
       ]
     },
     "AUD_HUL": {
@@ -2815,7 +2784,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#FF2E01",
-      "price": 6,
+      "price": 6.6,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -2835,7 +2804,8 @@
           0,
           0,
           0,
-          0
+          0,
+          2
         ],
         "sprint_pos_gained_points": [
           0,
@@ -2853,7 +2823,8 @@
           0,
           1,
           3,
-          2
+          2,
+          5
         ],
         "sprint_overtake_points": [
           0,
@@ -2871,9 +2842,11 @@
           5,
           0,
           3,
-          5
+          5,
+          2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -2907,9 +2880,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -2943,9 +2918,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -2979,6 +2956,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -2997,7 +2975,8 @@
           0,
           1,
           0,
-          0
+          0,
+          4
         ],
         "race_pos_gained_points": [
           0,
@@ -3015,7 +2994,8 @@
           0,
           1,
           7,
-          4
+          4,
+          2
         ],
         "race_overtake_points": [
           0,
@@ -3033,9 +3013,11 @@
           14,
           0,
           8,
-          15
+          15,
+          2
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -3069,6 +3051,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -3081,6 +3064,7 @@
           -20,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -3105,12 +3089,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        19,
-        15
+        17,
+        19
       ]
     },
     "CAD_BOT": {
@@ -3139,6 +3124,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -3157,6 +3143,7 @@
           -1,
           1,
           1,
+          0,
           0
         ],
         "sprint_overtake_points": [
@@ -3175,9 +3162,11 @@
           3,
           0,
           1,
+          0,
           0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -3211,9 +3200,11 @@
           0,
           0,
           0,
+          -10,
           -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -3247,9 +3238,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -3283,9 +3276,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
+          0,
           0,
           0,
           0,
@@ -3319,7 +3314,8 @@
           -3,
           1,
           3,
-          0
+          0,
+          -1
         ],
         "race_overtake_points": [
           4,
@@ -3337,9 +3333,11 @@
           7,
           0,
           3,
+          0,
           0
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -3373,6 +3371,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -3391,9 +3390,11 @@
           0,
           0,
           0,
-          -20
+          -20,
+          0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -3413,8 +3414,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -20,
-        6
+        -11,
+        -20
       ]
     },
     "CAD_PER": {
@@ -3423,11 +3424,12 @@
       "type": "driver",
       "isActive": true,
       "color": "#777777",
-      "price": 3,
+      "price": 3.6,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
         "sprint_pos_points": [
+          0,
           0,
           0,
           0,
@@ -3461,7 +3463,8 @@
           -1,
           0,
           2,
-          1
+          1,
+          0
         ],
         "sprint_overtake_points": [
           1,
@@ -3479,9 +3482,11 @@
           5,
           1,
           2,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -3515,9 +3520,11 @@
           0,
           -10,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -3551,9 +3558,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -3587,9 +3596,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
+          0,
           0,
           0,
           0,
@@ -3623,7 +3634,8 @@
           -1,
           0,
           6,
-          1
+          1,
+          0
         ],
         "race_overtake_points": [
           2,
@@ -3641,9 +3653,11 @@
           14,
           2,
           5,
-          8
+          8,
+          0
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -3677,6 +3691,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -3694,6 +3709,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0
         ],
@@ -3713,12 +3729,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        9,
-        11
+        -9,
+        9
       ]
     },
     "FER_HAM": {
@@ -3727,7 +3744,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#dc0000",
-      "price": 24.3,
+      "price": 24.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -3747,7 +3764,8 @@
           3,
           0,
           3,
-          6
+          6,
+          7
         ],
         "sprint_pos_gained_points": [
           1,
@@ -3765,7 +3783,8 @@
           -1,
           0,
           0,
-          -1
+          -1,
+          4
         ],
         "sprint_overtake_points": [
           2,
@@ -3783,6 +3802,7 @@
           5,
           0,
           1,
+          3,
           3
         ],
         "sprint_fastest_lap_points": [
@@ -3801,7 +3821,8 @@
           0,
           0,
           0,
-          0
+          0,
+          5
         ],
         "sprint_not_classified_points": [
           0,
@@ -3819,9 +3840,11 @@
           0,
           -10,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -3855,9 +3878,11 @@
           6,
           7,
           5,
-          9
+          9,
+          8
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -3891,6 +3916,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -3909,7 +3935,8 @@
           8,
           0,
           8,
-          15
+          15,
+          8
         ],
         "race_pos_gained_points": [
           3,
@@ -3927,7 +3954,8 @@
           -2,
           0,
           0,
-          -1
+          -1,
+          -3
         ],
         "race_overtake_points": [
           6,
@@ -3945,7 +3973,8 @@
           14,
           0,
           2,
-          9
+          9,
+          1
         ],
         "race_fastest_lap_points": [
           0,
@@ -3955,6 +3984,7 @@
           0,
           0,
           10,
+          0,
           0,
           0,
           0,
@@ -3981,6 +4011,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -3999,313 +4030,11 @@
           0,
           -20,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ]
-      },
-      "lastTwoTotalPoints": [
-        32,
-        15
-      ]
-    },
-    "FER_LEC": {
-      "id": "FER_LEC",
-      "abbreviation": "LEC",
-      "type": "driver",
-      "isActive": true,
-      "color": "#dc0000",
-      "price": 23.8,
-      "percentOwned": 0,
-      "x2PercentOwned": 0,
-      "raceResults": {
-        "sprint_pos_points": [
-          6,
-          7,
-          6,
-          6,
-          4,
-          0,
-          0,
-          1,
-          4,
-          7,
-          5,
-          7,
-          0,
-          5,
-          5,
-          5
-        ],
-        "sprint_pos_gained_points": [
-          1,
-          4,
-          1,
-          1,
-          1,
-          0,
-          -2,
-          -2,
-          -1,
-          1,
-          -1,
-          1,
-          0,
-          1,
-          -1,
-          0
-        ],
-        "sprint_overtake_points": [
-          2,
-          5,
-          3,
-          1,
-          1,
-          0,
-          2,
-          1,
-          5,
-          1,
-          1,
-          1,
-          1,
-          0,
-          1,
-          5
-        ],
-        "sprint_fastest_lap_points": [
-          0,
-          5,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          5,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "sprint_not_classified_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          -10,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -10,
-          0,
-          0,
-          0
-        ],
-        "sprint_disqualified_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "quali_pos_points": [
-          7,
-          7,
-          7,
-          8,
-          3,
-          7,
-          1,
-          9,
-          9,
-          6,
-          8,
-          5,
-          7,
-          6,
-          9,
-          6
-        ],
-        "quali_not_classified_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "quali_disqualified_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "race_pos_points": [
-          15,
-          12,
-          15,
-          4,
-          12,
-          0,
-          0,
-          4,
-          25,
-          18,
-          12,
-          10,
-          0,
-          12,
-          12,
-          12
-        ],
-        "race_pos_gained_points": [
-          1,
-          0,
-          1,
-          -5,
-          4,
-          0,
-          -5,
-          -6,
-          1,
-          2,
-          -2,
-          1,
-          0,
-          1,
-          -2,
-          0
-        ],
-        "race_overtake_points": [
-          6,
-          11,
-          8,
-          12,
-          2,
-          0,
-          4,
-          2,
-          1,
-          3,
-          3,
-          4,
-          1,
-          0,
-          1,
-          15
-        ],
-        "race_fastest_lap_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          10,
-          10,
-          0,
-          0,
-          0,
-          0
-        ],
-        "race_dotd_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          10,
-          10,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "race_not_classified_points": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          -20,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          -20,
-          0,
-          0,
-          0
-        ],
-        "race_disqualified_points": [
           0,
           0,
           0,
@@ -4326,7 +4055,327 @@
       },
       "lastTwoTotalPoints": [
         33,
-        20
+        32
+      ]
+    },
+    "FER_LEC": {
+      "id": "FER_LEC",
+      "abbreviation": "LEC",
+      "type": "driver",
+      "isActive": true,
+      "color": "#dc0000",
+      "price": 24.1,
+      "percentOwned": 0,
+      "x2PercentOwned": 0,
+      "raceResults": {
+        "sprint_pos_points": [
+          6,
+          7,
+          6,
+          6,
+          4,
+          0,
+          0,
+          1,
+          4,
+          7,
+          5,
+          7,
+          0,
+          5,
+          5,
+          5,
+          6
+        ],
+        "sprint_pos_gained_points": [
+          1,
+          4,
+          1,
+          1,
+          1,
+          0,
+          -2,
+          -2,
+          -1,
+          1,
+          -1,
+          1,
+          0,
+          1,
+          -1,
+          0,
+          0
+        ],
+        "sprint_overtake_points": [
+          2,
+          5,
+          3,
+          1,
+          1,
+          0,
+          2,
+          1,
+          5,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          5,
+          0
+        ],
+        "sprint_fastest_lap_points": [
+          0,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sprint_not_classified_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          -10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -10,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sprint_disqualified_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "quali_pos_points": [
+          7,
+          7,
+          7,
+          8,
+          3,
+          7,
+          1,
+          9,
+          9,
+          6,
+          8,
+          5,
+          7,
+          6,
+          9,
+          6,
+          9
+        ],
+        "quali_not_classified_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "quali_disqualified_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "race_pos_points": [
+          15,
+          12,
+          15,
+          4,
+          12,
+          0,
+          0,
+          4,
+          25,
+          18,
+          12,
+          10,
+          0,
+          12,
+          12,
+          12,
+          18
+        ],
+        "race_pos_gained_points": [
+          1,
+          0,
+          1,
+          -5,
+          4,
+          0,
+          -5,
+          -6,
+          1,
+          2,
+          -2,
+          1,
+          0,
+          1,
+          -2,
+          0,
+          0
+        ],
+        "race_overtake_points": [
+          6,
+          11,
+          8,
+          12,
+          2,
+          0,
+          4,
+          2,
+          1,
+          3,
+          3,
+          4,
+          1,
+          0,
+          1,
+          15,
+          0
+        ],
+        "race_fastest_lap_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          10,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "race_dotd_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "race_not_classified_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          -20,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -20,
+          0,
+          0,
+          0,
+          0
+        ],
+        "race_disqualified_points": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "lastTwoTotalPoints": [
+        43,
+        33
       ]
     },
     "HAA_BEA": {
@@ -4335,7 +4384,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#ffffff",
-      "price": 5.8,
+      "price": 6.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -4355,7 +4404,8 @@
           0,
           0,
           0,
-          0
+          0,
+          3
         ],
         "sprint_pos_gained_points": [
           2,
@@ -4373,7 +4423,8 @@
           -2,
           2,
           1,
-          1
+          1,
+          7
         ],
         "sprint_overtake_points": [
           3,
@@ -4391,9 +4442,11 @@
           3,
           1,
           1,
-          2
+          2,
+          5
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -4427,9 +4480,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -4463,6 +4518,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
@@ -4481,9 +4537,11 @@
           0,
           -5,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -4517,6 +4575,7 @@
           0,
           0,
           2,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -4535,7 +4594,8 @@
           -4,
           6,
           1,
-          2
+          2,
+          -1
         ],
         "race_overtake_points": [
           9,
@@ -4553,9 +4613,11 @@
           8,
           2,
           3,
-          5
+          5,
+          4
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -4589,6 +4651,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -4604,6 +4667,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -4625,12 +4689,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        7,
-        6
+        18,
+        7
       ]
     },
     "HAA_OCO": {
@@ -4639,7 +4704,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#ffffff",
-      "price": 9.3,
+      "price": 9.9,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -4659,6 +4724,7 @@
           0,
           0,
           1,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -4677,7 +4743,8 @@
           -1,
           1,
           2,
-          1
+          1,
+          6
         ],
         "sprint_overtake_points": [
           3,
@@ -4695,9 +4762,11 @@
           4,
           1,
           1,
-          4
+          4,
+          2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -4731,9 +4800,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -4767,9 +4838,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -4803,6 +4876,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -4821,6 +4895,7 @@
           0,
           0,
           4,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -4839,7 +4914,8 @@
           -2,
           2,
           5,
-          2
+          2,
+          -1
         ],
         "race_overtake_points": [
           7,
@@ -4857,9 +4933,11 @@
           12,
           3,
           3,
-          10
+          10,
+          5
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -4893,6 +4971,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -4911,9 +4990,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -4943,7 +5024,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#ff9800",
-      "price": 26.4,
+      "price": 26.1,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -4963,7 +5044,8 @@
           5,
           6,
           0,
-          0
+          0,
+          1
         ],
         "sprint_pos_gained_points": [
           1,
@@ -4981,7 +5063,8 @@
           2,
           -1,
           0,
-          -2
+          -2,
+          -3
         ],
         "sprint_overtake_points": [
           2,
@@ -4999,7 +5082,8 @@
           5,
           0,
           1,
-          5
+          5,
+          0
         ],
         "sprint_fastest_lap_points": [
           0,
@@ -5014,6 +5098,7 @@
           5,
           0,
           5,
+          0,
           0,
           0,
           0,
@@ -5035,9 +5120,11 @@
           0,
           0,
           -10,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -5071,9 +5158,11 @@
           2,
           10,
           6,
-          5
+          5,
+          6
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -5107,6 +5196,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -5125,7 +5215,8 @@
           12,
           15,
           0,
-          2
+          2,
+          12
         ],
         "race_pos_gained_points": [
           1,
@@ -5143,7 +5234,8 @@
           4,
           -2,
           0,
-          -4
+          -4,
+          1
         ],
         "race_overtake_points": [
           5,
@@ -5161,7 +5253,8 @@
           14,
           0,
           3,
-          13
+          13,
+          1
         ],
         "race_fastest_lap_points": [
           0,
@@ -5174,6 +5267,7 @@
           0,
           0,
           10,
+          0,
           0,
           0,
           0,
@@ -5197,6 +5291,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -5215,9 +5310,11 @@
           0,
           0,
           -20,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -5237,8 +5334,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        16,
-        -11
+        18,
+        16
       ]
     },
     "MCL_PIA": {
@@ -5247,7 +5344,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#ff9800",
-      "price": 23.7,
+      "price": 23.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -5267,7 +5364,8 @@
           4,
           1,
           0,
-          3
+          3,
+          0
         ],
         "sprint_pos_gained_points": [
           0,
@@ -5285,7 +5383,8 @@
           1,
           -1,
           -4,
-          0
+          0,
+          -10
         ],
         "sprint_overtake_points": [
           0,
@@ -5303,9 +5402,11 @@
           6,
           1,
           1,
-          6
+          6,
+          0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -5339,9 +5440,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -5375,6 +5478,7 @@
           8,
           4,
           8,
+          4,
           4
         ],
         "quali_not_classified_points": [
@@ -5393,9 +5497,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -5429,7 +5535,8 @@
           10,
           4,
           0,
-          8
+          8,
+          10
         ],
         "race_pos_gained_points": [
           0,
@@ -5447,7 +5554,8 @@
           1,
           -1,
           -10,
-          0
+          0,
+          1
         ],
         "race_overtake_points": [
           0,
@@ -5465,9 +5573,11 @@
           16,
           2,
           2,
-          17
+          17,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -5501,6 +5611,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -5515,6 +5626,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -5537,12 +5649,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        29,
-        0
+        6,
+        29
       ]
     },
     "MER_ANT": {
@@ -5551,7 +5664,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#00d2be",
-      "price": 27,
+      "price": 27.1,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -5571,7 +5684,8 @@
           8,
           8,
           4,
-          7
+          7,
+          5
         ],
         "sprint_pos_gained_points": [
           0,
@@ -5589,7 +5703,8 @@
           6,
           1,
           4,
-          1
+          1,
+          3
         ],
         "sprint_overtake_points": [
           2,
@@ -5607,7 +5722,8 @@
           9,
           0,
           3,
-          1
+          1,
+          0
         ],
         "sprint_fastest_lap_points": [
           0,
@@ -5625,9 +5741,11 @@
           5,
           0,
           0,
+          0,
           0
         ],
         "sprint_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -5661,6 +5779,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_pos_points": [
@@ -5679,9 +5798,11 @@
           4,
           9,
           0,
+          7,
           7
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -5715,6 +5836,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -5733,7 +5855,8 @@
           25,
           25,
           10,
-          18
+          18,
+          15
         ],
         "race_pos_gained_points": [
           0,
@@ -5751,6 +5874,7 @@
           18,
           1,
           11,
+          1,
           1
         ],
         "race_overtake_points": [
@@ -5769,7 +5893,8 @@
           26,
           0,
           7,
-          3
+          3,
+          2
         ],
         "race_fastest_lap_points": [
           0,
@@ -5785,6 +5910,7 @@
           0,
           0,
           10,
+          0,
           0,
           0,
           0
@@ -5805,9 +5931,11 @@
           10,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -5841,12 +5969,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        29,
-        28
+        33,
+        29
       ]
     },
     "MER_RUS": {
@@ -5855,7 +5984,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#00d2be",
-      "price": 28,
+      "price": 27.9,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -5875,6 +6004,7 @@
           7,
           4,
           8,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -5893,7 +6023,8 @@
           0,
           1,
           0,
-          -5
+          -5,
+          0
         ],
         "sprint_overtake_points": [
           2,
@@ -5911,7 +6042,8 @@
           2,
           1,
           0,
-          2
+          2,
+          1
         ],
         "sprint_fastest_lap_points": [
           0,
@@ -5929,6 +6061,7 @@
           0,
           5,
           5,
+          0,
           0
         ],
         "sprint_not_classified_points": [
@@ -5947,9 +6080,11 @@
           0,
           0,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -5983,9 +6118,11 @@
           9,
           5,
           10,
-          3
+          3,
+          5
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -6019,6 +6156,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -6037,7 +6175,8 @@
           18,
           10,
           25,
-          0
+          0,
+          2
         ],
         "race_pos_gained_points": [
           0,
@@ -6055,7 +6194,8 @@
           0,
           1,
           0,
-          -13
+          -13,
+          10
         ],
         "race_overtake_points": [
           4,
@@ -6073,7 +6213,8 @@
           6,
           1,
           0,
-          5
+          5,
+          9
         ],
         "race_fastest_lap_points": [
           0,
@@ -6091,9 +6232,11 @@
           0,
           10,
           10,
+          0,
           0
         ],
         "race_dotd_points": [
+          0,
           0,
           0,
           0,
@@ -6127,9 +6270,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -6149,8 +6294,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -5,
-        45
+        17,
+        -5
       ]
     },
     "RED_HAD": {
@@ -6159,7 +6304,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#0600ef",
-      "price": 15.7,
+      "price": 16.3,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -6179,7 +6324,8 @@
           0,
           3,
           6,
-          4
+          4,
+          0
         ],
         "sprint_pos_gained_points": [
           0,
@@ -6197,7 +6343,8 @@
           3,
           1,
           1,
-          1
+          1,
+          0
         ],
         "sprint_overtake_points": [
           2,
@@ -6215,9 +6362,11 @@
           6,
           1,
           1,
-          2
+          2,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -6251,9 +6400,11 @@
           0,
           0,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -6287,7 +6438,8 @@
           0,
           3,
           7,
-          8
+          8,
+          0
         ],
         "quali_not_classified_points": [
           0,
@@ -6305,13 +6457,15 @@
           0,
           0,
           0,
-          0
+          0,
+          -5
         ],
         "quali_disqualified_points": [
           0,
           0,
           0,
           -5,
+          0,
           0,
           0,
           0,
@@ -6341,7 +6495,8 @@
           0,
           8,
           15,
-          10
+          10,
+          1
         ],
         "race_pos_gained_points": [
           0,
@@ -6359,7 +6514,8 @@
           8,
           2,
           1,
-          3
+          3,
+          12
         ],
         "race_overtake_points": [
           4,
@@ -6377,9 +6533,11 @@
           17,
           3,
           3,
-          4
+          4,
+          9
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -6413,6 +6571,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -6420,6 +6579,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -6449,12 +6609,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        25,
-        26
+        8,
+        25
       ]
     },
     "RED_LAW": {
@@ -6483,9 +6644,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
+          0,
           0,
           0,
           0,
@@ -6519,9 +6682,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -6555,9 +6720,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -6591,6 +6758,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
@@ -6609,9 +6777,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -6645,9 +6815,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_gained_points": [
+          0,
           0,
           0,
           0,
@@ -6681,9 +6853,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -6717,9 +6891,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -6753,6 +6929,7 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
@@ -6764,7 +6941,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#0600ef",
-      "price": 27.9,
+      "price": 28.2,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -6784,6 +6961,7 @@
           6,
           7,
           7,
+          8,
           8
         ],
         "sprint_pos_gained_points": [
@@ -6802,6 +6980,7 @@
           1,
           1,
           2,
+          0,
           0
         ],
         "sprint_overtake_points": [
@@ -6820,7 +6999,8 @@
           5,
           1,
           2,
-          1
+          1,
+          0
         ],
         "sprint_fastest_lap_points": [
           5,
@@ -6838,7 +7018,8 @@
           0,
           0,
           0,
-          5
+          5,
+          0
         ],
         "sprint_not_classified_points": [
           0,
@@ -6856,9 +7037,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -6892,6 +7075,7 @@
           5,
           8,
           3,
+          10,
           10
         ],
         "quali_not_classified_points": [
@@ -6910,9 +7094,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -6946,6 +7132,7 @@
           15,
           18,
           18,
+          25,
           25
         ],
         "race_pos_gained_points": [
@@ -6964,6 +7151,7 @@
           2,
           1,
           6,
+          0,
           0
         ],
         "race_overtake_points": [
@@ -6982,7 +7170,8 @@
           15,
           1,
           6,
-          2
+          2,
+          0
         ],
         "race_fastest_lap_points": [
           10,
@@ -7000,7 +7189,8 @@
           0,
           0,
           0,
-          10
+          10,
+          0
         ],
         "race_dotd_points": [
           10,
@@ -7018,6 +7208,7 @@
           0,
           10,
           10,
+          10,
           10
         ],
         "race_not_classified_points": [
@@ -7033,6 +7224,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -7054,12 +7246,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        57,
-        43
+        53,
+        57
       ]
     },
     "VRB_LAW": {
@@ -7068,7 +7261,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#6692ff",
-      "price": 9.3,
+      "price": 9.9,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -7088,7 +7281,8 @@
           0,
           0,
           0,
-          2
+          2,
+          4
         ],
         "sprint_pos_gained_points": [
           -2,
@@ -7106,7 +7300,8 @@
           2,
           1,
           -1,
-          2
+          2,
+          3
         ],
         "sprint_overtake_points": [
           3,
@@ -7124,9 +7319,11 @@
           4,
           0,
           2,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -7160,9 +7357,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -7196,9 +7395,11 @@
           0,
           0,
           0,
-          0
+          0,
+          2
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -7232,6 +7433,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -7250,6 +7452,7 @@
           1,
           0,
           0,
+          6,
           6
         ],
         "race_pos_gained_points": [
@@ -7268,7 +7471,8 @@
           5,
           1,
           -1,
-          4
+          4,
+          1
         ],
         "race_overtake_points": [
           7,
@@ -7286,9 +7490,11 @@
           11,
           0,
           4,
-          7
+          7,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -7322,6 +7528,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -7329,6 +7536,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -7358,12 +7566,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        17,
-        3
+        18,
+        17
       ]
     },
     "VRB_LIN": {
@@ -7372,7 +7581,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#6692ff",
-      "price": 9.4,
+      "price": 10,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -7392,6 +7601,7 @@
           1,
           0,
           2,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -7410,6 +7620,7 @@
           1,
           1,
           3,
+          4,
           4
         ],
         "sprint_overtake_points": [
@@ -7428,9 +7639,11 @@
           2,
           1,
           1,
-          5
+          5,
+          2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -7464,9 +7677,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -7500,9 +7715,11 @@
           1,
           1,
           0,
-          0
+          0,
+          1
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -7536,6 +7753,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -7554,7 +7772,8 @@
           4,
           2,
           6,
-          1
+          1,
+          0
         ],
         "race_pos_gained_points": [
           1,
@@ -7572,7 +7791,8 @@
           1,
           1,
           8,
-          12
+          12,
+          -6
         ],
         "race_overtake_points": [
           8,
@@ -7590,9 +7810,11 @@
           5,
           1,
           3,
-          15
+          15,
+          0
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -7626,6 +7848,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -7634,6 +7857,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -7662,12 +7886,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        28,
-        17
+        1,
+        28
       ]
     },
     "VRB_TSU": {
@@ -7696,9 +7921,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
+          0,
           0,
           0,
           0,
@@ -7732,9 +7959,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -7768,9 +7997,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -7804,9 +8035,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -7840,9 +8073,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
+          0,
           0,
           0,
           0,
@@ -7876,9 +8111,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_overtake_points": [
+          0,
           0,
           0,
           0,
@@ -7912,9 +8149,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_dotd_points": [
+          0,
           0,
           0,
           0,
@@ -7948,9 +8187,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -7977,7 +8218,7 @@
       "type": "driver",
       "isActive": true,
       "color": "#005aff",
-      "price": 5.2,
+      "price": 4.6,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -7988,6 +8229,7 @@
           0,
           0,
           1,
+          0,
           0,
           0,
           0,
@@ -8015,6 +8257,7 @@
           1,
           1,
           0,
+          0,
           0
         ],
         "sprint_overtake_points": [
@@ -8033,9 +8276,11 @@
           5,
           1,
           2,
-          4
+          4,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -8069,9 +8314,11 @@
           0,
           0,
           -10,
+          -10,
           -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -8105,9 +8352,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -8141,6 +8390,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -8150,6 +8400,7 @@
           1,
           0,
           4,
+          0,
           0,
           0,
           0,
@@ -8177,7 +8428,8 @@
           3,
           1,
           0,
-          0
+          0,
+          -2
         ],
         "race_overtake_points": [
           5,
@@ -8195,9 +8447,11 @@
           14,
           3,
           4,
-          10
+          10,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -8231,6 +8485,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -8249,9 +8504,11 @@
           0,
           0,
           -20,
-          -20
+          -20,
+          0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -8272,7 +8529,7 @@
       },
       "lastTwoTotalPoints": [
         -10,
-        -16
+        -10
       ]
     },
     "WIL_SAI": {
@@ -8281,11 +8538,12 @@
       "type": "driver",
       "isActive": true,
       "color": "#005aff",
-      "price": 7.8,
+      "price": 8.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
         "sprint_pos_points": [
+          0,
           0,
           0,
           0,
@@ -8319,7 +8577,8 @@
           0,
           0,
           2,
-          -2
+          -2,
+          10
         ],
         "sprint_overtake_points": [
           3,
@@ -8337,9 +8596,11 @@
           5,
           1,
           3,
-          3
+          3,
+          0
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -8373,9 +8634,11 @@
           0,
           -10,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -8409,6 +8672,7 @@
           0,
           0,
           2,
+          0,
           0
         ],
         "quali_not_classified_points": [
@@ -8427,9 +8691,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -8463,6 +8729,7 @@
           0,
           0,
           1,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -8481,7 +8748,8 @@
           0,
           0,
           4,
-          -4
+          -4,
+          -1
         ],
         "race_overtake_points": [
           8,
@@ -8499,9 +8767,11 @@
           14,
           2,
           8,
-          8
+          8,
+          4
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -8535,6 +8805,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -8552,6 +8823,7 @@
           0,
           0,
           -20,
+          0,
           0,
           0
         ],
@@ -8571,12 +8843,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        4,
-        15
+        13,
+        4
       ]
     },
     "ALP": {
@@ -8585,7 +8858,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#ff87bc",
-      "price": 19.1,
+      "price": 18.8,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -8605,6 +8878,7 @@
           2,
           2,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -8623,7 +8897,8 @@
           -3,
           2,
           0,
-          0
+          0,
+          1
         ],
         "sprint_overtake_points": [
           4,
@@ -8641,9 +8916,11 @@
           6,
           2,
           2,
-          4
+          4,
+          2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -8677,9 +8954,11 @@
           0,
           0,
           -20,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -8713,7 +8992,8 @@
           13,
           2,
           5,
-          2
+          2,
+          3
         ],
         "quali_teamwork_points": [
           3,
@@ -8731,9 +9011,11 @@
           10,
           5,
           10,
+          5,
           5
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -8767,6 +9049,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -8784,6 +9067,7 @@
           1,
           8,
           6,
+          0,
           0,
           0
         ],
@@ -8803,7 +9087,8 @@
           -8,
           4,
           0,
-          1
+          1,
+          -4
         ],
         "race_overtake_points": [
           10,
@@ -8821,9 +9106,11 @@
           15,
           5,
           2,
-          10
+          10,
+          3
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -8857,9 +9144,11 @@
           0,
           2,
           5,
-          10
+          10,
+          0
         ],
         "race_overall_fastest_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -8893,6 +9182,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -8911,9 +9201,11 @@
           0,
           0,
           -40,
-          0
+          0,
+          -20
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -8933,8 +9225,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        28,
-        -18
+        -20,
+        28
       ]
     },
     "AST": {
@@ -8943,7 +9235,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#006f62",
-      "price": 5.1,
+      "price": 4.5,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -8963,7 +9255,8 @@
           0,
           0,
           0,
-          1
+          1,
+          0
         ],
         "sprint_pos_gained_points": [
           0,
@@ -8981,7 +9274,8 @@
           0,
           0,
           0,
-          3
+          3,
+          4
         ],
         "sprint_overtake_points": [
           3,
@@ -8999,9 +9293,11 @@
           8,
           3,
           2,
-          6
+          6,
+          2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -9035,9 +9331,11 @@
           -20,
           -10,
           -20,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -9071,6 +9369,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_teamwork_points": [
@@ -9089,7 +9388,8 @@
           -1,
           -1,
           -1,
-          3
+          3,
+          -1
         ],
         "quali_not_classified_points": [
           -5,
@@ -9107,9 +9407,11 @@
           0,
           -5,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -9143,7 +9445,8 @@
           0,
           0,
           0,
-          4
+          4,
+          0
         ],
         "race_pos_gained_points": [
           0,
@@ -9161,7 +9464,8 @@
           0,
           0,
           0,
-          6
+          6,
+          4
         ],
         "race_overtake_points": [
           8,
@@ -9179,9 +9483,11 @@
           20,
           7,
           6,
-          18
+          18,
+          3
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -9215,9 +9521,11 @@
           0,
           2,
           0,
+          5,
           5
         ],
         "race_overall_fastest_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -9251,6 +9559,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -9269,9 +9578,11 @@
           -40,
           -20,
           -40,
-          0
+          0,
+          -20
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -9291,8 +9602,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        36,
-        -35
+        -13,
+        36
       ]
     },
     "AUD": {
@@ -9301,7 +9612,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#FF2E01",
-      "price": 9.8,
+      "price": 10.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -9321,7 +9632,8 @@
           0,
           0,
           0,
-          0
+          0,
+          2
         ],
         "sprint_pos_gained_points": [
           1,
@@ -9339,7 +9651,8 @@
           -1,
           0,
           4,
-          -1
+          -1,
+          5
         ],
         "sprint_overtake_points": [
           3,
@@ -9357,9 +9670,11 @@
           10,
           1,
           5,
-          9
+          9,
+          2
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -9393,13 +9708,15 @@
           0,
           0,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
           0,
           0,
           0,
           -20,
+          0,
           0,
           0,
           0,
@@ -9429,7 +9746,8 @@
           0,
           0,
           0,
-          1
+          1,
+          0
         ],
         "quali_teamwork_points": [
           5,
@@ -9447,9 +9765,11 @@
           3,
           3,
           -1,
-          5
+          5,
+          3
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -9483,6 +9803,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -9501,7 +9822,8 @@
           0,
           1,
           0,
-          0
+          0,
+          4
         ],
         "race_pos_gained_points": [
           1,
@@ -9519,7 +9841,8 @@
           -1,
           0,
           9,
-          -4
+          -4,
+          2
         ],
         "race_overtake_points": [
           9,
@@ -9537,9 +9860,11 @@
           29,
           1,
           14,
-          26
+          26,
+          3
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -9573,7 +9898,8 @@
           5,
           5,
           5,
-          10
+          10,
+          0
         ],
         "race_overall_fastest_pit_stop_points": [
           0,
@@ -9591,9 +9917,11 @@
           5,
           0,
           0,
+          0,
           0
         ],
         "race_world_record_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -9627,9 +9955,11 @@
           0,
           0,
           0,
-          0
+          0,
+          -20
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -9649,8 +9979,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        38,
-        27
+        -9,
+        38
       ]
     },
     "CAD": {
@@ -9679,6 +10009,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_pos_gained_points": [
@@ -9697,7 +10028,8 @@
           -2,
           1,
           3,
-          1
+          1,
+          0
         ],
         "sprint_overtake_points": [
           3,
@@ -9715,9 +10047,11 @@
           8,
           1,
           3,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -9751,9 +10085,11 @@
           0,
           -10,
           0,
-          -10
+          -10,
+          -20
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -9787,9 +10123,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_teamwork_points": [
+          -1,
           -1,
           -1,
           -1,
@@ -9823,9 +10161,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -9859,6 +10199,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -9877,7 +10218,8 @@
           -4,
           1,
           9,
-          1
+          1,
+          -1
         ],
         "race_overtake_points": [
           6,
@@ -9895,9 +10237,11 @@
           21,
           2,
           8,
-          8
+          8,
+          0
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -9931,9 +10275,11 @@
           0,
           2,
           0,
+          0,
           0
         ],
         "race_overall_fastest_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -9967,6 +10313,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -9985,9 +10332,11 @@
           0,
           -20,
           0,
-          -20
+          -20,
+          0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10007,8 +10356,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        -12,
-        16
+        -21,
+        -12
       ]
     },
     "FER": {
@@ -10017,7 +10366,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#dc0000",
-      "price": 27.9,
+      "price": 28.2,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -10037,7 +10386,8 @@
           3,
           5,
           8,
-          11
+          11,
+          13
         ],
         "sprint_pos_gained_points": [
           2,
@@ -10055,7 +10405,8 @@
           -1,
           1,
           -1,
-          -1
+          -1,
+          4
         ],
         "sprint_overtake_points": [
           4,
@@ -10073,7 +10424,8 @@
           6,
           0,
           2,
-          8
+          8,
+          3
         ],
         "sprint_fastest_lap_points": [
           0,
@@ -10091,7 +10443,8 @@
           0,
           0,
           0,
-          0
+          0,
+          5
         ],
         "sprint_not_classified_points": [
           0,
@@ -10109,9 +10462,11 @@
           -10,
           -10,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10145,9 +10500,11 @@
           13,
           13,
           14,
-          15
+          15,
+          17
         ],
         "quali_teamwork_points": [
+          10,
           10,
           10,
           10,
@@ -10181,9 +10538,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10217,7 +10576,8 @@
           8,
           12,
           20,
-          27
+          27,
+          26
         ],
         "race_pos_gained_points": [
           4,
@@ -10235,7 +10595,8 @@
           -2,
           1,
           -2,
-          -1
+          -1,
+          -3
         ],
         "race_overtake_points": [
           12,
@@ -10253,7 +10614,8 @@
           15,
           0,
           3,
-          24
+          24,
+          1
         ],
         "race_fastest_lap_points": [
           0,
@@ -10271,7 +10633,8 @@
           0,
           0,
           0,
-          0
+          0,
+          10
         ],
         "race_pit_stop_points": [
           5,
@@ -10289,6 +10652,7 @@
           0,
           2,
           0,
+          5,
           5
         ],
         "race_overall_fastest_pit_stop_points": [
@@ -10307,9 +10671,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_world_record_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -10343,9 +10709,11 @@
           -20,
           -20,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10365,8 +10733,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        80,
-        45
+        91,
+        80
       ]
     },
     "HAA": {
@@ -10375,7 +10743,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#ffffff",
-      "price": 11.4,
+      "price": 12,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -10395,7 +10763,8 @@
           0,
           0,
           1,
-          0
+          0,
+          3
         ],
         "sprint_pos_gained_points": [
           3,
@@ -10413,7 +10782,8 @@
           -3,
           3,
           3,
-          2
+          2,
+          13
         ],
         "sprint_overtake_points": [
           6,
@@ -10431,9 +10801,11 @@
           7,
           2,
           2,
-          6
+          6,
+          7
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -10467,9 +10839,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10503,6 +10877,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_teamwork_points": [
@@ -10521,7 +10896,8 @@
           3,
           1,
           3,
-          -1
+          -1,
+          3
         ],
         "quali_not_classified_points": [
           0,
@@ -10539,9 +10915,11 @@
           0,
           -5,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10575,6 +10953,7 @@
           0,
           0,
           6,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -10593,7 +10972,8 @@
           -6,
           8,
           6,
-          4
+          4,
+          -2
         ],
         "race_overtake_points": [
           16,
@@ -10611,9 +10991,11 @@
           20,
           5,
           6,
-          15
+          15,
+          9
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -10647,9 +11029,11 @@
           0,
           2,
           0,
+          2,
           2
         ],
         "race_overall_fastest_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -10683,6 +11067,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -10698,6 +11083,7 @@
           0,
           0,
           -40,
+          0,
           0,
           0,
           0,
@@ -10719,12 +11105,13 @@
           0,
           0,
           0,
+          0,
           0
         ]
       },
       "lastTwoTotalPoints": [
-        20,
-        21
+        35,
+        20
       ]
     },
     "MCL": {
@@ -10733,7 +11120,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#ff9800",
-      "price": 32.3,
+      "price": 32.4,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -10753,7 +11140,8 @@
           9,
           7,
           0,
-          3
+          3,
+          1
         ],
         "sprint_pos_gained_points": [
           1,
@@ -10771,7 +11159,8 @@
           3,
           -2,
           -4,
-          -2
+          -2,
+          -13
         ],
         "sprint_overtake_points": [
           2,
@@ -10789,7 +11178,8 @@
           11,
           1,
           2,
-          11
+          11,
+          0
         ],
         "sprint_fastest_lap_points": [
           0,
@@ -10804,6 +11194,7 @@
           5,
           0,
           5,
+          0,
           0,
           0,
           0,
@@ -10825,9 +11216,11 @@
           0,
           0,
           -10,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10861,9 +11254,11 @@
           10,
           14,
           14,
-          9
+          9,
+          10
         ],
         "quali_teamwork_points": [
+          10,
           10,
           10,
           10,
@@ -10897,9 +11292,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -10933,7 +11330,8 @@
           22,
           19,
           0,
-          10
+          10,
+          22
         ],
         "race_pos_gained_points": [
           1,
@@ -10951,7 +11349,8 @@
           5,
           -3,
           -10,
-          -4
+          -4,
+          2
         ],
         "race_overtake_points": [
           5,
@@ -10969,7 +11368,8 @@
           30,
           2,
           5,
-          30
+          30,
+          2
         ],
         "race_fastest_lap_points": [
           0,
@@ -10982,6 +11382,7 @@
           0,
           0,
           10,
+          0,
           0,
           0,
           0,
@@ -11005,6 +11406,7 @@
           0,
           2,
           2,
+          2,
           2
         ],
         "race_overall_fastest_pit_stop_points": [
@@ -11023,9 +11425,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_world_record_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -11059,9 +11463,11 @@
           0,
           0,
           -20,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11081,8 +11487,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        57,
-        1
+        36,
+        57
       ]
     },
     "MER": {
@@ -11111,7 +11517,8 @@
           15,
           12,
           12,
-          7
+          7,
+          5
         ],
         "sprint_pos_gained_points": [
           0,
@@ -11129,7 +11536,8 @@
           6,
           2,
           4,
-          -4
+          -4,
+          3
         ],
         "sprint_overtake_points": [
           4,
@@ -11147,7 +11555,8 @@
           11,
           1,
           3,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
           0,
@@ -11165,6 +11574,7 @@
           5,
           5,
           5,
+          0,
           0
         ],
         "sprint_not_classified_points": [
@@ -11183,9 +11593,11 @@
           0,
           0,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11219,7 +11631,8 @@
           13,
           14,
           10,
-          10
+          10,
+          12
         ],
         "quali_teamwork_points": [
           10,
@@ -11237,6 +11650,7 @@
           10,
           10,
           5,
+          10,
           10
         ],
         "quali_not_classified_points": [
@@ -11255,9 +11669,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11291,7 +11707,8 @@
           43,
           35,
           35,
-          18
+          18,
+          17
         ],
         "race_pos_gained_points": [
           0,
@@ -11309,7 +11726,8 @@
           18,
           2,
           11,
-          -12
+          -12,
+          11
         ],
         "race_overtake_points": [
           9,
@@ -11327,7 +11745,8 @@
           32,
           1,
           7,
-          8
+          8,
+          11
         ],
         "race_fastest_lap_points": [
           0,
@@ -11345,6 +11764,7 @@
           10,
           10,
           10,
+          0,
           0
         ],
         "race_pit_stop_points": [
@@ -11362,6 +11782,7 @@
           5,
           2,
           10,
+          5,
           5,
           5
         ],
@@ -11381,9 +11802,11 @@
           0,
           5,
           5,
+          0,
           0
         ],
         "race_world_record_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -11417,9 +11840,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11439,8 +11864,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        39,
-        88
+        65,
+        39
       ]
     },
     "RED": {
@@ -11449,7 +11874,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#0600ef",
-      "price": 32.4,
+      "price": 32.7,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -11469,7 +11894,8 @@
           6,
           10,
           13,
-          12
+          12,
+          8
         ],
         "sprint_pos_gained_points": [
           5,
@@ -11487,7 +11913,8 @@
           4,
           2,
           3,
-          1
+          1,
+          0
         ],
         "sprint_overtake_points": [
           7,
@@ -11505,7 +11932,8 @@
           11,
           2,
           3,
-          3
+          3,
+          1
         ],
         "sprint_fastest_lap_points": [
           5,
@@ -11523,7 +11951,8 @@
           0,
           0,
           0,
-          5
+          5,
+          0
         ],
         "sprint_not_classified_points": [
           -10,
@@ -11541,9 +11970,11 @@
           0,
           0,
           0,
-          0
+          0,
+          -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11577,7 +12008,8 @@
           5,
           11,
           10,
-          18
+          18,
+          10
         ],
         "quali_teamwork_points": [
           5,
@@ -11595,7 +12027,8 @@
           5,
           10,
           10,
-          10
+          10,
+          5
         ],
         "quali_not_classified_points": [
           -5,
@@ -11613,13 +12046,15 @@
           0,
           0,
           0,
-          0
+          0,
+          -5
         ],
         "quali_disqualified_points": [
           0,
           0,
           0,
           -10,
+          0,
           0,
           0,
           0,
@@ -11649,7 +12084,8 @@
           15,
           26,
           33,
-          35
+          35,
+          26
         ],
         "race_pos_gained_points": [
           14,
@@ -11667,7 +12103,8 @@
           10,
           3,
           7,
-          3
+          3,
+          12
         ],
         "race_overtake_points": [
           17,
@@ -11685,7 +12122,8 @@
           32,
           4,
           9,
-          6
+          6,
+          9
         ],
         "race_fastest_lap_points": [
           10,
@@ -11703,7 +12141,8 @@
           0,
           0,
           0,
-          10
+          10,
+          0
         ],
         "race_pit_stop_points": [
           5,
@@ -11721,7 +12160,8 @@
           2,
           5,
           2,
-          10
+          10,
+          5
         ],
         "race_overall_fastest_pit_stop_points": [
           0,
@@ -11739,9 +12179,11 @@
           0,
           0,
           0,
+          5,
           5
         ],
         "race_world_record_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -11775,9 +12217,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11797,8 +12241,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        97,
-        71
+        66,
+        97
       ]
     },
     "VRB": {
@@ -11807,7 +12251,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#6692ff",
-      "price": 15.9,
+      "price": 16.5,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -11827,7 +12271,8 @@
           1,
           0,
           2,
-          2
+          2,
+          4
         ],
         "sprint_pos_gained_points": [
           -1,
@@ -11845,7 +12290,8 @@
           3,
           2,
           2,
-          6
+          6,
+          7
         ],
         "sprint_overtake_points": [
           6,
@@ -11863,9 +12309,11 @@
           6,
           1,
           3,
-          8
+          8,
+          3
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -11899,9 +12347,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -11935,7 +12385,8 @@
           1,
           1,
           0,
-          0
+          0,
+          3
         ],
         "quali_teamwork_points": [
           10,
@@ -11953,9 +12404,11 @@
           5,
           5,
           3,
-          3
+          3,
+          10
         ],
         "quali_not_classified_points": [
+          0,
           0,
           0,
           0,
@@ -11989,6 +12442,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_pos_points": [
@@ -12007,7 +12461,8 @@
           5,
           2,
           6,
-          7
+          7,
+          6
         ],
         "race_pos_gained_points": [
           -4,
@@ -12025,7 +12480,8 @@
           6,
           2,
           7,
-          16
+          16,
+          -5
         ],
         "race_overtake_points": [
           15,
@@ -12043,9 +12499,11 @@
           16,
           1,
           7,
-          22
+          22,
+          1
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -12079,6 +12537,7 @@
           0,
           2,
           0,
+          5,
           5
         ],
         "race_overall_fastest_pit_stop_points": [
@@ -12097,9 +12556,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_world_record_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -12133,9 +12594,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -12155,8 +12618,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        53,
-        23
+        34,
+        53
       ]
     },
     "WIL": {
@@ -12165,7 +12628,7 @@
       "type": "constructor",
       "isActive": true,
       "color": "#005aff",
-      "price": 13.2,
+      "price": 12.6,
       "percentOwned": 0,
       "x2PercentOwned": 0,
       "raceResults": {
@@ -12176,6 +12639,7 @@
           0,
           0,
           1,
+          0,
           0,
           0,
           0,
@@ -12203,7 +12667,8 @@
           1,
           1,
           2,
-          -2
+          -2,
+          10
         ],
         "sprint_overtake_points": [
           5,
@@ -12221,9 +12686,11 @@
           10,
           2,
           5,
-          7
+          7,
+          1
         ],
         "sprint_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -12257,9 +12724,11 @@
           0,
           -10,
           -10,
+          -10,
           -10
         ],
         "sprint_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -12293,6 +12762,7 @@
           0,
           0,
           2,
+          0,
           0
         ],
         "quali_teamwork_points": [
@@ -12311,6 +12781,7 @@
           1,
           1,
           5,
+          1,
           1
         ],
         "quali_not_classified_points": [
@@ -12329,9 +12800,11 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "quali_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -12365,6 +12838,7 @@
           0,
           0,
           1,
+          0,
           0
         ],
         "race_pos_gained_points": [
@@ -12383,7 +12857,8 @@
           3,
           1,
           4,
-          -4
+          -4,
+          -3
         ],
         "race_overtake_points": [
           13,
@@ -12401,9 +12876,11 @@
           28,
           5,
           12,
-          18
+          18,
+          5
         ],
         "race_fastest_lap_points": [
+          0,
           0,
           0,
           0,
@@ -12437,9 +12914,11 @@
           2,
           2,
           2,
-          10
+          10,
+          2
         ],
         "race_overall_fastest_pit_stop_points": [
+          0,
           0,
           0,
           0,
@@ -12473,6 +12952,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "race_not_classified_points": [
@@ -12491,9 +12971,11 @@
           0,
           -20,
           -20,
-          -20
+          -20,
+          0
         ],
         "race_disqualified_points": [
+          0,
           0,
           0,
           0,
@@ -12513,8 +12995,8 @@
         ]
       },
       "lastTwoTotalPoints": [
-        5,
-        6
+        6,
+        5
       ]
     }
   }
