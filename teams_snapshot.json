@@ -2,103 +2,164 @@
   {
     "slot": 1,
     "name": "Two Drivers, One CSV",
-    "budget_remaining": 0.8,
+    "budget_remaining": 0.0,
     "free_transfers": 2,
     "drivers": [
-      {
-        "name": "Isack Hadjar",
-        "tla": "HAD",
-        "price": 16.3,
-        "season_score": 201,
-        "is_turbo": false
-      },
       {
         "name": "Nico Hulkenberg",
         "tla": "HUL",
         "price": 6.6,
-        "season_score": 40,
+        "season_score": 47,
         "is_turbo": false
       },
       {
         "name": "Arvid Lindblad",
         "tla": "LIN",
         "price": 10.0,
-        "season_score": 136,
+        "season_score": 147,
         "is_turbo": false
       },
       {
         "name": "Charles Leclerc",
         "tla": "LEC",
         "price": 24.1,
-        "season_score": 427,
+        "season_score": 480,
+        "is_turbo": false
+      },
+      {
+        "name": "Fernando Alonso",
+        "tla": "ALO",
+        "price": 5.4,
+        "season_score": 39,
         "is_turbo": false
       },
       {
         "name": "Kimi Antonelli",
         "tla": "ANT",
         "price": 27.1,
-        "season_score": 684,
+        "season_score": 720,
         "is_turbo": true
       }
     ],
     "turbo_driver": "Kimi Antonelli",
     "constructors": [
       {
-        "name": "Racing Bulls",
-        "tla": "VRB",
-        "price": 16.5,
-        "season_score": 528,
+        "name": "Ferrari",
+        "tla": "FER",
+        "price": 28.2,
+        "season_score": 1179,
         "is_turbo": false
       },
       {
         "name": "Mercedes",
         "tla": "MER",
         "price": 34.0,
-        "season_score": 1373,
+        "season_score": 1430,
         "is_turbo": false
       }
     ],
-    "total_price": 134.6
+    "total_price": 135.4
   },
   {
     "slot": 2,
     "name": "Melbourne Moneyball",
-    "budget_remaining": 1.1,
+    "budget_remaining": 1.5,
     "free_transfers": 2,
     "drivers": [
+      {
+        "name": "Lewis Hamilton",
+        "tla": "HAM",
+        "price": 24.4,
+        "season_score": 483,
+        "is_turbo": false
+      },
+      {
+        "name": "Gabriel Bortoleto",
+        "tla": "BOR",
+        "price": 7.0,
+        "season_score": 84,
+        "is_turbo": false
+      },
       {
         "name": "Nico Hulkenberg",
         "tla": "HUL",
         "price": 6.6,
-        "season_score": 40,
+        "season_score": 47,
         "is_turbo": false
       },
       {
         "name": "Arvid Lindblad",
         "tla": "LIN",
         "price": 10.0,
-        "season_score": 136,
+        "season_score": 147,
         "is_turbo": false
       },
       {
         "name": "Charles Leclerc",
         "tla": "LEC",
         "price": 24.1,
-        "season_score": 427,
+        "season_score": 480,
+        "is_turbo": true
+      }
+    ],
+    "turbo_driver": "Charles Leclerc",
+    "constructors": [
+      {
+        "name": "Ferrari",
+        "tla": "FER",
+        "price": 28.2,
+        "season_score": 1179,
         "is_turbo": false
       },
       {
-        "name": "Sergio Perez",
-        "tla": "PER",
-        "price": 3.6,
-        "season_score": 19,
+        "name": "Mercedes",
+        "tla": "MER",
+        "price": 34.0,
+        "season_score": 1430,
+        "is_turbo": false
+      }
+    ],
+    "total_price": 134.3
+  },
+  {
+    "slot": 3,
+    "name": "Scarlet Regression",
+    "budget_remaining": 1.1,
+    "free_transfers": 3,
+    "drivers": [
+      {
+        "name": "Isack Hadjar",
+        "tla": "HAD",
+        "price": 16.3,
+        "season_score": 214,
+        "is_turbo": false
+      },
+      {
+        "name": "Nico Hulkenberg",
+        "tla": "HUL",
+        "price": 6.6,
+        "season_score": 47,
+        "is_turbo": false
+      },
+      {
+        "name": "Arvid Lindblad",
+        "tla": "LIN",
+        "price": 10.0,
+        "season_score": 147,
+        "is_turbo": false
+      },
+      {
+        "name": "Liam Lawson",
+        "tla": "LAW",
+        "price": 9.9,
+        "season_score": 174,
         "is_turbo": false
       },
       {
         "name": "Max Verstappen",
         "tla": "VER",
         "price": 28.2,
-        "season_score": 486,
+        "season_score": 513,
         "is_turbo": true
       }
     ],
@@ -108,78 +169,17 @@
         "name": "Ferrari",
         "tla": "FER",
         "price": 28.2,
-        "season_score": 1098,
+        "season_score": 1179,
         "is_turbo": false
       },
       {
-        "name": "Mercedes",
-        "tla": "MER",
-        "price": 34.0,
-        "season_score": 1373,
+        "name": "Red Bull Racing",
+        "tla": "RBR",
+        "price": 32.7,
+        "season_score": 934,
         "is_turbo": false
       }
     ],
-    "total_price": 134.7
-  },
-  {
-    "slot": 3,
-    "name": "Scarlet Regression",
-    "budget_remaining": 1.6,
-    "free_transfers": 3,
-    "drivers": [
-      {
-        "name": "Isack Hadjar",
-        "tla": "HAD",
-        "price": 16.3,
-        "season_score": 201,
-        "is_turbo": false
-      },
-      {
-        "name": "Nico Hulkenberg",
-        "tla": "HUL",
-        "price": 6.6,
-        "season_score": 40,
-        "is_turbo": false
-      },
-      {
-        "name": "Arvid Lindblad",
-        "tla": "LIN",
-        "price": 10.0,
-        "season_score": 136,
-        "is_turbo": false
-      },
-      {
-        "name": "Carlos Sainz",
-        "tla": "SAI",
-        "price": 8.4,
-        "season_score": 117,
-        "is_turbo": false
-      },
-      {
-        "name": "George Russell",
-        "tla": "RUS",
-        "price": 27.9,
-        "season_score": 425,
-        "is_turbo": true
-      }
-    ],
-    "turbo_driver": "George Russell",
-    "constructors": [
-      {
-        "name": "Ferrari",
-        "tla": "FER",
-        "price": 28.2,
-        "season_score": 1098,
-        "is_turbo": false
-      },
-      {
-        "name": "Mercedes",
-        "tla": "MER",
-        "price": 34.0,
-        "season_score": 1373,
-        "is_turbo": false
-      }
-    ],
-    "total_price": 131.4
+    "total_price": 131.9
   }
 ]
